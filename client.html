@@ -109,7 +109,7 @@
 
         //Forward
         forward.onmousedown = ()=>{
-
+            console.log('forward');
             clearInterval(lastCommand);
             broker.emit('forward',roverName);
             lastCommand = setInterval(()=>{
