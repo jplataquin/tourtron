@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client</title>
+</head>
+<body>
+    <video id="videoEl" playsinline autoplay muted></video>
+    <script type="text/javascript" src="//patrila.app:5000/socket.io/socket.io.js"></script>
+
+    <script>
+
+        let videoEl = document.querySelector('#videoEl');
+
+        const broker = io("wss://patrila.app:5000/");
+
+        broker.emit('get-available-rovers');
+        broker.on('available-rover-list',(list)=>{
+            console.log(list);
+
+            broker.emit('connect-to-rover',{
+                name:'TOURTRON_1',
+                uid:1
+            });
+        });
+
+
+        let webRTCconfig = {
+            iceServers: [
+                { 
+                "urls": "stun:stun.l.google.com:19302",
+                },
+                { 
+                    "urls": "turn:turn.patrila.app:5349",
+                    "username": "user",
+                    "credential": "somepassword"
+                }
+            ]
+        };
+
+
+        let peerConnections;
+
+        broker.on("offer", (id, description, roverName) => {
+  
+            peerConnection = new RTCPeerConnection(webRTCconfig);
+            
+            peerConnection
+                .setRemoteDescription(description)
+                .then(()  => peerConnection.createAnswer())
+                .then(sdp => peerConnection.setLocalDescription(sdp))
+                .then(() => {
+                    broker.emit("answer", id, peerConnection.localDescription);
+                });
+
+
+            peerConnection.ontrack = event => {
+                videoEl.srcObject = event.streams[0];
+                broker.emit('connection-success',roverName);
+            };
+
+            peerConnection.onicecandidate = event => {
+                if (event.candidate) {
+                    broker.emit("candidate", id, event.candidate);
+                }
+            };
+
+        });
+
+
+        broker.on("candidate", (id, candidate) => {
+            peerConnection
+                .addIceCandidate(new RTCIceCandidate(candidate))
+                .catch(e => console.error(e));
+        });
+        
+
+    </script>
+</body>
+</html>
