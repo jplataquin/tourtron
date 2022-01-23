@@ -21,7 +21,7 @@ const http2Server = http2.createSecureServer({
     cert: credentials.cert
 });
 
-app.use('assets/',express.static(path.join(__dirname, '/assets'))); 
+app.use('/assets',express.static(path.join(__dirname, '/assets'))); 
 
 app.get('/client', function (req, res) {
     console.log('here')
