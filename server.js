@@ -146,8 +146,8 @@ io.sockets.on("connection", socket => {
     socket.on('forward',(roverName)=>{
 
         if(typeof availableRovers[roverName] == 'undefined') return false;
-
-        if(availableRovers[roverName] != 'connected') return false;
+        
+        if(availableRovers[roverName].state.status != 'connected') return false;
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
@@ -158,7 +158,7 @@ io.sockets.on("connection", socket => {
 
         if(typeof availableRovers[roverName] == 'undefined') return false;
 
-        if(availableRovers[roverName] != 'connected') return false;
+        if(availableRovers[roverName].state.status != 'connected') return false;
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
@@ -169,7 +169,7 @@ io.sockets.on("connection", socket => {
 
         if(typeof availableRovers[roverName] == 'undefined') return false;
 
-        if(availableRovers[roverName] != 'connected') return false;
+        if(availableRovers[roverName].state.status != 'connected') return false;
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
@@ -180,7 +180,7 @@ io.sockets.on("connection", socket => {
 
         if(typeof availableRovers[roverName] == 'undefined') return false;
 
-        if(availableRovers[roverName] != 'connected') return false;
+        if(availableRovers[roverName].state.status != 'connected') return false;
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
@@ -191,7 +191,7 @@ io.sockets.on("connection", socket => {
 
         if(typeof availableRovers[roverName] == 'undefined') return false;
 
-        if(availableRovers[roverName] != 'connected') return false;
+        if(availableRovers[roverName].state.status != 'connected') return false;
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
