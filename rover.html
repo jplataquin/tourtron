@@ -24,15 +24,14 @@
         </tr>
     </table>
 
-    <!--
-    <script type="text/javascript" src="http://localhost:3000/socket.io/socket.io.js"></script>
-    -->
-
+   
+    
     <script type="text/javascript" src="//patrila.app:5000/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="//patrila.app:5001/assets/js/streamify.js"></script>
 
     <script>
-        
+        const local = io("ws://localhost:3000/");
+
         const broker = io("wss://patrila.app:5000/");
 
         let state = {
