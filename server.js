@@ -24,11 +24,12 @@ const http2Server = http2.createSecureServer({
 app.use('assets/',express.static(path.join(__dirname, 'assets'))); 
 
 app.get('/client', function (req, res) {
-    res.sendFile(path.join(__dirname, 'client.html'));
+    console.log('here')
+    res.sendFile(path.join(__dirname, '/client.html'));
 });
 
 app.get('/rover', function (req, res) {
-    res.sendFile(path.join(__dirname, 'rover.html'));
+    res.sendFile(path.join(__dirname, '/rover.html'));
 });
 
 /***************************************************************/
