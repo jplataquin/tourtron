@@ -8,9 +8,28 @@
 </head>
 <body>
     <video id="videoEl" playsinline autoplay muted></video>
+
+
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <button id="forward">🠕</button>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><button id="left">🠔</button></td>
+            <td><button id="backward">🠗</button></td>
+            <td><button id="right">🠖</button></td>
+        </tr>
+    </table>
+
     <script type="text/javascript" src="//patrila.app:5000/socket.io/socket.io.js"></script>
 
     <script>
+
+        let roverName = null;
 
         let videoEl = document.querySelector('#videoEl');
 
@@ -43,7 +62,7 @@
 
         let peerConnections;
 
-        broker.on("offer", (id, description, roverName) => {
+        broker.on("offer", (id, description, name) => {
   
             peerConnection = new RTCPeerConnection(webRTCconfig);
             
@@ -58,7 +77,8 @@
 
             peerConnection.ontrack = event => {
                 videoEl.srcObject = event.streams[0];
-                broker.emit('connection-success',roverName);
+                broker.emit('connection-success',name);
+                roverName = name;
             };
 
             peerConnection.onicecandidate = event => {
@@ -76,7 +96,103 @@
                 .catch(e => console.error(e));
         });
         
+        /***************************************************************/
 
+       
+        const forward   = document.querySelector('#forward');
+        const backward  = document.querySelector('#backward');
+        const left      = document.querySelector('#left');
+        const right     = document.querySelector('#right');
+        
+ 
+        let lastCommand;
+
+        //Forward
+        forward.onmousedown = ()=>{
+
+            clearInterval(lastCommand);
+            broker.emit('forward',roverName);
+            lastCommand = setInterval(()=>{
+                broker.emit('forward',roverName);
+            },2000);
+               
+        }
+
+        forward.onmouseout = ()=>{
+            clearInterval(lastCommand);
+            broker.emit('stop',roverName);
+        }
+
+        forward.onmouseup = ()=>{
+
+            clearInterval(lastCommand);
+            broker.emit('stop',roverName);
+        }
+
+        //Backward
+        backward.onmousedown = ()=>{
+
+            clearInterval(lastCommand);
+            broker.emit('backward',roverName);
+            lastCommand = setInterval(()=>{
+                broker.emit('backward',roverName);
+            },2000);
+            
+        }
+
+        backward.onmouseout = ()=>{
+            clearInterval(lastCommand);
+            broker.emit('stop',roverName);
+        }
+
+        backward.onmouseup = ()=>{
+            clearInterval(lastCommand);
+            broker.emit('stop',roverName);
+        }
+
+        //Left
+        left.onmousedown = ()=>{
+
+            clearInterval(lastCommand);
+            broker.emit('rotate-left',roverName);
+            lastCommand = setInterval(()=>{
+                broker.emit('rotate-left',roverName);
+            },2000);
+        }
+
+        left.onmouseout = ()=>{
+            clearInterval(lastCommand);
+            broker.emit('stop',roverName);
+        }
+
+        left.onmouseup = ()=>{
+            clearInterval(lastCommand);
+            broker.emit('stop',roverName);
+        }
+
+        //Right
+        right.onmousedown = ()=>{
+
+            clearInterval(lastCommand);
+            broker.emit('rotate-right',roverName);
+            lastCommand = setInterval(()=>{
+                broker.emit('rotate-right',roverName);
+            },2000);
+            
+        }
+
+        right.onmouseout = ()=>{
+            clearInterval(lastCommand);
+            broker.emit('stop',roverName);
+        }
+
+        right.onmouseup = ()=>{
+            clearInterval(lastCommand);
+            broker.emit('stop',roverName);
+        }
+
+
+    </script>
     </script>
 </body>
 </html>

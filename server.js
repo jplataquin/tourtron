@@ -3,17 +3,24 @@ const https         = require('https');
 const express       = require('express');
 const fs            = require('fs');
 const http2         = require("http2");
+//const http          = require("http");
 const path          = require('path');
 const wssport       = 5000;
 const httpsport     = 5001;
-
 
 const credentials = {
     key:    fs.readFileSync('../../../../etc/letsencrypt/live/patrila.app/privkey.pem'),
     cert:   fs.readFileSync('../../../../etc/letsencrypt/live/patrila.app/fullchain.pem')
 };
 
+
 const app         = express();
+
+/*
+const httpsServer   = http.createServer(app);
+const http2Server  = http.createServer();
+*/
+
 const httpsServer = https.createServer(credentials, app);
 const http2Server = http2.createSecureServer({  
     allowHTTP1: true,  
@@ -131,7 +138,65 @@ io.sockets.on("connection", socket => {
         availableRovers[name].client = socket;
 
         availableRovers[name].socket.emit('status',availableRovers[name].state);
-    })
+    });
+
+    /****************MOVEMENT*****************/
+
+
+    socket.on('forward',(roverName)=>{
+
+        if(typeof availableRovers[roverName] == 'undefined') return false;
+
+        if(availableRovers[roverName] != 'connected') return false;
+
+        if(availableRovers[roverName].client.id != socket.id) return false;
+
+        availableRovers[roverName].socket.emit('forward');
+    });
+
+    socket.on('backward',(roverName)=>{
+
+        if(typeof availableRovers[roverName] == 'undefined') return false;
+
+        if(availableRovers[roverName] != 'connected') return false;
+
+        if(availableRovers[roverName].client.id != socket.id) return false;
+
+        availableRovers[roverName].socket.emit('backward');
+    });
+
+    socket.on('rotate-left',(roverName)=>{
+
+        if(typeof availableRovers[roverName] == 'undefined') return false;
+
+        if(availableRovers[roverName] != 'connected') return false;
+
+        if(availableRovers[roverName].client.id != socket.id) return false;
+
+        availableRovers[roverName].socket.emit('rotate-left');
+    });
+
+    socket.on('rotate-right',(roverName)=>{
+
+        if(typeof availableRovers[roverName] == 'undefined') return false;
+
+        if(availableRovers[roverName] != 'connected') return false;
+
+        if(availableRovers[roverName].client.id != socket.id) return false;
+
+        availableRovers[roverName].socket.emit('rotate-right');
+    });
+
+    socket.on('stop',(roverName)=>{
+
+        if(typeof availableRovers[roverName] == 'undefined') return false;
+
+        if(availableRovers[roverName] != 'connected') return false;
+
+        if(availableRovers[roverName].client.id != socket.id) return false;
+
+        availableRovers[roverName].socket.emit('stop');
+    });
 });
 
 
