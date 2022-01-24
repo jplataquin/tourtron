@@ -44,7 +44,9 @@ app.get('/rover', function (req, res) {
 const io = new Server(http2Server,{  
     cors: {    
       origin: "*"  
-    }
+    },
+    pingInterval: 5000, 
+    pingTimeout: 10000
 });
 
 let availableRovers = {};
@@ -165,11 +167,15 @@ io.sockets.on("connection", socket => {
         socket.to(clientId).emit('rover-broadcast-failed',message);
     });
 
-    socket.on('disconnect',() =>{
+    socket.once('disconnect',() =>{
         let rovers = Array.from(availableRovers);
+
+        console.log('Disconnected',socket.id);
 
         for(let i = 0; rovers.length-1;i++){
             let rover = rovers[i];
+
+            console.log(i,rover);
 
             //If the rover was disconnected
             if(rover.socket.id == socket.id){

@@ -175,7 +175,7 @@
             clearInterval(lastCommand);
             broker.volatile.emit('rotate-left',roverName);
             lastCommand = setInterval(()=>{
-                broker.volatileemit('rotate-left',roverName);
+                broker.volatile.emit('rotate-left',roverName);
             },commandDelay);
         }
 

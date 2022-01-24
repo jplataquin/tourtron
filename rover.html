@@ -51,7 +51,7 @@
 
         //If local server was disconnected
         local.on('disconnected',()=>{
-
+            console.log('Disconnected');
             //Stop the stream
             if(broadcast != null){
                 broadcast.stopStream();
