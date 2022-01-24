@@ -66,6 +66,7 @@ io.sockets.on("connection", socket => {
     });
 
 
+    //ready - avaiable - pending - connected
 
     //Receive status of rover
     socket.on('status',(state)=>{
@@ -77,19 +78,33 @@ io.sockets.on("connection", socket => {
 
             availableRovers[state.name] = {
                 socket: socket,
-                state:state 
+                state:state,
+                client:null
             };
 
             socket.emit('status',state);
+
+            return true;
         }
     });
 
 
     socket.on('get-available-rovers',()=>{
-        socket.emit('available-rover-list',Object.keys(availableRovers));
+
+        let roverList = [];
+
+        //Get only rover that has status available
+        for(let key in availableRovers){
+            if(availableRovers[key].state.status == 'available'){
+                roverList.push(key);
+            }
+        }
+
+        socket.emit('available-rover-list',roverList);
     });
 
     socket.on('connect-to-rover',(data)=>{
+        
         console.log('connect-to-rover');
 
         let uid = data.uid ?? false;
@@ -97,6 +112,7 @@ io.sockets.on("connection", socket => {
 
         //TODO: validate user and session
 
+        //If rover is not detected
         if(typeof availableRovers[name] == 'undefined'){
             
             socket.emit('connection-error',{
@@ -106,8 +122,9 @@ io.sockets.on("connection", socket => {
             return false;
         }
 
-
+        //If rover is not status available
         if(availableRovers[name].state.status != 'available'){
+        
             socket.emit('connection-error',{
                 message:'Rover is not available (B)'
             });
@@ -118,7 +135,7 @@ io.sockets.on("connection", socket => {
         //TODO get client data and send to rover
 
         //Update rover status
-        availableRovers[name].state.status = 'pending-connection';
+        availableRovers[name].state.status = 'pending';
 
 
         //Inform rover that the client wants to connect
@@ -137,7 +154,51 @@ io.sockets.on("connection", socket => {
         availableRovers[name].state.status = 'connected';
         availableRovers[name].client = socket;
 
+        //inform the rover of new status
         availableRovers[name].socket.emit('status',availableRovers[name].state);
+    });
+
+    socket.on('rover-broadcast-failed',(roverName,clientId,message)=>{
+
+        if(typeof availableRovers[roverName] == 'undefined') return false;
+
+        socket.to(clientId).emit('rover-broadcast-failed',message);
+    });
+
+    socket.on('disconnect',() =>{
+        let rovers = Array.from(availableRovers);
+
+        for(let i = 0; rovers.length-1;i++){
+            let rover = rovers[i];
+
+            //If the rover was disconnected
+            if(rover.socket.id == socket.id){
+                
+                if(rover.client != null){
+
+                    rover.client.emit('rover-disconnected');
+
+                    
+                }
+
+                //Delete rover from registry
+                delete availableRovers[rover.state.name];
+
+                return false;
+            }
+
+            if(rover.client != null){
+                //If client was disconnected
+                if(rover.client.id == socket.id){
+
+                    rover.state.status = 'ready';
+                    rover.client = null;
+
+                    rover.socket.emit('client-disconnected');
+                    return false;
+                }
+            }
+        };
     });
 
     /****************MOVEMENT*****************/
@@ -197,6 +258,9 @@ io.sockets.on("connection", socket => {
 
         availableRovers[roverName].socket.emit('stop');
     });
+
+
+    
 });
 
 

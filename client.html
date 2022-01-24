@@ -29,13 +29,17 @@
 
     <script>
 
-        let roverName = null;
+        let roverName       = null;
+        let peerConnection  = null;
+        let videoEl         = document.querySelector('#videoEl');
 
-        let videoEl = document.querySelector('#videoEl');
-
-        const broker = io("wss://patrila.app:5000/");
+        //Connect to broker
+        const broker = io("wss://patrila.app:5000/",{
+            reconnection:false
+        });
 
         broker.emit('get-available-rovers');
+        
         broker.on('available-rover-list',(list)=>{
             console.log(list);
 
@@ -60,8 +64,6 @@
         };
 
 
-        let peerConnections;
-
         broker.on("offer", (id, description, name) => {
   
             peerConnection = new RTCPeerConnection(webRTCconfig);
@@ -77,7 +79,7 @@
 
             peerConnection.ontrack = event => {
                 videoEl.srcObject = event.streams[0];
-                broker.emit('connection-success',name);
+                broker.volatile.emit('connection-success',name);
                 roverName = name;
             };
 
@@ -95,7 +97,23 @@
                 .addIceCandidate(new RTCIceCandidate(candidate))
                 .catch(e => console.error(e));
         });
-        
+
+        //If rover is disconnected then close the peer connection
+        broker.on('rover-disconnected',()=>{
+            if(peerConnection){
+                peerConnection.close();
+            }
+        });
+
+        //If rover failed to broadcast
+        broker.on('rover-broadcast-failed',(message)=>{
+
+            if(peerConnection){
+                peerConnection.close();
+            }
+
+            console.log('Error: '+message);
+        });
         /***************************************************************/
 
        
@@ -106,93 +124,94 @@
         
  
         let lastCommand;
+        let commandDelay = 2000;
 
         //Forward
         forward.onmousedown = ()=>{
             console.log('forward');
             clearInterval(lastCommand);
-            broker.emit('forward',roverName);
+            broker.volatile.emit('forward',roverName);
             lastCommand = setInterval(()=>{
-                broker.emit('forward',roverName);
-            },2000);
+                broker.volatile.emit('forward',roverName);
+            },commandDelay);
                
         }
 
         forward.onmouseout = ()=>{
             clearInterval(lastCommand);
-            broker.emit('stop',roverName);
+            broker.volatile.emit('stop',roverName);
         }
 
         forward.onmouseup = ()=>{
 
             clearInterval(lastCommand);
-            broker.emit('stop',roverName);
+            broker.volatile.emit('stop',roverName);
         }
 
         //Backward
         backward.onmousedown = ()=>{
 
             clearInterval(lastCommand);
-            broker.emit('backward',roverName);
+            broker.volatile.emit('backward',roverName);
             lastCommand = setInterval(()=>{
-                broker.emit('backward',roverName);
-            },2000);
+                broker.volatile.emit('backward',roverName);
+            },commandDelay);
             
         }
 
         backward.onmouseout = ()=>{
             clearInterval(lastCommand);
-            broker.emit('stop',roverName);
+            broker.volatile.emit('stop',roverName);
         }
 
         backward.onmouseup = ()=>{
             clearInterval(lastCommand);
-            broker.emit('stop',roverName);
+            broker.volatile.emit('stop',roverName);
         }
 
         //Left
         left.onmousedown = ()=>{
 
             clearInterval(lastCommand);
-            broker.emit('rotate-left',roverName);
+            broker.volatile.emit('rotate-left',roverName);
             lastCommand = setInterval(()=>{
-                broker.emit('rotate-left',roverName);
-            },2000);
+                broker.volatileemit('rotate-left',roverName);
+            },commandDelay);
         }
 
         left.onmouseout = ()=>{
             clearInterval(lastCommand);
-            broker.emit('stop',roverName);
+            broker.volatile.emit('stop',roverName);
         }
 
         left.onmouseup = ()=>{
             clearInterval(lastCommand);
-            broker.emit('stop',roverName);
+            broker.volatile.emit('stop',roverName);
         }
 
         //Right
         right.onmousedown = ()=>{
 
             clearInterval(lastCommand);
-            broker.emit('rotate-right',roverName);
+            broker.volatile.emit('rotate-right',roverName);
             lastCommand = setInterval(()=>{
-                broker.emit('rotate-right',roverName);
-            },2000);
+                broker.volatile.emit('rotate-right',roverName);
+            },commandDelay);
             
         }
 
         right.onmouseout = ()=>{
             clearInterval(lastCommand);
-            broker.emit('stop',roverName);
+            broker.volatile.emit('stop',roverName);
         }
 
         right.onmouseup = ()=>{
             clearInterval(lastCommand);
-            broker.emit('stop',roverName);
+            broker.volatile.emit('stop',roverName);
         }
 
 
     </script>
-    </script>
+   
 </body>
 </html>
