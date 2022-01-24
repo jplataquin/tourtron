@@ -45,7 +45,7 @@ function broadcastStream(data){
     }
 
 
-
+    
  
 
     return new Promise( (resolve,reject)=>{
@@ -79,11 +79,11 @@ function broadcastStream(data){
 
 
             data.socket.on("answer", (id, description) => {
-                peerConnections[id].setRemoteDescription(description);
+                peerConnection.setRemoteDescription(description);
             });
 
             data.socket.on("candidate", (id, candidate) => {
-                peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
+                peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
             });
               
 
