@@ -168,12 +168,12 @@ io.sockets.on("connection", socket => {
     });
 
     socket.once('disconnect',() =>{
-        let rovers = Array.from(availableRovers);
+        let rovers = Object.values(availableRovers);
 
         console.log('rovers',rovers,availableRovers);
         console.log('Disconnected',socket.id);
 
-        for(let i = 0; rovers.length-1;i++){
+        for(let i = 0; i <= rovers.length-1;i++){
             let rover = rovers[i];
 
             console.log(i,rover);
