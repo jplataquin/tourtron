@@ -21,9 +21,17 @@
     <script>
 
         //Initialize two sockets
-        const local  = io('ws://localhost:3000');
-        const broker = io("wss://patrila.app:5000");
+        let local,broker;
+        
+        try{
 
+            local = io('ws://localhost:3000');
+            broker = io("wss://patrila.app:5000");
+        }catch(err){
+            
+            console.log('IO NOT DEFINED')
+            return false;
+        };
         
         //Initialize state
         let state = {
