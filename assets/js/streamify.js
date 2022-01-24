@@ -19,23 +19,23 @@ function broadcastStream(data){
     };
    
     if(!data.camera) {
-        return new Promise.reject('Camera not found');
+        return Promise.reject('Camera not found');
     }
 
     if(!data.microphone) {
-        return new Promise.reject('Microphone not found');
+        return Promise.reject('Microphone not found');
     }
 
     if(!data.socket) {
-        return new Promise.reject('Socket not found');
+        return Promise.reject('Socket not found');
     }
 
     if(!data.clientSocketId) {
-        return new Promise.reject('Client Socket ID not found');
+        return Promise.reject('Client Socket ID not found');
     }
 
     if(!data.state) {
-        return new Promise.reject('State not found');
+        return Promise.reject('State not found');
     }
 
     if (window.stream) {
