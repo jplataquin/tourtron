@@ -57,10 +57,10 @@ function broadcastStream(data){
         }).then((stream)=>{
         
             window.stream = stream;
-                
+            peerConnection    = null;   
             peerConnection    = new RTCPeerConnection(data.webRTCconfig);        
         
-        
+            console.log('debug1',peerConnection)
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
         
             peerConnection.onicecandidate = (event) => {
@@ -79,6 +79,7 @@ function broadcastStream(data){
 
 
             data.socket.on("answer", (id, description) => {
+                console.log('debug2',peerConnection);
                 peerConnection.setRemoteDescription(description);
             });
 
@@ -99,6 +100,8 @@ function broadcastStream(data){
                     
                     //Close peer connection
                     peerConnection.close();
+
+                    console.log('closed',peerConnection);
                 }
             });
 
