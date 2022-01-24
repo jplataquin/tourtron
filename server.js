@@ -170,6 +170,7 @@ io.sockets.on("connection", socket => {
     socket.once('disconnect',() =>{
         let rovers = Array.from(availableRovers);
 
+        console.log('rovers',rovers,availableRovers);
         console.log('Disconnected',socket.id);
 
         for(let i = 0; rovers.length-1;i++){
