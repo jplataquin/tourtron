@@ -76,6 +76,7 @@
                     broker.volatile.emit('status',state);
                 }
 
+                /**
                 //If pending status has not change in more or equal to 10 seconds
                 if(state.status == 'pending' && (now - state.time) >= 10000){
 
@@ -94,6 +95,7 @@
                     //Stop movement
                     local.emit('stop');
                 }
+                **/
 
             },3000);
         
@@ -157,7 +159,7 @@
 
         //if client got disconnected
         broker.on('client-disconnected',()=>{
-
+            console.log('Client disconneced');
             //Stop the stream
             if(broadcast != null){
                 broadcast.stopStream();
