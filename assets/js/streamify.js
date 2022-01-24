@@ -45,9 +45,8 @@ function broadcastStream(data){
     }
 
 
-    
     let peerConnection = new RTCPeerConnection(data.webRTCconfig);   
-
+   
     return new Promise( (resolve,reject)=>{
 
         //Open microphone and camera
@@ -57,7 +56,9 @@ function broadcastStream(data){
         }).then((stream)=>{
         
             window.stream = stream;
-              
+            
+            
+
          
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
         
@@ -76,12 +77,10 @@ function broadcastStream(data){
                 });
 
 
-            data.socket.on("answer", (id, description) => {
-                
+            data.socket.on("answer", (id, description) => {  
                 if(peerConnection != null){
                     peerConnection.setRemoteDescription(description);
                 }
-                
             });
 
             data.socket.on("candidate", (id, candidate) => {

@@ -75,19 +75,25 @@
 
         broker.on('connect',()=>{
 
+            let pendingFlag = false;
+
             setInterval(()=>{
 
                 let now = (new Date()).getTime();
                 
                 //If state is ready inform broker
                 if(state.status == 'ready'){
+                    pendingFlag = false;
                     broker.volatile.emit('status',state);
                 }
 
-                /**
+                
                 //If pending status has not change in more or equal to 10 seconds
-                if(state.status == 'pending' && (now - state.time) >= 10000){
+                if(state.status == 'pending' && (now - state.time) >= 10000 && !pendingFlag){
 
+                    pendingFlag = true;
+                    
+                    console.log('pending stuff')
                     //Stop the stream
                     if(broadcast != null){
                         broadcast.stopStream();
@@ -103,7 +109,7 @@
                     //Stop movement
                     local.emit('stop');
                 }
-                **/
+                
 
             },3000);
         
