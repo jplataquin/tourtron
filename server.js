@@ -175,7 +175,6 @@ io.sockets.on("connection", socket => {
         for(let i = 0; i <= rovers.length-1;i++){
             let rover = rovers[i];
 
-            console.log(i,rover);
 
             //If the rover was disconnected
             if(rover.socket.id == socket.id){
