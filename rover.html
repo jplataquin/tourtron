@@ -132,13 +132,15 @@
 
             getMediaCaptureDevices().then(media=>{
              
-                broadcast = broadcastStream({
+                broadcastStream({
                     camera: media.video[0].id,
                     microphone: media.audio[0].id,
                     socket:broker,
                     clientSocketId:data.clientId,
                     state:state
-                }).then(()=>{
+                }).then((bcast)=>{
+
+                    broadcast = bcast;
                     console.log('done');
                 }).catch(err=>{
                     
@@ -170,6 +172,7 @@
             console.log('Client disconneced');
             //Stop the stream
             if(broadcast != null){
+                console.log('boradcast',broadcast);
                 broadcast.stopStream();
             }
             
