@@ -38,9 +38,7 @@
             reconnection:false
         });
 
-        broker.emit('get-available-rovers');
-        
-        broker.on('available-rover-list',(list)=>{
+        broker.emit('get-available-rovers',(list)=>{
             console.log(list);
 
             broker.emit('connect-to-rover',{
@@ -48,7 +46,8 @@
                 uid:1
             });
         });
-
+        
+        
 
         let webRTCconfig = {
             iceServers: [
@@ -102,6 +101,7 @@
         broker.on('rover-disconnected',()=>{
             if(peerConnection){
                 peerConnection.close();
+                peerConnection = null;
             }
         });
 
@@ -110,6 +110,7 @@
 
             if(peerConnection){
                 peerConnection.close();
+                peerConnection = null
             }
 
             console.log('Error: '+message);

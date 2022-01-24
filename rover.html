@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rover</title>
 
-    <script data-consolejs-channel="daa4b7a1-5479-59f1-caab-94477ed9704c" src="https://remotejs.com/agent/agent.js"></script>
 </head>
 <body>
     <h1>Hello World</h1>
@@ -25,11 +24,16 @@
 
         try{
 
-            local = io('ws://localhost:3000');
+            local  = io('ws://localhost:3000');
             broker = io("wss://patrila.app:5000");
+
         }catch(err){
-            
-            console.log('IO NOT DEFINED');
+
+            //Restart
+            setTimeout(()=>{
+                documen.location.reload();
+            },5000);
+
             throw err;
         };
         
@@ -53,7 +57,6 @@
         let broadcast = null;
 
         local.on('connect',()=>{
-
             console.log('Local server connected');
         });
 
@@ -92,7 +95,7 @@
                 if(state.status == 'pending' && (now - state.time) >= 10000 && !pendingFlag){
 
                     pendingFlag = true;
-                    
+
                     console.log('pending stuff')
                     //Stop the stream
                     if(broadcast != null){

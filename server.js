@@ -91,7 +91,7 @@ io.sockets.on("connection", socket => {
     });
 
 
-    socket.on('get-available-rovers',()=>{
+    socket.on('get-available-rovers',(callback)=>{
 
         let roverList = [];
 
@@ -102,7 +102,7 @@ io.sockets.on("connection", socket => {
             }
         }
 
-        socket.emit('available-rover-list',roverList);
+        callback(roverList);
     });
 
     socket.on('connect-to-rover',(data)=>{
