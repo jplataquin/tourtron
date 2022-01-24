@@ -77,12 +77,17 @@ function broadcastStream(data){
 
 
             data.socket.on("answer", (id, description) => {
-            
-                peerConnection.setRemoteDescription(description);
+                
+                if(peerConnection != null){
+                    peerConnection.setRemoteDescription(description);
+                }
+                
             });
 
             data.socket.on("candidate", (id, candidate) => {
-                peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+                if(peerConnection != null){
+                    peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+                }
             });
               
 
@@ -98,6 +103,7 @@ function broadcastStream(data){
                     
                     //Close peer connection
                     peerConnection.close();
+                    peerConnection = null;
 
                 }
             });
@@ -112,6 +118,7 @@ function broadcastStream(data){
             }
             
             peerConnection.close();
+            peerConnection = null;
 
             reject(err);
             console.log('Error: unable to broadcast',err);
