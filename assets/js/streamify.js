@@ -46,7 +46,7 @@ function broadcastStream(data){
 
 
     
-    let peerConnections = {};
+    let peerConnection = new RTCPeerConnection(data.webRTCconfig);   
 
     return new Promise( (resolve,reject)=>{
 
@@ -57,13 +57,8 @@ function broadcastStream(data){
         }).then((stream)=>{
         
             window.stream = stream;
-             
-            const peerConnection = new RTCPeerConnection(data.webRTCconfig);        
-            
-            console.log('attempt connection',peerConnections);
-
-            peerConnections[data.clientSocketId]     = peerConnection;
-            
+              
+         
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
         
             peerConnection.onicecandidate = (event) => {
@@ -83,11 +78,11 @@ function broadcastStream(data){
 
             data.socket.on("answer", (id, description) => {
             
-                peerConnections[id].setRemoteDescription(description);
+                peerConnection.setRemoteDescription(description);
             });
 
             data.socket.on("candidate", (id, candidate) => {
-                peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
+                peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
             });
               
 
@@ -104,7 +99,6 @@ function broadcastStream(data){
                     //Close peer connection
                     peerConnection.close();
 
-                    peerConnections = {};
                 }
             });
 
@@ -117,6 +111,8 @@ function broadcastStream(data){
                 });
             }
             
+            peerConnection.close();
+
             reject(err);
             console.log('Error: unable to broadcast',err);
         });
