@@ -46,7 +46,7 @@ function broadcastStream(data){
 
 
     
- 
+    let peerConnection;
 
     return new Promise( (resolve,reject)=>{
 
@@ -58,7 +58,7 @@ function broadcastStream(data){
         
             window.stream = stream;
                 
-            let peerConnection    = new RTCPeerConnection(data.webRTCconfig);        
+            peerConnection    = new RTCPeerConnection(data.webRTCconfig);        
         
         
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
