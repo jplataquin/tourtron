@@ -170,7 +170,6 @@ io.sockets.on("connection", socket => {
     socket.once('disconnect',() =>{
         let rovers = Object.values(availableRovers);
 
-        console.log('rovers',rovers,availableRovers);
         console.log('Disconnected',socket.id);
 
         for(let i = 0; i <= rovers.length-1;i++){
@@ -182,7 +181,7 @@ io.sockets.on("connection", socket => {
             if(rover.socket.id == socket.id){
                 
                 if(rover.client != null){
-
+                    console.log('Rover disconnected');
                     rover.client.emit('rover-disconnected');
 
                     
@@ -195,6 +194,8 @@ io.sockets.on("connection", socket => {
             }
 
             if(rover.client != null){
+
+                console.log('Client disconnected');
                 //If client was disconnected
                 if(rover.client.id == socket.id){
 
