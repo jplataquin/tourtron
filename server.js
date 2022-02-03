@@ -219,6 +219,7 @@ io.sockets.on("connection", socket => {
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
+        console.log('FORWARD');
         availableRovers[roverName].socket.emit('forward');
     });
 
@@ -230,6 +231,8 @@ io.sockets.on("connection", socket => {
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
+        
+        console.log('BACKWARD');
         availableRovers[roverName].socket.emit('backward');
     });
 
@@ -241,6 +244,8 @@ io.sockets.on("connection", socket => {
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
+        
+        console.log('ROTATE LEFT');
         availableRovers[roverName].socket.emit('rotate-left');
     });
 
@@ -252,6 +257,8 @@ io.sockets.on("connection", socket => {
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
+        
+        console.log('ROTATE RIGHT');
         availableRovers[roverName].socket.emit('rotate-right');
     });
 
@@ -263,6 +270,8 @@ io.sockets.on("connection", socket => {
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
+        
+        console.log('STOP');
         availableRovers[roverName].socket.emit('stop');
     });
 

@@ -151,7 +151,7 @@
 
         //Backward
         backward.onmousedown = ()=>{
-
+            console.log('backward');
             clearInterval(lastCommand);
             broker.volatile.emit('backward',roverName);
             lastCommand = setInterval(()=>{
@@ -172,7 +172,7 @@
 
         //Left
         left.onmousedown = ()=>{
-
+            console.log('left');
             clearInterval(lastCommand);
             broker.volatile.emit('rotate-left',roverName);
             lastCommand = setInterval(()=>{
@@ -192,7 +192,7 @@
 
         //Right
         right.onmousedown = ()=>{
-
+            console.log('right');
             clearInterval(lastCommand);
             broker.volatile.emit('rotate-right',roverName);
             lastCommand = setInterval(()=>{

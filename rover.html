@@ -9,6 +9,7 @@
 </head>
 <body>
     <h1>Hello World</h1>
+    <h2 id="status"></h2>
     
   
 
@@ -18,6 +19,8 @@
     <script type="text/javascript" src="//patrila.app:5001/assets/js/streamify.js"></script>
 
     <script>
+
+        const statusDisplay = document.getElementById('status');
 
         //Initialize two sockets
         let local,broker;
@@ -205,6 +208,8 @@
             clearInterval(lastCommand);
             
             local.volatile.emit('forward');
+            
+            statusDisplay.innerHTML = 'FORWARD';
 
             lastCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
@@ -215,6 +220,8 @@
             clearInterval(lastCommand);
             
             local.volatile.emit('backward');
+
+            statusDisplay.innerHTML = 'BACKWARD';
             lastCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
@@ -224,6 +231,8 @@
             clearInterval(lastCommand);
             
             local.volatile.emit('rotate-left');
+
+            statusDisplay.innerHTML = 'ROTATE LEFT';
             lastCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
@@ -233,6 +242,8 @@
             clearInterval(lastCommand);
             
             local.volatile.emit('rotate-right');
+
+            statusDisplay.innerHTML = 'ROTATE RIGHT';
             lastCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
@@ -242,6 +253,8 @@
             clearInterval(lastCommand);
             
             local.volatile.emit('stop');
+
+            statusDisplay.innerHTML = 'STOP';
             lastCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
