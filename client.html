@@ -25,10 +25,20 @@
         </tr>
     </table>
 
+    <div id="app"></div>
+
     <script type="text/javascript" src="//patrila.app:5000/socket.io/socket.io.js"></script>
 
-    <script>
+    <script type="module">
 
+        import {ArrowPadsComponent} from '/components/ArrowPadsComponent.js'; 
+
+        const app = document.querySelector('#app');
+
+        let ArrowPads = new ArrowPadsComponent();
+
+        render(ArrowPads).to(app);
+        
         let roverName       = null;
         let peerConnection  = null;
         let videoEl         = document.querySelector('#videoEl');
