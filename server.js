@@ -30,7 +30,7 @@ const http2Server = http2.createSecureServer({
 
 app.use('/assets',express.static(path.join(__dirname, '/assets'))); 
 
-app.get('/js/adarna.js',function(req,res){
+app.get('/js/adarna',function(req,res){
     console.log('adarna');
     res.sendFile(path.join(__dirname, 'node_modules/adarna/dist/adarna.js'));
 });
