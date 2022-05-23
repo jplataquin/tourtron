@@ -167,6 +167,9 @@ mozallowfullscreen="true">
                 console.log(command);
                 this.el.fullScreenBtn.innerHTML = command+' '+id;
                 clearInterval(this.lastCommand);
+
+                if(!this.broker) return false;
+                
                 this.broker.volatile.emit(command,this.roverName);
                 this.lastCommand = setInterval(()=>{
                    this.broker.volatile.emit(command,this.roverName);
