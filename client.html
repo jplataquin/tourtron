@@ -160,7 +160,7 @@
 
             sendCommand(command){
                 console.log(command);
-                alert(command);
+                this.el.fullScreenBtn.innerHTML = command;
                 clearInterval(this.lastCommand);
                 this.broker.volatile.emit(command,this.roverName);
                 this.lastCommand = setInterval(()=>{
