@@ -12,20 +12,6 @@
     <video id="videoEl" playsinline autoplay muted></video>
 
 
-    <table>
-        <tr>
-            <td></td>
-            <td>
-                <button id="forward">🠕</button>
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><button id="left">🠔</button></td>
-            <td><button id="backward">🠗</button></td>
-            <td><button id="right">🠖</button></td>
-        </tr>
-    </table>
 
     <div id="app"></div>
 
@@ -37,8 +23,7 @@
 
         const app = document.querySelector('#app');
 
-       
-
+    
         let view = new class extends Component{
 
             view(){
@@ -59,8 +44,11 @@
                                         bottom: 0,
                                         minWidth: '100%'
                                     },
+                                    playsinline:true, 
+                                    autoplay:true, 
+                                    muted:true,
                                     src:'https://www.w3schools.com/html/mov_bbb.mp4',
-                                    
+                                    dataEl:'video'
                                 });
 
 
@@ -90,8 +78,13 @@
             controller(){
 
                 this.lastCommand;
-                this.commandDelay = 2000;
+                this.commandDelay       = 2000;
+                this.roverName          = null;
+                this.peerConnection     = null;
+                this.broker             = null;
 
+                this.initConnection();
+      
                 this.el.directionPad.handler.onchange((command,time,id)=>{
 
                     switch(command){
@@ -102,10 +95,10 @@
                             this.moveBackward();
                             break;
                         case 'LEFT':
-                            this.moveLeft();
+                            this.rotateLeft();
                             break;
                         case 'RIGHT':
-                            this.moveRight();
+                            this.rotateRight();
                             break;
                         default: 
                             this.allStop();    
@@ -115,11 +108,119 @@
             }
 
             moveForward(){
-                console.log('forward');
+                this.sendCommand('forward');
+            }
+
+            moveBackward(){
+                this.sendCommand('backward');
+            }
+
+            moveLeft(){
+                this.sendCommand('rotate_left');
+            }
+
+            rotateRight(){
+                this.sendCommand('rotate-right');
             }
 
             allStop(){
-                console.log('All Stop');
+                this.sendCommand('stop');
+            }
+
+            sendCommand(command){
+                console.log(command);
+                clearInterval(this.lastCommand);
+                this.broker.volatile.emit(command,this.roverName);
+                this.lastCommand = setInterval(()=>{
+                   this.broker.volatile.emit(command,this.roverName);
+                },this.commandDelay);
+            }
+
+            initConnection(){
+
+                //Connect to broker
+                this.broker = io("wss://patrila.app:5000/",{
+                    reconnection:false
+                });
+
+                this.broker.emit('get-available-rovers',(list)=>{
+                    console.log(list);
+
+                    this.broker.emit('connect-to-rover',{
+                        name:'TOURTRON_1',
+                        uid:1
+                    });
+                });
+                
+                
+
+                let webRTCconfig = {
+                    iceServers: [
+                        { 
+                        "urls": "stun:stun.l.google.com:19302",
+                        },
+                        { 
+                            "urls": "turn:turn.patrila.app:5349",
+                            "username": "user",
+                            "credential": "somepassword"
+                        }
+                    ]
+                };
+
+
+                this.broker.on("offer", (id, description, name) => {
+        
+                    this.peerConnection = new RTCPeerConnection(webRTCconfig);
+                    
+                    this.peerConnection
+                        .setRemoteDescription(description)
+                        .then(()  => this.peerConnection.createAnswer())
+                        .then(sdp => this.peerConnection.setLocalDescription(sdp))
+                        .then(() => {
+                            this.broker.emit("answer", id, this.peerConnection.localDescription);
+                        });
+
+
+                    this.peerConnection.ontrack = event => {
+                        this.el.video.srcObject = event.streams[0];
+                        this.broker.volatile.emit('connection-success',name);
+                        this.roverName = name;
+                    };
+
+                    this.peerConnection.onicecandidate = event => {
+                        if (event.candidate) {
+                            this.broker.emit("candidate", id, event.candidate);
+                        }
+                    };
+
+                });
+
+
+                this.broker.on("candidate", (id, candidate) => {
+                    this.peerConnection
+                        .addIceCandidate(new RTCIceCandidate(candidate))
+                        .catch(e => console.error(e));
+                });
+
+                //If rover is disconnected then close the peer connection
+                this.broker.on('rover-disconnected',()=>{
+                    if(this.peerConnection){
+                        this.peerConnection.close();
+                        this.peerConnection = null;
+                    }
+                });
+
+                //If rover failed to broadcast
+                this.broker.on('rover-broadcast-failed',(message)=>{
+
+                    if(this.peerConnection){
+                        this.peerConnection.close();
+                        this.peerConnection = null
+                    }
+
+                    console.log('Error: '+message);
+                });
+
             }
 
         }();
@@ -128,93 +229,8 @@
 
         render(view).to(app);
 
-        let roverName       = null;
-        let peerConnection  = null;
-        let videoEl         = document.querySelector('#videoEl');
 
-        //Connect to broker
-        const broker = io("wss://patrila.app:5000/",{
-            reconnection:false
-        });
-
-        broker.emit('get-available-rovers',(list)=>{
-            console.log(list);
-
-            broker.emit('connect-to-rover',{
-                name:'TOURTRON_1',
-                uid:1
-            });
-        });
-        
-        
-
-        let webRTCconfig = {
-            iceServers: [
-                { 
-                "urls": "stun:stun.l.google.com:19302",
-                },
-                { 
-                    "urls": "turn:turn.patrila.app:5349",
-                    "username": "user",
-                    "credential": "somepassword"
-                }
-            ]
-        };
-
-
-        broker.on("offer", (id, description, name) => {
-  
-            peerConnection = new RTCPeerConnection(webRTCconfig);
-            
-            peerConnection
-                .setRemoteDescription(description)
-                .then(()  => peerConnection.createAnswer())
-                .then(sdp => peerConnection.setLocalDescription(sdp))
-                .then(() => {
-                    broker.emit("answer", id, peerConnection.localDescription);
-                });
-
-
-            peerConnection.ontrack = event => {
-                videoEl.srcObject = event.streams[0];
-                broker.volatile.emit('connection-success',name);
-                roverName = name;
-            };
-
-            peerConnection.onicecandidate = event => {
-                if (event.candidate) {
-                    broker.emit("candidate", id, event.candidate);
-                }
-            };
-
-        });
-
-
-        broker.on("candidate", (id, candidate) => {
-            peerConnection
-                .addIceCandidate(new RTCIceCandidate(candidate))
-                .catch(e => console.error(e));
-        });
-
-        //If rover is disconnected then close the peer connection
-        broker.on('rover-disconnected',()=>{
-            if(peerConnection){
-                peerConnection.close();
-                peerConnection = null;
-            }
-        });
-
-        //If rover failed to broadcast
-        broker.on('rover-broadcast-failed',(message)=>{
-
-            if(peerConnection){
-                peerConnection.close();
-                peerConnection = null
-            }
-
-            console.log('Error: '+message);
-        });
-        /***************************************************************/
+              /***************************************************************/
 
        /**
         const forward   = document.querySelector('#forward');
