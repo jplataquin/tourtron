@@ -172,7 +172,7 @@ mozallowfullscreen="true">
             }
 
             rotateLeft(){
-                this.sendCommand('rotate_left');
+                this.sendCommand('rotate-left');
             }
 
             rotateRight(){
@@ -244,8 +244,8 @@ mozallowfullscreen="true">
 
 
                     this.peerConnection.ontrack = event => {
-                        console.log(this.el.video);
                         this.el.video.srcObject = event.streams[0];
+                        this.el.video.play();
                         this.broker.volatile.emit('connection-success',name);
                         this.roverName = name;
                     };
