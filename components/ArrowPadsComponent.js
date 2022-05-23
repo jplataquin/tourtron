@@ -351,7 +351,7 @@ class ArrowPadsComponent extends Component {
 
         return {
             '.button':{
-                backgroundColor:'background-color:rgba(0,0,0,0.3)',
+                backgroundColor:'rgba(0,0,0,0.3)',
                 height:'50px',
                 width:'50px'
             },
@@ -359,7 +359,7 @@ class ArrowPadsComponent extends Component {
                 backgroundColor:'pink !important'
             },
             '.area':{
-                backgroundColor:'background-color:rgba(0,0,0,0.3)',
+                backgroundColor:'rgba(0,0,0,0.3)',
                 height:'150px',
                 width:'150px',
                 borderRadius:'50%'
@@ -375,7 +375,7 @@ class ArrowPadsComponent extends Component {
             '.middle':{
                 height:'50px',
                 width:'50px',
-                backgroundColor:'background-color:rgba(0,0,0,0.3)',
+                backgroundColor:'rgba(0,0,0,0.3)',
                 borderRadius:'50%'
             },
             '.center':{
