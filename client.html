@@ -90,21 +90,26 @@ mozallowfullscreen="true">
                     console.log(command,time,id);
                     switch(command,time,id){
                         case 'UP':
+                            console.log(1);
                             this.moveForward(time,id);
                             break;
                         case 'DOWN':
+                            console.log(2);
                             this.moveBackward(time,id);
                             break;
                         case 'LEFT':
+                            
                             this.rotateLeft(time,id);
                             break;
                         case 'RIGHT':
                             this.rotateRight(time,id);
                             break;
                         case 'NEUTRAL':
+                        console.log(3);
                             this.allStop(time,id);
                             break;
                         default: 
+                        console.log(4);
                             this.allStop(time,id);    
 
                     }
