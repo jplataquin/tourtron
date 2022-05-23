@@ -46,11 +46,16 @@
                 let ArrowPads = new ArrowPadsComponent();
                 return t.div({},()=>{
                     t.div({class:'row'},()=>{
-                        t.div({style:{
-                            width:'100%',
-                            backgroundColor:'red',
-                            height:'500px'
-                        }});
+                        
+                        t.div({class:'col'},()=>{
+                           t.video({
+                               src:'https://www.w3schools.com/html/mov_bbb.mp4',
+                               playsinline:true, 
+                               autoplay:true, 
+                               muted:true
+                            });
+                        });
+                      
                     });
                 });
             }
