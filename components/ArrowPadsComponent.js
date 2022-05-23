@@ -25,7 +25,7 @@ class ArrowPadsComponent extends Component {
                 t.div(()=>{
                     t.div({dataEl:'left', class:'button float-left left'},()=>{});
 
-                    t.div({dataEl:'neutral', class:'middle float-left'},()=>{});
+                    t.div({dataEl:'middle', class:'middle float-left'},()=>{});
 
                     t.div({dataEl:'right', class:'button float-left right'},()=>{});
                     
@@ -42,60 +42,48 @@ class ArrowPadsComponent extends Component {
     }
 
     controller(dom){
-        //Mousedown
-        this.el.neutral.onmousedown = (e)=>{this.neutralActive(e,0)};
+
         this.el.up.onmousedown      = (e)=>{this.upActive(e,1)};
         this.el.down.onmousedown    = (e)=>{this.downActive(e,2)};
         this.el.left.onmousedown    = (e)=>{this.leftActive(e,3)};
         this.el.right.onmousedown   = (e)=>{this.rightActive(e,4)};
-        
 
-        //Mouseup
-        this.el.neutral.onmouseup   = (e)=>{this.neutralInactive(e,-1)};
         this.el.up.onmouseup        = (e)=>{this.upInactive(e,5)};
         this.el.down.onmouseup      = (e)=>{this.downInactive(e,6)};
         this.el.left.onmouseup      = (e)=>{this.leftInactive(e,7)};
         this.el.right.onmouseup     = (e)=>{this.rightInactive(e,8)};
 
-        //Mouseout
-        this.el.neutral.onmouseout   = (e)=>{this.neutralInactive(e,-1)};
         this.el.up.onmouseout        = (e)=>{this.upInactive(e,9)};
         this.el.down.onmouseout      = (e)=>{this.downInactive(e,10)};
         this.el.left.onmouseout      = (e)=>{this.leftInactive(e,11)};
         this.el.right.onmouseout     = (e)=>{this.rightInactive(e,12)};
-       
-        //Touchstart
-        this.el.neutral.ontouchstart = (e)=>{this.neutralActive(e,0)}
+        
         this.el.up.ontouchstart      = (e)=>{this.upActive(e,13);};
+
+       
+
         this.el.down.ontouchstart    = (e)=>{this.downActive(e,14)};
         this.el.left.ontouchstart    = (e)=>{this.leftActive(e,15)};
         this.el.right.ontouchstart   = (e)=>{this.rightActive(e,16)};
 
-        //Touchend
-        this.el.neutral.ontouchend   = (e)=>{this.neutralInactive(e,-1)};
         this.el.up.ontouchend        = (e)=>{this.upInactive(e,17);};
         this.el.down.ontouchend      = (e)=>{this.downInactive(e,18)};
         this.el.left.ontouchend      = (e)=>{this.leftInactive(e,19)};
         this.el.right.ontouchend     = (e)=>{this.rightInactive(e,20)};
 
-        //Touchcancel
-        this.el.neutral.ontouchcancel   = (e)=>{this.neutralInactive(e,-1)};
         this.el.up.ontouchcancel        = (e)=>{this.upInactive(e,21)};
         this.el.down.ontouchcancel      = (e)=>{this.downInactive(e,22)};
         this.el.left.ontouchcancel      = (e)=>{this.leftInactive(e,23)};
         this.el.right.ontouchcancel     = (e)=>{this.rightInactive(e,24)};
 
-        //ondragstart
-        this.el.neutral.ondragsleave   = (e)=>{this.neutralInactive(e,-1)};
-        this.el.up.ondragsleave        = (e)=>{this.upInactive(e,25)};
-        this.el.down.ondragsleave      = (e)=>{this.downInactive(e,26)};
-        this.el.left.ondragsleave      = (e)=>{this.leftInactive(e,27)};
-        this.el.right.ondragsleave     = (e)=>{this.rightInactive(e,28)};
+        this.el.up.ondragsleave       = (e)=>{this.upInactive(e,25)};
+        this.el.down.ondragstart      = (e)=>{this.downInactive(e,26)};
+        this.el.left.ondragstart      = (e)=>{this.leftInactive(e,27)};
+        this.el.right.ondragstart     = (e)=>{this.rightInactive(e,28)};
 
 
         dom.ontouchend = (e)=>{
            
-           this.el.neutral.classList.remove('active');
            this.el.up.classList.remove('active');
            this.el.down.classList.remove('active');
            this.el.left.classList.remove('active');
@@ -105,7 +93,6 @@ class ArrowPadsComponent extends Component {
        }
 
        dom.ontouchcancel = (e)=>{
-           this.el.neutral.classList.remove('active');
            this.el.up.classList.remove('active');
            this.el.down.classList.remove('active');
            this.el.left.classList.remove('active');
@@ -121,32 +108,6 @@ class ArrowPadsComponent extends Component {
            let x = e.touches[0].pageX;
            let y = e.touches[0].pageY;
 
-
-           //NEUTRALACTIVE
-           if( x <= this.neutralRect.right && x >= this.neutralRect.left && y >= this.neutralRect.top && y <= this.neutralRect.bottom){
-            this.el.neutral.classList.add('active');
-            this.touched = this.el.neutral;
-            this.currentActive = 'NEUTRAL';
-            this.callback(this.currentActive,(new Date()).getTime(),31);
-          }
-          
-          //NEUTRALINACTIVE
-          if( this.touched == this.el.up && 
-              (x > this.neutralRect.right || 
-              x < this.neutralRect.left || 
-              y > this.neutralRect.bottom || 
-              y < this.neutralRect.top)
-          ){
-              
-              this.el.neutral.classList.remove('active');
-              this.touched = null;
-              this.currentActive = '';
-              this.callback(this.currentActive,(new Date()).getTime(),32);
-              
-          }
-
-
-           //UPACTIVE
            if( x <= this.upRect.right && x >= this.upRect.left && y >= this.upRect.top && y <= this.upRect.bottom){
              this.el.up.classList.add('active');
              this.touched = this.el.up;
@@ -154,7 +115,6 @@ class ArrowPadsComponent extends Component {
              this.callback(this.currentActive,(new Date()).getTime(),31);
            }
            
-           //UPINACTIVE
            if( this.touched == this.el.up && 
                (x > this.upRect.right || 
                x < this.upRect.left || 
@@ -170,7 +130,7 @@ class ArrowPadsComponent extends Component {
            }
 
            
-           //DOWNACTIVE
+           
            if(x <= this.downRect.right && x >= this.downRect.left && y >= this.downRect.top && y <= this.downRect.bottom){
                this.el.down.classList.add('active');
                this.touched = this.el.down;
@@ -178,7 +138,6 @@ class ArrowPadsComponent extends Component {
                this.callback(this.currentActive,(new Date()).getTime(),33);
            }
            
-           //DOWNINACTIVE
            if( this.touched == this.el.down && 
                (x > this.downRect.right || 
                x < this.downRect.left || 
@@ -193,7 +152,7 @@ class ArrowPadsComponent extends Component {
                
            }
 
-           //LEFTACTIVE
+
            if(x <= this.leftRect.right && x >= this.leftRect.left && y >= this.leftRect.top && y <= this.leftRect.bottom){
                this.el.left.classList.add('active');
                this.touched = this.el.left;
@@ -201,7 +160,6 @@ class ArrowPadsComponent extends Component {
                this.callback(this.currentActive,(new Date()).getTime(),35);
            }
            
-           //LEFTINACTIVE
            if( this.touched == this.el.left && 
                (x > this.leftRect.right || 
                x < this.leftRect.left || 
@@ -215,7 +173,7 @@ class ArrowPadsComponent extends Component {
                this.callback(this.currentActive,(new Date()).getTime(),36);
            }
 
-           //RIGHTACTIVE
+
            if(x <= this.rightRect.right && x >= this.rightRect.left && y >= this.rightRect.top && y <= this.rightRect.bottom){
                this.el.right.classList.add('active');
                this.touched = this.el.right;
@@ -223,7 +181,6 @@ class ArrowPadsComponent extends Component {
                this.callback(this.currentActive,(new Date()).getTime(),37);
            }
            
-           //RIGHTINACTIVE
            if( this.touched == this.el.right && 
                (x > this.rightRect.right || 
                x < this.rightRect.left || 
@@ -239,7 +196,7 @@ class ArrowPadsComponent extends Component {
            }
        }
 
-        dom.handler.onchange = (callback)=>{
+       dom.handler.onchange = (callback)=>{
 
             this.callback = callback;
         }
@@ -247,24 +204,15 @@ class ArrowPadsComponent extends Component {
 
     onPage(){
 
-        this.neutralRect    = this.el.neutral.getBoundingClientRect();
-        this.upRect         = this.el.up.getBoundingClientRect();
-        this.downRect       = this.el.down.getBoundingClientRect();
-        this.leftRect       = this.el.left.getBoundingClientRect();
-        this.rightRect      = this.el.right.getBoundingClientRect();
-    }
-
-    neutralActive(e,id){
-        e.preventDefault();
-        e.target.classList.add('active');
-        this.currentActive = 'NEUTRAL';
-        
-        this.callback(this.currentActive,(new Date()).getTime(),id);
+        this.upRect     = this.el.up.getBoundingClientRect();
+        this.downRect   = this.el.down.getBoundingClientRect();
+        this.leftRect   = this.el.left.getBoundingClientRect();
+        this.rightRect  = this.el.right.getBoundingClientRect();
     }
 
     upActive(e,id){
         e.preventDefault();
-        e.target.classList.add('active');
+        this.el.up.classList.add('active');
         this.currentActive = 'UP';
         
         this.callback(this.currentActive,(new Date()).getTime(),id);
@@ -289,18 +237,6 @@ class ArrowPadsComponent extends Component {
         e.target.classList.add('active');
         this.currentActive = 'RIGHT';
         this.callback(this.currentActive,(new Date()).getTime(),id);         
-    }
-
-
-    neutralInactive(e,id){
-
-        if(this.currentActive == '') return false;
-
-        e.preventDefault();
-        e.target.classList.remove('active');
-        this.currentActive = ''; 
-        this.callback(this.currentActive,(new Date).getTime(),id);   
-    
     }
 
     upInactive(e,id){
@@ -351,15 +287,15 @@ class ArrowPadsComponent extends Component {
 
         return {
             '.button':{
-                backgroundColor:'rgba(0,0,0,0.3)',
+                backgroundColor:'blue',
                 height:'50px',
                 width:'50px'
             },
             '.active':{
-                backgroundColor:'pink !important'
+                backgroundColor:'pink'
             },
             '.area':{
-                backgroundColor:'rgba(0,0,0,0.3)',
+                backgroundColor:'red',
                 height:'150px',
                 width:'150px',
                 borderRadius:'50%'
@@ -375,7 +311,7 @@ class ArrowPadsComponent extends Component {
             '.middle':{
                 height:'50px',
                 width:'50px',
-                backgroundColor:'rgba(0,0,0,0.3)',
+                backgroundColor:'yellow',
                 borderRadius:'50%'
             },
             '.center':{
