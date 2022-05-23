@@ -22,12 +22,6 @@
 
         const app = document.querySelector('#app');
         
-        window.addEventListener("load",function() {
-            setTimeout(function(){
-                // This hides the address bar:
-                window.scrollTo(0, 1);
-            }, 3000);
-        });
     
         let view = new class extends Component{
 
@@ -110,6 +104,12 @@
 
                     }
                 });
+
+
+                setTimeout(function(){
+                    alert('ok');
+                    window.scrollTo(0, 1);
+                }, 3000);
             }
 
             moveForward(){
