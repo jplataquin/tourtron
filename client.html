@@ -88,6 +88,21 @@ mozallowfullscreen="true">
       
                 this.el.directionPad.handler.onchange((command,time,id)=>{
                     console.log('lALALA');
+
+                    if(command == 'UP'){
+                        this.moveForward(time,id);
+                    }else if(command == 'DOWN'){
+                        this.moveBackward(time,id);
+                    }else if(command == 'LEFT'){
+                        this.rotateLeft(time,id);
+                    }else if(command == 'RIGHT'){
+                        this.rotateRight(time,id);
+                    }else if(command == 'NEUTRAL'){
+                        this.allStop(time,id);
+                    }else{
+                        this.allStop(time,id);
+                    }
+                    /**
                     switch(command,time,id){
                         case 'UP':
                             console.log(1);
@@ -112,7 +127,7 @@ mozallowfullscreen="true">
                         console.log(command,time,id);
                             this.allStop(time,id);    
 
-                    }
+                    }**/
                 });
 
 
