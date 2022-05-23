@@ -87,7 +87,7 @@ mozallowfullscreen="true">
               //  this.initConnection();
       
                 this.el.directionPad.handler.onchange((command,time,id)=>{
-
+                    console.log(command,time,id);
                     switch(command,time,id){
                         case 'UP':
                             this.moveForward(time,id);
@@ -169,7 +169,7 @@ mozallowfullscreen="true">
                 clearInterval(this.lastCommand);
 
                 if(!this.broker) return false;
-                
+
                 this.broker.volatile.emit(command,this.roverName);
                 this.lastCommand = setInterval(()=>{
                    this.broker.volatile.emit(command,this.roverName);
