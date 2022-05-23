@@ -60,7 +60,7 @@
                                     }
                                 },()=>{
                                     t.div({class:'d-flex justify-content-between'},()=>{
-                                        t.h1('TEST');
+                                        t.button({dataEl:'fullScreenBtn'},'Full Screen');
 
                                         t.el(ArrowPads.component.bindTo(this).as('directionPad')); 
                                     });
@@ -106,10 +106,9 @@
                 });
 
 
-                setTimeout(function(){
-                    alert('ok');
-                    window.scrollTo(0, document.body.scrollHeight);
-                }, 3000);
+               this.el.fullScreenBtn.onclick = ()=>{
+                    document.body.requestFullscreen();
+               }
             }
 
             moveForward(){
