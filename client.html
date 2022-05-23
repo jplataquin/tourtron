@@ -39,13 +39,12 @@ mozallowfullscreen="true">
                            // t.div({class:'embed-responsive embed-responsive-16by9'},()=>{
 
                                 t.video({
-                                    /*
                                     style:{
                                         position: 'fixed',
                                         right: 0,
                                         top: 0,
                                         minWidth: '100%'
-                                    },*/
+                                    },
                                     playsinline:true, 
                                     autoplay:true, 
                                     muted:true,
@@ -66,7 +65,7 @@ mozallowfullscreen="true">
                                 },()=>{
                                     t.div({class:'d-flex justify-content-between'},()=>{
                                         t.button({dataEl:'fullScreenBtn'},'Full Screen');
-
+                                        t.button({dataEl:'play'},'Play');
                                         t.el(ArrowPads.component.bindTo(this).as('directionPad')); 
                                     });
                                 });
@@ -135,6 +134,10 @@ mozallowfullscreen="true">
 
                this.el.fullScreenBtn.onclick = ()=>{
                     this.toggleFullScreen();
+               }
+
+               this.el.play.onlick = ()=>{
+                   this.el.video.play();
                }
             }
 
