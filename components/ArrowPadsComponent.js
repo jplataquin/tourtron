@@ -356,7 +356,7 @@ class ArrowPadsComponent extends Component {
                 width:'50px'
             },
             '.active':{
-                backgroundColor:'pink'
+                backgroundColor:'pink !important'
             },
             '.area':{
                 backgroundColor:'red',
