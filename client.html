@@ -47,15 +47,19 @@
                 return t.div({},()=>{
                     t.div({class:'row'},()=>{
                         
-                        t.div({class:'col d-flex justify-content-start'},()=>{
-                           t.video({
-                               src:'https://www.w3schools.com/html/mov_bbb.mp4',
-                               width:'100%' 
-                                
-                            });
-                        });
+                        t.div({class:'col text-center'},()=>{
+
+                            t.div({class:'embed-responsive embed-responsive-16by9'},()=>{
+
+                                t.video({
+                                    class:'embed-responsive-item',
+                                    src:'https://www.w3schools.com/html/mov_bbb.mp4'
+                                });
+                            });//div
+                        
+                        });//div
                       
-                    });
+                    });//div
                 });
             }
 
