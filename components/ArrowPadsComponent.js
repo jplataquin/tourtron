@@ -1,4 +1,4 @@
-import {Component,Template} from '../node_modules/adarna/dist/adarna.js';
+import {Component,Template} from '/js/adarna.js';
        
 class ArrowPadsComponent extends Component {
 
