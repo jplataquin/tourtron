@@ -377,7 +377,7 @@ class ArrowPadsComponent extends Component {
                 width:'50px',
                 backgroundColor:'rgba(0,0,0,0.3)',
                 borderRadius:'50%',
-                backgroundImage:'url("data:image/svg+xml;utf8,<?xml version=\'1.0\' encoding=\'iso-8859-1\'?><svg xmlns=\'http://www.w3.org/2000/svg\'> <path d=\'M3.5 5A1.5 1.5 0 0 1 5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5zM5 4.5a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5V5a.5.5 0 0 0-.5-.5H5z\'/> </svg>'
+                backgroundImage:'url("data:image/svg+xml;utf8,<?xml version=\'1.0\' encoding=\'iso-8859-1\'?><svg version=\'1.1\' id=\'Layer_1\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' x=\'0px\' y=\'0px\' viewBox=\'0 0 330 330\' style=\'enable-background:new 0 0 330 330;\' xml:space=\'preserve\'><path id=\'XMLID_224_\' d=\'M3.5 5A1.5 1.5 0 0 1 5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5zM5 4.5a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5V5a.5.5 0 0 0-.5-.5H5z\'/></svg>")'
             },
             '.center':{
                 margin: 'auto'
