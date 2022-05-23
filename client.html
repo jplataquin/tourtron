@@ -88,24 +88,24 @@ mozallowfullscreen="true">
       
                 this.el.directionPad.handler.onchange((command,time,id)=>{
 
-                    switch(command){
+                    switch(command,time,id){
                         case 'UP':
-                            this.moveForward();
+                            this.moveForward(time,id);
                             break;
                         case 'DOWN':
-                            this.moveBackward();
+                            this.moveBackward(time,id);
                             break;
                         case 'LEFT':
-                            this.rotateLeft();
+                            this.rotateLeft(time,id);
                             break;
                         case 'RIGHT':
-                            this.rotateRight();
+                            this.rotateRight(time,id);
                             break;
                         case 'NEUTRAL':
-                            this.allStop();
+                            this.allStop(time,id);
                             break;
                         default: 
-                            this.allStop();    
+                            this.allStop(time,id);    
 
                     }
                 });
@@ -143,8 +143,8 @@ mozallowfullscreen="true">
                 }
             }
 
-            moveForward(){
-                this.sendCommand('forward');
+            moveForward(time,id){
+                this.sendCommand('forward',time,id);
             }
 
             moveBackward(){
@@ -163,9 +163,9 @@ mozallowfullscreen="true">
                 this.sendCommand('stop');
             }
 
-            sendCommand(command){
+            sendCommand(command,time,id){
                 console.log(command);
-                this.el.fullScreenBtn.innerHTML = command;
+                this.el.fullScreenBtn.innerHTML = command+' '+id;
                 clearInterval(this.lastCommand);
                 this.broker.volatile.emit(command,this.roverName);
                 this.lastCommand = setInterval(()=>{
