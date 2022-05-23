@@ -92,7 +92,7 @@
                 this.lastCommand;
                 this.commandDelay = 2000;
 
-                this.el.directionPad.component.handle.callback((command,time,id)=>{
+                this.el.directionPad.handler.onchange((command,time,id)=>{
 
                     switch(command){
                         case 'UP':
