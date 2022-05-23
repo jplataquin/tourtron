@@ -49,14 +49,20 @@
                         
                         t.div({class:'col text-center'},()=>{
 
-                            t.div({class:'embed-responsive embed-responsive-16by9'},()=>{
+                           // t.div({class:'embed-responsive embed-responsive-16by9'},()=>{
 
                                 t.video({
-                                    class:'embed-responsive-item',
+                                    style:{
+                                        position: 'fixed',
+                                        right: 0,
+                                        bottom: 0,
+                                        minWidth: '100%',
+                                        minHeight: '100%'
+                                    },
                                     src:'https://www.w3schools.com/html/mov_bbb.mp4',
-                                    width:'70%'
+                                    
                                 });
-                            });//div
+                           // });//div
                         
                         });//div
                       
