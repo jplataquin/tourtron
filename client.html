@@ -21,11 +21,12 @@
         import {ArrowPadsComponent} from '/components/ArrowPadsComponent.js'; 
 
         const app = document.querySelector('#app');
+        
         window.addEventListener("load",function() {
             setTimeout(function(){
                 // This hides the address bar:
                 window.scrollTo(0, 1);
-            }, 0);
+            }, 3000);
         });
     
         let view = new class extends Component{
