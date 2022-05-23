@@ -11,6 +11,33 @@ class ArrowPadsComponent extends Component {
     view(){
         const t = new Template();
 
+        let modal = t.div({class:'modal',tabindex:'-1'},()=>{
+            t.div({class:'modal-dialog'},()=>{
+                t.div({class:'modal-content'},()=>{
+                    t.div({class:'modal-header'},()=>{
+                        t.h5({class:'modal-title'},'Stream');
+                    });
+
+                    t.div({class:'modal-body'},()=>{
+                        t.txt('Receive stream');
+                    });
+
+                    t.div({class:'modal-footer'},()=>{
+                        t.button({
+                            type:'button',
+                            class:'btn btn-secondary',
+                            dataBsDismiss:"modal"
+                        },'Close');
+
+                        t.button({
+                            type:'button',
+                            class:'btn btn-primary'
+                        },'Ok');
+                    });
+                });
+            });
+        });
+
         return t.div(()=>{
 
     

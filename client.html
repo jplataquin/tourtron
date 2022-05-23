@@ -32,6 +32,35 @@ mozallowfullscreen="true">
                 let ArrowPads = new ArrowPadsComponent();
 
                 return t.div({},()=>{
+
+
+                    t.div({dataEl:'modal', class:'modal',tabindex:'-1'},()=>{
+                        t.div({class:'modal-dialog'},()=>{
+                            t.div({class:'modal-content'},()=>{
+                                t.div({class:'modal-header'},()=>{
+                                    t.h5({class:'modal-title'},'Stream');
+                                });
+
+                                t.div({class:'modal-body'},()=>{
+                                    t.txt('Receive stream');
+                                });
+
+                                t.div({class:'modal-footer'},()=>{
+                                    t.button({
+                                        type:'button',
+                                        class:'btn btn-secondary',
+                                        dataBsDismiss:"modal"
+                                    },'Close');
+
+                                    t.button({
+                                        type:'button',
+                                        class:'btn btn-primary'
+                                    },'Ok');
+                                });
+                            });
+                        });
+                    });
+
                     t.div({class:'row'},()=>{
                         
                         t.div({class:'col text-center'},()=>{
@@ -136,11 +165,15 @@ mozallowfullscreen="true">
                     this.toggleFullScreen();
                }
 
-               this.el.play.onclick = ()=>{
-                   this.el.video.play();
+               let modal = new bootstrap.Modal(this.el.modal,{});
 
-                   console.log('PLaying');
+               this.el.play.onclick = ()=>{
+                   //this.el.video.play();
+
+                   modal.show();
                }
+
+               
             }
 
             toggleFullScreen(){
