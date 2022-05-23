@@ -87,7 +87,7 @@ class ArrowPadsComponent extends Component {
 
         //ondragstart
         this.el.neutral.ondragsleave   = (e)=>{this.neutralInactive(e,-1)};
-        this.el.up.ondragsleave       = (e)=>{this.upInactive(e,25)};
+        this.el.up.ondragsleave        = (e)=>{this.upInactive(e,25)};
         this.el.down.ondragsleave      = (e)=>{this.downInactive(e,26)};
         this.el.left.ondragsleave      = (e)=>{this.leftInactive(e,27)};
         this.el.right.ondragsleave     = (e)=>{this.rightInactive(e,28)};
