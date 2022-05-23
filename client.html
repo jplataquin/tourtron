@@ -44,6 +44,7 @@
             view(){
                 const t = new Template();
                 let ArrowPads = new ArrowPadsComponent();
+
                 return t.div({},()=>{
                     t.div({class:'row'},()=>{
                         
@@ -74,7 +75,7 @@
                                     t.div({class:'d-flex justify-content-between'},()=>{
                                         t.h1('TEST');
 
-                                        t.el(ArrowPads.component.bindTo(this).as('arrowPads')); 
+                                        t.el(ArrowPads.component.bindTo(this).as('directionPad')); 
                                     });
                                 });
                            // });//div
@@ -83,6 +84,42 @@
                       
                     });//div
                 });
+            }
+
+
+            controller(){
+
+                this.lastCommand;
+                this.commandDelay = 2000;
+
+                this.el.directionPad.handler.callback((command,time,id)=>{
+
+                    switch(command){
+                        case 'UP':
+                            this.moveForward();
+                            break;
+                        case 'DOWN':
+                            this.moveBackward();
+                            break;
+                        case 'LEFT':
+                            this.moveLeft();
+                            break;
+                        case 'RIGHT':
+                            this.moveRight();
+                            break;
+                        default: 
+                            this.allStop();    
+
+                    }
+                });
+            }
+
+            moveForward(){
+                console.log('forward');
+            }
+
+            allStop(){
+                console.log('All Stop');
             }
 
         }();
@@ -179,13 +216,13 @@
         });
         /***************************************************************/
 
-       
+       /**
         const forward   = document.querySelector('#forward');
         const backward  = document.querySelector('#backward');
         const left      = document.querySelector('#left');
         const right     = document.querySelector('#right');
         
- 
+        
         let lastCommand;
         let commandDelay = 2000;
 
@@ -273,7 +310,7 @@
             broker.volatile.emit('stop',roverName);
         }
 
-
+    **/
     </script>
    
 </body>
