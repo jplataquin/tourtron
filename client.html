@@ -245,7 +245,11 @@ mozallowfullscreen="true">
 
                     this.peerConnection.ontrack = event => {
                         this.el.video.srcObject = event.streams[0];
-                        this.el.video.play();
+                        
+                        if(confirm('Play Video')){
+                            this.el.video.play();
+                        }
+
                         this.broker.volatile.emit('connection-success',name);
                         this.roverName = name;
                     };
