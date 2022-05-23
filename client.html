@@ -104,30 +104,26 @@ mozallowfullscreen="true">
                     
                     switch(command){
                         case 'UP':
-                            console.log(1);
-                            this.moveForward(time,id);
+                            this.moveForward();
                             break;
                         
                         case 'DOWN':
-                            console.log(2);
-                            this.moveBackward(time,id);
+                            this.moveBackward();
                             break;
+
                         case 'LEFT':
-                            
-                            this.rotateLeft(time,id);
+                            this.rotateLeft();
                             break;
 
                         case 'RIGHT':
-                            this.rotateRight(time,id);
+                            this.rotateRight();
                             break;
 
                         case 'NEUTRAL':
-                            console.log(3);
-                            this.allStop(time,id);
+                            this.allStop();
                             break;
                         
                         default: 
-                            console.log(command,time,id);
                             this.allStop(time,id);    
 
                     }
@@ -166,8 +162,8 @@ mozallowfullscreen="true">
                 }
             }
 
-            moveForward(time,id){
-                this.sendCommand('forward',time,id);
+            moveForward(){
+                this.sendCommand('forward');
             }
 
             moveBackward(){
@@ -188,7 +184,9 @@ mozallowfullscreen="true">
 
             sendCommand(command,time,id){
                 console.log(command);
-                this.el.fullScreenBtn.innerHTML = command+' '+id;
+                
+                this.el.fullScreenBtn.innerHTML = command;
+                
                 clearInterval(this.lastCommand);
 
                 if(!this.broker) return false;
