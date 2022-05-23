@@ -48,6 +48,7 @@ mozallowfullscreen="true">
                                     playsinline:true, 
                                     autoplay:true, 
                                     muted:true,
+                                    controls:true,
                                    // poster:'https://via.placeholder.com/300.jpg?text=TEST',
                                     //src:'https://www.w3schools.com/html/mov_bbb.mp4',
                                     dataEl:'video'
@@ -245,11 +246,6 @@ mozallowfullscreen="true">
 
                     this.peerConnection.ontrack = event => {
                         this.el.video.srcObject = event.streams[0];
-                        
-                        if(confirm('Play Video')){
-                            this.el.video.play();
-                        }
-
                         this.broker.volatile.emit('connection-success',name);
                         this.roverName = name;
                     };
