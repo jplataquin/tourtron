@@ -90,10 +90,8 @@ mozallowfullscreen="true">
                                     }
                                 },()=>{
                                     t.div({class:'d-flex justify-content-between'},()=>{
-                                        t.button({dataEl:'fullScreenBtn'},'Full Screen');
                                         
-                                        
-                                        t.button({class:'control-buttons mt-auto', dataEl:'play'},()=>{
+                                        t.button({class:'control-buttons mt-auto', dataEl:'fullScreenBtn'},()=>{
                                             t.img({src:'/assets/img/maximize.png'});
                                         });
 
@@ -117,24 +115,11 @@ mozallowfullscreen="true">
                 this.roverName          = null;
                 this.peerConnection     = null;
                 this.broker             = null;
-
+                this.modalReceiveStream = new bootstrap.Modal(this.el.modal,{});
+                
                 this.initConnection();
       
                 this.el.directionPad.handler.onchange((command,time,id)=>{
-                    /**
-                    if(command == 'UP'){
-                        this.moveForward(time,id);
-                    }else if(command == 'DOWN'){
-                        this.moveBackward(time,id);
-                    }else if(command == 'LEFT'){
-                        this.rotateLeft(time,id);
-                    }else if(command == 'RIGHT'){
-                        this.rotateRight(time,id);
-                    }else if(command == 'NEUTRAL'){
-                        this.allStop(time,id);
-                    }else{
-                        this.allStop(time,id);
-                    }**/
                     
                     switch(command){
                         case 'UP':
@@ -164,12 +149,20 @@ mozallowfullscreen="true">
                 });
 
 
+                document.addEventListener("fullscreenChange", function () {
+                    if (fullscreenElement != null) {
+                        this.el.fullScreenBtn.firstChild.src = '/assets/img/minimize.png';
+                    } else {
+                        this.el.fullScreenBtn.firstChild.src = '/assets/img/maximize.png';           
+                    }
+                });
+
                this.el.fullScreenBtn.onclick = ()=>{
                     this.toggleFullScreen();
                }
 
-               this.modalReceiveStream = new bootstrap.Modal(this.el.modal,{});
-
+               
+               /**
                this.el.play.onclick = ()=>{
                    this.modalReceiveStream.show();
                }
@@ -177,7 +170,8 @@ mozallowfullscreen="true">
 
                this.el.receiveStreamBtn.onclick = ()=>{
                     this.el.video.play();
-               }
+                    this.modalReceiveStream.hide();
+               }**/
 
                
             }
