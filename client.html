@@ -162,16 +162,11 @@ mozallowfullscreen="true">
                }
 
                
-               /**
-               this.el.play.onclick = ()=>{
-                   this.modalReceiveStream.show();
-               }
-
-
+               
                this.el.receiveStreamBtn.onclick = ()=>{
                     this.el.video.play();
                     this.modalReceiveStream.hide();
-               }**/
+               }
 
                
             }
@@ -226,8 +221,7 @@ mozallowfullscreen="true">
             sendCommand(command,time,id){
                 console.log(command);
                 
-                this.el.fullScreenBtn.innerHTML = command;
-                
+          
                 clearInterval(this.lastCommand);
 
                 if(!this.broker) return false;
