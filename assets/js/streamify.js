@@ -12,7 +12,7 @@ function broadcastStream(data){
             },
              { 
                "urls": "turn:turn.patrila.app:5349",
-               "username": "user",
+               "username": "guest",
                "credential": "somepassword"
              }
         ]
