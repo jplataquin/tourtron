@@ -207,78 +207,78 @@
   
         broker.on('forward',()=>{
             
-            if(lastCommnand == 'forward') return false;
-            lastCommand = 'forward';
+            //if(lastCommnand == 'forward') return false;
+            //lastCommand = 'forward';
 
-            //clearInterval(timeoutCommand);
+            clearInterval(timeoutCommand);
             
             local.volatile.emit('forward');
             
             statusDisplay.innerHTML = 'FORWARD';
 
-            /*
+            
             timeoutCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
-            */
+            
         });
 
         broker.on('backward',()=>{
 
-            if(lastCommnand == 'backward') return false;
-            lastCommand = 'backward';
+            //if(lastCommnand == 'backward') return false;
+            //lastCommand = 'backward';
             
-            //clearInterval(lastCommand);
+            clearInterval(timeoutCommand);
             
             local.volatile.emit('backward');
 
             statusDisplay.innerHTML = 'BACKWARD';
             
-            /*
-            lastCommand = setTimeout(()=>{
+            
+            timeoutCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
-            */
+            
         });
 
         broker.on('rotate-left',()=>{
 
-            if(lastCommnand == 'rotate-left') return false;
-            lastCommand = 'rotate-left';
+            //if(lastCommnand == 'rotate-left') return false;
+            //lastCommand = 'rotate-left';
             
             //clearInterval(lastCommand);
             
             local.volatile.emit('rotate-left');
 
             statusDisplay.innerHTML = 'ROTATE LEFT';
-            /*
-            lastCommand = setTimeout(()=>{
+            
+            timeoutCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
-            */
+            
         });
 
         broker.on('rotate-right',()=>{
 
-            if(lastCommnand == 'rotate-right') return false;
-            lastCommand = 'rotate-right';
+           // if(lastCommnand == 'rotate-right') return false;
+            //lastCommand = 'rotate-right';
             
             //clearInterval(lastCommand);
             
             local.volatile.emit('rotate-right');
 
             statusDisplay.innerHTML = 'ROTATE RIGHT';
-            /*
-            lastCommand = setTimeout(()=>{
+            
+            timeoutCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
-            */
+            
         });
 
         broker.on('stop',()=>{
 
-            if(lastCommnand == 'stop') return false;
-            lastCommand = 'stop';
+            //if(lastCommnand == 'stop') return false;
+            //lastCommand = 'stop';
             
 
             //clearInterval(lastCommand);
@@ -286,11 +286,11 @@
             local.volatile.emit('stop');
 
             statusDisplay.innerHTML = 'STOP';
-            /*
-            lastCommand = setTimeout(()=>{
+            
+            timeoutCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
-            */
+            
         });
 
 

@@ -107,7 +107,7 @@
             controller(){
 
                 this.lastCommand;
-                this.commandDelay       = 500;
+                this.commandDelay       = 3000;
                 this.roverName          = null;
                 this.peerConnection     = null;
                 this.broker             = null;
@@ -223,11 +223,11 @@
                 if(!this.broker) return false;
 
                 this.broker.volatile.emit(command,this.roverName);
-                /*
+                
                 this.lastCommand = setInterval(()=>{
                    this.broker.volatile.emit(command,this.roverName);
                 },this.commandDelay);
-                */
+                
             }
 
             initConnection(){
