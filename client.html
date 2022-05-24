@@ -75,7 +75,7 @@ mozallowfullscreen="true">
                                     autoplay:true, 
                                     muted:true,
                                     controls:true,
-                                   // poster:'https://via.placeholder.com/300.jpg?text=TEST',
+                                    poster:'https://via.placeholder.com/300.jpg?text=TEST',
                                     //src:'https://www.w3schools.com/html/mov_bbb.mp4',
                                     dataEl:'video'
                                 });
@@ -91,7 +91,11 @@ mozallowfullscreen="true">
                                 },()=>{
                                     t.div({class:'d-flex justify-content-between'},()=>{
                                         t.button({dataEl:'fullScreenBtn'},'Full Screen');
-                                        t.button({dataEl:'play'},'Play');
+                                        t.button({class:'control-buttons', dataEl:'play'},()=>{
+                                            t.img({src:'/assets/img/maximize.png'});
+                                        });
+
+                                        
                                         t.el(ArrowPads.component.bindTo(this).as('directionPad')); 
                                     });
                                 });
@@ -327,6 +331,17 @@ mozallowfullscreen="true">
                     console.log('Error: '+message);
                 });
 
+            }
+
+            style(){
+                return {
+                    '.control-buttons':{
+                        height:'50px',
+                        width:'50px',
+                        backgroundColor:'rgba(0,0,0,0.2)',
+                        borderRadius:'50%'
+                    }
+                }
             }
 
         }();
