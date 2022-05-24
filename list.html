@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    <title>Client</title>
+    <title>Tourtron</title>
 </head>
 <body style="padding-top:500px" allowfullscreen="true"
 webkitallowfullscreen="true"
@@ -26,13 +26,57 @@ mozallowfullscreen="true">
     
         let view = new class extends Component{
 
+            model(){
+                return {
+                    items:[]
+                };
+            }
+
             view(){
+                
                 const t = new Template();
 
                 return t.div({},()=>{
 
+                    t.div({class:'container'},()=>{
 
-                });
+                        t.div({},()=>{
+                            t.img({class:'img-fluid',src:'https://via.placeholder.com/300'});
+                        });
+
+                        t.div(()=>{
+                            
+                            for(let i = 0; i<= this.model.items.length - 1; i++){
+
+                                let item = this.model.items[i];
+                                
+                                t.div({class:'card', style:{width:'18rem'}},()=>{
+                                    t.img({
+                                        src:'https://via.placeholder.com/300',
+                                        class:'card-img-top'
+                                    });
+
+                                    t.div({class:'card-body'},()=>{
+                                        
+                                        t.h5({class:'card-title'},item.name);
+                                        
+                                        t.p({class:'card-text'},'Iloilo, Philippines');
+                                        
+                                        t.a({
+                                            href:'#',
+                                            class:'btn btn-primary'
+                                        },'Connect');
+                                    })//div
+
+                                });//div
+                                
+                            }
+                            
+                        });//div
+
+                    });//div
+
+                });//div
             }
 
 
@@ -64,12 +108,25 @@ mozallowfullscreen="true">
             pollList(){
 
                 this.broker.emit('get-available-rovers',(list)=>{
-                    console.log(list);
+                    
+                    let items = [];
+                    list.map(name=>{
+                        items.push({name:name});
+                    });
+
+                    this.setModel(items);
                 });
                 
                 setInterval(()=>{
                     this.broker.emit('get-available-rovers',(list)=>{
-                        console.log(list);
+                        let items = [];
+                        
+                        list.map(name=>{
+                            items.push({name:name});
+                        });
+
+                        
+                        this.setModel(items);
                     });
                 },3000);
                 
