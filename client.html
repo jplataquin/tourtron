@@ -149,7 +149,10 @@ mozallowfullscreen="true">
                 });
 
 
-                document.addEventListener("fullscreenChange", function () {
+                document.addEventListener("fullscreenChange", () => {
+
+                    console.log(document.fullscreenElement);
+                    
                     if (document.fullscreenElement != null) {
                         this.el.fullScreenBtn.firstChild.src = '/assets/img/minimize.png';
                     } else {
