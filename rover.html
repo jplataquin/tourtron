@@ -21,6 +21,8 @@
     <script>
 
         const statusDisplay = document.getElementById('status');
+        
+        let lastCommnand = '';
 
         //Initialize two sockets
         let local,broker;
@@ -199,65 +201,96 @@
         });
         
         //local
-        let lastCommand;
+        let timeoutCommand;
         
         let localDelay = 2000;
   
         broker.on('forward',()=>{
             
-            clearInterval(lastCommand);
+            if(lastCommnand == 'forward') return false;
+            lastCommand = 'forward';
+
+            //clearInterval(timeoutCommand);
             
             local.volatile.emit('forward');
             
             statusDisplay.innerHTML = 'FORWARD';
 
-            lastCommand = setTimeout(()=>{
+            /*
+            timeoutCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
+            */
         });
 
         broker.on('backward',()=>{
-            clearInterval(lastCommand);
+
+            if(lastCommnand == 'backward') return false;
+            lastCommand = 'backward';
+            
+            //clearInterval(lastCommand);
             
             local.volatile.emit('backward');
 
             statusDisplay.innerHTML = 'BACKWARD';
+            
+            /*
             lastCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
+            */
         });
 
         broker.on('rotate-left',()=>{
-            clearInterval(lastCommand);
+
+            if(lastCommnand == 'rotate-left') return false;
+            lastCommand = 'rotate-left';
+            
+            //clearInterval(lastCommand);
             
             local.volatile.emit('rotate-left');
 
             statusDisplay.innerHTML = 'ROTATE LEFT';
+            /*
             lastCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
+            */
         });
 
         broker.on('rotate-right',()=>{
-            clearInterval(lastCommand);
+
+            if(lastCommnand == 'rotate-right') return false;
+            lastCommand = 'rotate-right';
+            
+            //clearInterval(lastCommand);
             
             local.volatile.emit('rotate-right');
 
             statusDisplay.innerHTML = 'ROTATE RIGHT';
+            /*
             lastCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
+            */
         });
 
         broker.on('stop',()=>{
-            clearInterval(lastCommand);
+
+            if(lastCommnand == 'stop') return false;
+            lastCommand = 'stop';
+            
+
+            //clearInterval(lastCommand);
             
             local.volatile.emit('stop');
 
             statusDisplay.innerHTML = 'STOP';
+            /*
             lastCommand = setTimeout(()=>{
                 local.volatile.emit('stop');
             },localDelay);
+            */
         });
 
 
