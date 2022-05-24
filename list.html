@@ -44,7 +44,7 @@ mozallowfullscreen="true">
                 
                 this.initConnection();
       
-                //this.pollList();
+                this.pollList();
             }
 
             
@@ -63,11 +63,15 @@ mozallowfullscreen="true">
 
             pollList(){
 
+                this.broker.emit('get-available-rovers',(list)=>{
+                    console.log(list);
+                });
+                
                 setInterval(()=>{
                     this.broker.emit('get-available-rovers',(list)=>{
                         console.log(list);
-                    },3000);
-                });
+                    });
+                },3000);
                 
             }
 
