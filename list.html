@@ -55,8 +55,8 @@ mozallowfullscreen="true">
             initConnection(){
 
                 //Connect to broker
-                this.broker = io("wss://patrila.app:5000/",{
-                    reconnection:false
+                this.broker = io('wss://patrila.app:5000/',{
+                    reconnection:true
                 });
 
             }
