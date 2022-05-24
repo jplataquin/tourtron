@@ -58,7 +58,7 @@
 
 
         let broadcast = null;
-
+        /**
         local.on('connect',()=>{
             console.log('Local server connected');
         });
@@ -78,7 +78,7 @@
 
             broker.volatile.emit('rover-not-responding');
         });
-
+        **/
         broker.on('connect',()=>{
 
             let pendingFlag = false;
@@ -202,7 +202,7 @@
         let lastCommand;
         
         let localDelay = 2000;
-
+        /**
         broker.on('forward',()=>{
             
             clearInterval(lastCommand);
@@ -261,7 +261,7 @@
         });
 
 
-
+        **/
 
     </script>
 
