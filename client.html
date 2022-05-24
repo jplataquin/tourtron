@@ -246,8 +246,7 @@ mozallowfullscreen="true">
                 });
 
                 this.broker.emit('get-available-rovers',(list)=>{
-                    console.log(list);
-
+             
                     this.broker.emit('connect-to-rover',{
                         name:'TOURTRON_1',
                         uid:1
@@ -288,9 +287,13 @@ mozallowfullscreen="true">
                         this.broker.volatile.emit('connection-success',name);
                         this.roverName = name;
 
-                        if(!this.el.video.hasClass('show')){
-                            this.el.modalReceiveStream.show();
+                        if(this.el.video){
+                         
+                            if(!this.el.video.hasClass('show')){
+                                this.el.modalReceiveStream.show();
+                            }
                         }
+                     
                     };
 
                     this.peerConnection.onicecandidate = event => {
