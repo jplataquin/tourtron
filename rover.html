@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    
     <title>Rover</title>
 
 </head>
 <body>
     <h1>Hello World</h1>
     <h2 id="status"></h2>
-    
+    <div id="app"></div>
   
 
    
@@ -18,281 +21,429 @@
     <script type="text/javascript" src="//patrila.app:5000/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="//patrila.app:5001/assets/js/streamify.js"></script>
 
-    <script>
+    <script type="module">
+        import {render,Component,Template} from '/js/adarna.js';
 
         const statusDisplay = document.getElementById('status');
         
-        let lastCommnand = '';
 
-        //Initialize two sockets
-        let local,broker;
-
-        try{
-
-            local  = io('ws://localhost:3000');
-            broker = io("wss://patrila.app:5000");
-
-        }catch(err){
-
-            //Restart
-            setTimeout(()=>{
-                documen.location.reload();
-            },5000);
-
-            throw err;
-        };
+        const app = document.querySelector('#app');
         
-        //Initialize state
-        let state = {
-            name:'TOURTRON_1',
-            status:'ready',
-            time:(new Date).getTime()
-        };
+    
+        let view = new class extends Component{
 
-        function updateState(data){
+            init(){
 
-            for(let key in state){
-                if(typeof data[key] != 'undefined'){
-                    state[key] = data[key];
-                } 
-            }
-        }
-
-
-        let broadcast = null;
-        
-        local.on('connect',()=>{
-            console.log('Local server connected');
-        });
-
-        //If local server was disconnected
-        local.on('disconnected',()=>{
-            console.log('Disconnected');
-            //Stop the stream
-            if(broadcast != null){
-                broadcast.stopStream();
+                this.state = {
+                    name:'TOURTRON_1',
+                    status:'ready',
+                    time:(new Date).getTime()
+                };
+                this.local;
+                this.broker;
+                this.peerConnection;
+                this.lastCommnand   = '';
+                this.broadcast      = null;
+                this.initConnection();
+                this.commands();
+                this.receiveStream();
             }
 
-            updateState({
-                status:'ready',
-                time:(new Date()).getTime()
-            });
+            view(){
 
-            broker.volatile.emit('rover-not-responding');
-        });
-        
-        broker.on('connect',()=>{
+                const t = new Template();
+                let ArrowPads = new ArrowPadsComponent();
 
-            let pendingFlag = false;
+                return t.div({},()=>{
 
-            setInterval(()=>{
+                    t.video({
+                        style:{
+                            minWidth: '100%'
+                        },
+                        playsinline:true, 
+                        autoplay:true, 
+                        muted:true,
+                        controls:true,
+                        poster:'https://via.placeholder.com/300.jpg?text=TEST',
+                        //src:'https://www.w3schools.com/html/mov_bbb.mp4',
+                        dataEl:'video'
+                    });
+                });
+            }
 
-                let now = (new Date()).getTime();
-                
-                //If state is ready inform broker
-                if(state.status == 'ready'){
-                    pendingFlag = false;
-                    broker.volatile.emit('status',state);
-                }
+            controller(){
 
-                
-                //If pending status has not change in more or equal to 10 seconds
-                if(state.status == 'pending' && (now - state.time) >= 10000 && !pendingFlag){
+            }
 
-                    pendingFlag = true;
+            initConnection(){
+              
 
-                    console.log('pending stuff')
+                try{
+
+                    this.local  = io('ws://localhost:3000');
+                    this.broker = io("wss://patrila.app:5000");
+
+                }catch(err){
+
+                    //Restart
+                    setTimeout(()=>{
+                        documen.location.reload();
+                    },3000);
+
+                    throw err;
+                };
+
+                this.local.on('connect',()=>{
+                    console.log('Local server connected');
+                });
+
+                //If local server was disconnected
+                this.local.on('disconnected',()=>{
+                    
+                    console.log('Local server disconnected');
+                    
                     //Stop the stream
-                    if(broadcast != null){
-                        broadcast.stopStream();
+                    if(this.broadcast != null){
+                        this.broadcast.stopStream();
+                    }
+
+                    this.updateState({
+                        status:'ready',
+                        time:(new Date()).getTime()
+                    });
+
+                    this.broker.volatile.emit('rover-not-responding');
+                });
+                
+                this.broker.on('connect',()=>{
+
+                    let pendingFlag = false;
+
+                    setInterval(()=>{
+
+                        let now = (new Date()).getTime();
+                        
+                        //If state is ready inform broker
+                        if(this.state.status == 'ready'){
+                            pendingFlag = false;
+                            this.broker.volatile.emit('status',this.state);
+                        }
+
+                        
+                        //If pending status has not change in more or equal to 10 seconds
+                        if(this.state.status == 'pending' && (now - this.state.time) >= 10000 && !pendingFlag){
+
+                            pendingFlag = true;
+
+                            console.log('pending stuff')
+                            //Stop the stream
+                            if(this.broadcast != null){
+                                this.broadcast.stopStream();
+                            }
+                            
+                            this.updateState({
+                                status:'ready',
+                                time:(new Date()).getTime()
+                            });
+
+                            this.broker.volatile.emit('rover-not-responding');
+                            
+                            //Stop movement
+                            this.local.emit('stop');
+                        }
+                        
+
+                    },2000);
+                
+                });
+            
+                
+                //If there is a status update
+                this.broker.on('status',(data)=>{
+                    
+                    console.log('status',data);
+                    
+                    this.updateState({
+                        status:data.status,
+                        time:(new Date()).getTime()
+                    });
+                });
+
+
+                //If a client wants to connect
+                this.broker.on('connection-request',(data)=>{
+                    
+                    console.log('connection-request',data);
+
+                    //Update rover state to pending
+                    this.updateState({
+                        status:'pending',   
+                        time:(new Date()).getTime()
+                    });
+
+                    getMediaCaptureDevices().then(media=>{
+                    
+                        broadcastStream({
+                            camera: media.video[0].id,
+                            microphone: media.audio[0].id,
+                            socket:this.broker,
+                            clientSocketId:data.clientId,
+                            state:this.state
+                        }).then((bcast)=>{
+
+                            this.broadcast = bcast;
+                            console.log('done');
+                            
+                            //Request stream of client
+                            this.broker.emit('request-client-stream',data.clientId);
+
+                        }).catch(err=>{
+                            
+                            updateState({
+                                status:'ready',
+                                time:(new Date()).getTime()
+                            });
+
+                            this.broker.volatile.emit(
+                                'rover-broadcast-failed',
+                                this.state.name,
+                                data.clientId,
+                                'Rover cannot connect to client'
+                            );
+
+                            this.local.emit('stop');
+                            console.log('Error',err);
+                        });
+
+                    }).catch(err=>{
+
+                        updateState({
+                            status:'ready',
+                            time:(new Date()).getTime()
+                        });
+                        
+                        this.broker.volatile.emit(
+                            'rover-broadcast-failed',
+                            this.state.name,
+                            data.clientId,
+                            'Cannot access camera or microphone'
+                        );
+                        
+                        this.local.emit('stop');
+                        console.log('ERROR',err);
+                    });
+                });
+
+                //if client got disconnected
+                this.broker.on('client-disconnected',()=>{
+                    
+                    console.log('Client disconneced');
+                    
+                    //Stop the stream
+                    if(this.broadcast != null){
+                        console.log('boradcast',broadcast);
+                        this.broadcast.stopStream();
                     }
                     
-                    updateState({
-                        status:'ready',
-                        time:(new Date()).getTime()
-                    });
-
-                    broker.volatile.emit('rover-not-responding');
-                    
                     //Stop movement
-                    local.emit('stop');
-                }
-                
+                    this.local.emit('stop');
 
-            },3000);
-        
-        });
-       
-        
-        //If there is a status update
-        broker.on('status',(data)=>{
-            console.log('status',data);
-            updateState({
-                status:data.status,
-                time:(new Date()).getTime()
-            });
-        });
-
-
-        //If a client wants to connect
-        broker.on('connection-request',(data)=>{
-            console.log('connection-request',data);
-
-            //Update rover state to pending
-            updateState({
-                status:'pending',   
-                time:(new Date()).getTime()
-            });
-
-            getMediaCaptureDevices().then(media=>{
-             
-                broadcastStream({
-                    camera: media.video[0].id,
-                    microphone: media.audio[0].id,
-                    socket:broker,
-                    clientSocketId:data.clientId,
-                    state:state
-                }).then((bcast)=>{
-
-                    broadcast = bcast;
-                    console.log('done');
-                }).catch(err=>{
-                    
-                    updateState({
+                    this.updateState({
                         status:'ready',
                         time:(new Date()).getTime()
                     });
+                    
 
-                    broker.volatile.emit('rover-broadcast-failed',state.name,data.clientId,'Rover cannot connect to client');
-                    local.emit('stop');
-                    console.log('Error',err);
-                });
-
-            }).catch(err=>{
-
-                updateState({
-                    status:'ready',
-                    time:(new Date()).getTime()
+                    if(this.peerConnection){
+                        this.peerConnection.close();
+                        this.peerConnection = null;
+                    }
                 });
                 
-                broker.volatile.emit('rover-broadcast-failed',state.name,data.clientId,'Cannot access camera or microphone');
-                local.emit('stop');
-                console.log('ERROR',err);
-            });
-        });
 
-        //if client got disconnected
-        broker.on('client-disconnected',()=>{
-            console.log('Client disconneced');
-            //Stop the stream
-            if(broadcast != null){
-                console.log('boradcast',broadcast);
-                broadcast.stopStream();
             }
-            
-            //Stop movement
-            local.emit('stop');
 
-            updateState({
-                status:'ready',
-                time:(new Date()).getTime()
-            });
-            
-        });
+            updateState(data){
+
+                for(let key in this.state){
+                    if(typeof data[key] != 'undefined'){
+                        this.state[key] = data[key];
+                    } 
+                }
+            }
+
+            commands(){
+                //local
+                let timeoutCommand;
+                
+                let localDelay = 2000;
         
-        //local
-        let timeoutCommand;
+                this.broker.on('forward',()=>{
+                    
+                    //if(lastCommnand == 'forward') return false;
+                    //lastCommand = 'forward';
+
+                    clearInterval(timeoutCommand);
+                    
+                    this.local.volatile.emit('forward');
+                    
+                    statusDisplay.innerHTML = 'FORWARD';
+
+                    
+                    timeoutCommand = setTimeout(()=>{
+                        this.local.volatile.emit('stop');
+                    },localDelay);
+                    
+                });
+
+                this.broker.on('backward',()=>{
+
+                    //if(lastCommnand == 'backward') return false;
+                    //lastCommand = 'backward';
+                    
+                    clearInterval(timeoutCommand);
+                    
+                    this.local.volatile.emit('backward');
+
+                    statusDisplay.innerHTML = 'BACKWARD';
+                    
+                    
+                    timeoutCommand = setTimeout(()=>{
+                        this.local.volatile.emit('stop');
+                    },localDelay);
+                    
+                });
+
+                this.broker.on('rotate-left',()=>{
+
+                    //if(lastCommnand == 'rotate-left') return false;
+                    //lastCommand = 'rotate-left';
+                    
+                    //clearInterval(lastCommand);
+                    
+                    this.local.volatile.emit('rotate-left');
+
+                    statusDisplay.innerHTML = 'ROTATE LEFT';
+                    
+                    timeoutCommand = setTimeout(()=>{
+                        this.local.volatile.emit('stop');
+                    },localDelay);
+                    
+                });
+
+                this.broker.on('rotate-right',()=>{
+
+                // if(lastCommnand == 'rotate-right') return false;
+                    //lastCommand = 'rotate-right';
+                    
+                    //clearInterval(lastCommand);
+                    
+                    this.local.volatile.emit('rotate-right');
+
+                    statusDisplay.innerHTML = 'ROTATE RIGHT';
+                    
+                    timeoutCommand = setTimeout(()=>{
+                        this.local.volatile.emit('stop');
+                    },localDelay);
+                    
+                });
+
+                this.broker.on('stop',()=>{
+
+                    //if(lastCommnand == 'stop') return false;
+                    //lastCommand = 'stop';
+                    
+
+                    //clearInterval(lastCommand);
+                    
+                    this.local.volatile.emit('stop');
+
+                    statusDisplay.innerHTML = 'STOP';
+                    
+                    timeoutCommand = setTimeout(()=>{
+                        this.local.volatile.emit('stop');
+                    },localDelay);
+                    
+                });
+
+            }
         
-        let localDelay = 2000;
-  
-        broker.on('forward',()=>{
-            
-            //if(lastCommnand == 'forward') return false;
-            //lastCommand = 'forward';
+            receiveStream(){
+                
+                let webRTCconfig = {
+                    iceServers: [
+                        { 
+                        "urls": "stun:stun.l.google.com:19302",
+                        },
+                        { 
+                            "urls": "turn:turn.patrila.app:5349",
+                            "username": "guest",
+                            "credential": "somepassword"
+                        }
+                    ]
+                };
 
-            clearInterval(timeoutCommand);
-            
-            local.volatile.emit('forward');
-            
-            statusDisplay.innerHTML = 'FORWARD';
 
-            
-            timeoutCommand = setTimeout(()=>{
-                local.volatile.emit('stop');
-            },localDelay);
-            
-        });
+                this.broker.on("offer", (id, description, name) => {
+        
+                    this.peerConnection = new RTCPeerConnection(webRTCconfig);
+                    
+                    this.peerConnection
+                        .setRemoteDescription(description)
+                        .then(()  => this.peerConnection.createAnswer())
+                        .then(sdp => this.peerConnection.setLocalDescription(sdp))
+                        .then(() => {
 
-        broker.on('backward',()=>{
+                        
+                            this.broker.emit("answer", id, this.peerConnection.localDescription);
+                        }).catch((e)=>{
+                            console.log('error',e);
+                        });
 
-            //if(lastCommnand == 'backward') return false;
-            //lastCommand = 'backward';
-            
-            clearInterval(timeoutCommand);
-            
-            local.volatile.emit('backward');
 
-            statusDisplay.innerHTML = 'BACKWARD';
-            
-            
-            timeoutCommand = setTimeout(()=>{
-                local.volatile.emit('stop');
-            },localDelay);
-            
-        });
+                    this.peerConnection.ontrack = event => {
 
-        broker.on('rotate-left',()=>{
+                        this.el.video.srcObject = event.streams[0];
+                
+                    
+                    };
 
-            //if(lastCommnand == 'rotate-left') return false;
-            //lastCommand = 'rotate-left';
-            
-            //clearInterval(lastCommand);
-            
-            local.volatile.emit('rotate-left');
+                    this.peerConnection.onicecandidate = event => {
+                        if (event.candidate) {    
+                            this.broker.emit("candidate", id, event.candidate);
+                        }
+                    };
 
-            statusDisplay.innerHTML = 'ROTATE LEFT';
-            
-            timeoutCommand = setTimeout(()=>{
-                local.volatile.emit('stop');
-            },localDelay);
-            
-        });
+                });
 
-        broker.on('rotate-right',()=>{
 
-           // if(lastCommnand == 'rotate-right') return false;
-            //lastCommand = 'rotate-right';
-            
-            //clearInterval(lastCommand);
-            
-            local.volatile.emit('rotate-right');
+                this.broker.on("candidate", (id, candidate) => {
+                    this.peerConnection
+                        .addIceCandidate(new RTCIceCandidate(candidate))
+                        .catch(e => console.error(e));
+                });
 
-            statusDisplay.innerHTML = 'ROTATE RIGHT';
-            
-            timeoutCommand = setTimeout(()=>{
-                local.volatile.emit('stop');
-            },localDelay);
-            
-        });
+                this.broker.on('client-broadcast-failed',(message)=>{
 
-        broker.on('stop',()=>{
+                    if(this.peerConnection){
+                        this.peerConnection.close();
+                        this.peerConnection = null
+                    }
 
-            //if(lastCommnand == 'stop') return false;
-            //lastCommand = 'stop';
-            
+                    console.log('Error: '+message);
+                });
 
-            //clearInterval(lastCommand);
-            
-            local.volatile.emit('stop');
 
-            statusDisplay.innerHTML = 'STOP';
-            
-            timeoutCommand = setTimeout(()=>{
-                local.volatile.emit('stop');
-            },localDelay);
-            
-        });
+            }
+        }();
 
+        render(view).to(app);
+
+        
+      
+
+        
+        
 
 
     </script>

@@ -171,6 +171,14 @@ io.sockets.on("connection", socket => {
         availableRovers[name].socket.emit('status',availableRovers[name].state);
     });
 
+    socket.on('request-client-stream',(clientId)=>{
+        socket.to(clientId).emit('request-client-stream',socket.id);
+    });
+
+    socket.on('client-broadcast-failed',(target)=>{
+        socket.to(target).emit('client-broadcast-failed');
+    });
+
     socket.on('rover-broadcast-failed',(roverName,clientId,message)=>{
 
         if(typeof availableRovers[roverName] == 'undefined') return false;

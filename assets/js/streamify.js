@@ -58,8 +58,6 @@ function broadcastStream(data){
             window.stream = stream;
             
             
-
-         
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
         
             peerConnection.onicecandidate = (event) => {
