@@ -11,36 +11,10 @@ class ArrowPadsComponent extends Component {
     view(){
         const t = new Template();
 
-        let modal = t.div({class:'modal',tabindex:'-1'},()=>{
-            t.div({class:'modal-dialog'},()=>{
-                t.div({class:'modal-content'},()=>{
-                    t.div({class:'modal-header'},()=>{
-                        t.h5({class:'modal-title'},'Stream');
-                    });
-
-                    t.div({class:'modal-body'},()=>{
-                        t.txt('Receive stream');
-                    });
-
-                    t.div({class:'modal-footer'},()=>{
-                        t.button({
-                            type:'button',
-                            class:'btn btn-secondary',
-                            dataBsDismiss:"modal"
-                        },'Close');
-
-                        t.button({
-                            type:'button',
-                            class:'btn btn-primary'
-                        },'Ok');
-                    });
-                });
-            });
-        });
-
+        
         return t.div(()=>{
 
-    
+            
             t.div({dataEl:'area',class:'area'},()=>{
 
                 
@@ -404,7 +378,7 @@ class ArrowPadsComponent extends Component {
                 width:'50px',
                 backgroundColor:'rgba(0,0,0,0.3)',
                 borderRadius:'50%',
-                backgroundImage:'url("data:image/svg+xml;utf8,<?xml version=\'1.0\' encoding=\'iso-8859-1\'?><svg version=\'1.1\' id=\'Layer_1\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' x=\'0px\' y=\'0px\' viewBox=\'0 0 330 330\' style=\'enable-background:new 0 0 330 330;\' xml:space=\'preserve\'><path id=\'XMLID_224_\' d=\'M3.5 5A1.5 1.5 0 0 1 5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5zM5 4.5a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5V5a.5.5 0 0 0-.5-.5H5z\'/></svg>")'
+                backgroundImage:'url("data:image/svg+xml,%3C%3Fxml version=\'1.0\' standalone=\'no\'%3F%3E%3C!DOCTYPE svg PUBLIC \'-//W3C//DTD SVG 1.1//EN\' \'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\'%3E%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' fill=\'currentColor\' class=\'bi bi-stop\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M3.5 5A1.5 1.5 0 0 1 5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5zM5 4.5a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5V5a.5.5 0 0 0-.5-.5H5z\'/%3E%3C/svg%3E ")'
             },
             '.center':{
                 margin: 'auto'

@@ -38,7 +38,7 @@ mozallowfullscreen="true">
                         t.div({class:'modal-dialog'},()=>{
                             t.div({class:'modal-content'},()=>{
                                 t.div({class:'modal-header'},()=>{
-                                    t.h5({class:'modal-title'},'Stream');
+                                    t.h5({class:'modal-title'},'Tourtron');
                                 });
 
                                 t.div({class:'modal-body'},()=>{
@@ -46,15 +46,12 @@ mozallowfullscreen="true">
                                 });
 
                                 t.div({class:'modal-footer'},()=>{
-                                    t.button({
-                                        type:'button',
-                                        class:'btn btn-secondary',
-                                        dataBsDismiss:"modal"
-                                    },'Close');
+                           
 
                                     t.button({
                                         type:'button',
-                                        class:'btn btn-primary'
+                                        class:'btn btn-primary',
+                                        dataEl:'receiveStreamBtn'
                                     },'Ok');
                                 });
                             });
@@ -165,12 +162,15 @@ mozallowfullscreen="true">
                     this.toggleFullScreen();
                }
 
-               let modal = new bootstrap.Modal(this.el.modal,{});
+               this.modalReceiveStream = new bootstrap.Modal(this.el.modal,{});
 
                this.el.play.onclick = ()=>{
-                   //this.el.video.play();
+                   this.modalReceiveStream.show();
+               }
 
-                   modal.show();
+
+               this.el.receiveStreamBtn.onclick = ()=>{
+                    this.el.video.play();
                }
 
                
@@ -287,6 +287,10 @@ mozallowfullscreen="true">
                         this.el.video.srcObject = event.streams[0];
                         this.broker.volatile.emit('connection-success',name);
                         this.roverName = name;
+
+                        if(!this.el.video.hasClass('show')){
+                            this.el.modalReceiveStream.show();
+                        }
                     };
 
                     this.peerConnection.onicecandidate = event => {
