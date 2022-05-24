@@ -150,7 +150,7 @@ mozallowfullscreen="true">
 
 
                 document.addEventListener("fullscreenChange", function () {
-                    if (fullscreenElement != null) {
+                    if (document.fullscreenElement != null) {
                         this.el.fullScreenBtn.firstChild.src = '/assets/img/minimize.png';
                     } else {
                         this.el.fullScreenBtn.firstChild.src = '/assets/img/maximize.png';           
