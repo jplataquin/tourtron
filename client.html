@@ -149,19 +149,16 @@ mozallowfullscreen="true">
                 });
 
 
-                document.addEventListener("fullscreenChange", () => {
+               
 
-                    console.log(document.fullscreenElement);
-                    
+               this.el.fullScreenBtn.onclick = ()=>{
+                    this.toggleFullScreen();
+
                     if (document.fullscreenElement != null) {
                         this.el.fullScreenBtn.firstChild.src = '/assets/img/minimize.png';
                     } else {
                         this.el.fullScreenBtn.firstChild.src = '/assets/img/maximize.png';           
                     }
-                });
-
-               this.el.fullScreenBtn.onclick = ()=>{
-                    this.toggleFullScreen();
                }
 
                
