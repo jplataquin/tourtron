@@ -114,34 +114,26 @@ mozallowfullscreen="true">
 
             pollList(){
 
-                this.broker.emit('get-available-rovers',(list)=>{
-                    
-                    console.log(list);
+                setTimeout(()=>{
 
-                    /**
-                    let items = [];
-
-                    list.map(name=>{
-                        items.push({name:name});
-                    });
-
-                    this.update(items);**/
-                });
-                
-                setInterval(()=>{
                     this.broker.emit('get-available-rovers',(list)=>{
+                    
                         
-                        /**
                         let items = [];
 
                         list.map(name=>{
                             items.push({name:name});
                         });
 
-                        
+                        console.log(items);
+                        /**
                         this.update(items);**/
+
+                        this.pollList();
                     });
                 },3000);
+                
+                
                 
             }
 
