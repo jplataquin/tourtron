@@ -26,6 +26,14 @@ mozallowfullscreen="true">
     
         let view = new class extends Component{
 
+            init(){
+
+                this.initConnection();
+      
+                this.pollList();
+            }
+
+            
             model(){
                 return {
                     items:[]
@@ -86,9 +94,7 @@ mozallowfullscreen="true">
                 this.peerConnection     = null;
                 this.broker             = null;
                 
-                this.initConnection();
-      
-                this.pollList();
+               
             }
 
             
