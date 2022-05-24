@@ -120,13 +120,13 @@ mozallowfullscreen="true">
                 setInterval(()=>{
                     this.broker.emit('get-available-rovers',(list)=>{
                         let items = [];
-                        
+
                         list.map(name=>{
                             items.push({name:name});
                         });
 
                         
-                        this.setModel(items);
+                        this.update(items);
                     });
                 },3000);
                 
