@@ -55,7 +55,7 @@ mozallowfullscreen="true">
                             t.img({class:'img-fluid',src:'https://via.placeholder.com/300'});
                         });
 
-                        t.div(()=>{
+                        t.div({class:'d-flex justify-content-evenly'},()=>{
                             
                             for(let i = 0; i<= this.model.items.length - 1; i++){
 
@@ -74,7 +74,7 @@ mozallowfullscreen="true">
                                         t.p({class:'card-text'},'Iloilo, Philippines');
                                         
                                         t.a({
-                                            href:'#',
+                                            href:'/client.html?r='+item.name,
                                             class:'btn btn-primary'
                                         },'Connect');
                                     })//div
