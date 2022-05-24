@@ -287,12 +287,10 @@ mozallowfullscreen="true">
                         this.broker.volatile.emit('connection-success',name);
                         this.roverName = name;
 
-                        if(this.el.video){
-                            console.log(this.el.video);
-                            if(!this.el.video.hasClass('show')){
-                                this.el.modalReceiveStream.show();
-                            }
+                        if(!this.el.video.classList.contains('show')){
+                            this.el.modalReceiveStream.show();
                         }
+                    
                      
                     };
 
