@@ -273,11 +273,17 @@ mozallowfullscreen="true">
                         .then(()  => this.peerConnection.createAnswer())
                         .then(sdp => this.peerConnection.setLocalDescription(sdp))
                         .then(() => {
+
+                            console.log('answer');
                             this.broker.emit("answer", id, this.peerConnection.localDescription);
+                        }).catch((e)=>{
+                            console.log('error',e);
                         });
 
 
                     this.peerConnection.ontrack = event => {
+
+                        console.log('ontrack',event);
                         this.el.video.srcObject = event.streams[0];
                         this.broker.volatile.emit('connection-success',name);
                         this.roverName = name;
@@ -291,6 +297,7 @@ mozallowfullscreen="true">
 
                     this.peerConnection.onicecandidate = event => {
                         if (event.candidate) {
+                            console.log('ice');
                             this.broker.emit("candidate", id, event.candidate);
                         }
                     };
