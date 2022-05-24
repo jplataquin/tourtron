@@ -91,7 +91,9 @@ mozallowfullscreen="true">
                                 },()=>{
                                     t.div({class:'d-flex justify-content-between'},()=>{
                                         t.button({dataEl:'fullScreenBtn'},'Full Screen');
-                                        t.button({class:'control-buttons', dataEl:'play'},()=>{
+                                        
+                                        
+                                        t.button({class:'control-buttons mt-auto', dataEl:'play'},()=>{
                                             t.img({src:'/assets/img/maximize.png'});
                                         });
 
@@ -342,8 +344,8 @@ mozallowfullscreen="true">
                         borderRadius:'50%'
                     },
                     '.control-buttons img':{
-                        height:'50px',
-                        width:'50px'
+                        height:'25px',
+                        width:'25px'
                     }
                 }
             }
