@@ -28,12 +28,15 @@ mozallowfullscreen="true">
 
             init(){
 
+                this.peerConnection     = null;
+                this.broker             = null;
+
                 this.initConnection();
       
                 this.pollList();
             }
 
-            
+
             model(){
                 return {
                     items:[]
@@ -90,9 +93,7 @@ mozallowfullscreen="true">
 
             controller(){
 
-                this.roverName          = null;
-                this.peerConnection     = null;
-                this.broker             = null;
+                
                 
                
             }
@@ -117,17 +118,20 @@ mozallowfullscreen="true">
                     
                     console.log(list);
 
+                    /**
                     let items = [];
 
                     list.map(name=>{
                         items.push({name:name});
                     });
 
-                    this.update(items);
+                    this.update(items);**/
                 });
                 
                 setInterval(()=>{
                     this.broker.emit('get-available-rovers',(list)=>{
+                        
+                        /**
                         let items = [];
 
                         list.map(name=>{
@@ -135,7 +139,7 @@ mozallowfullscreen="true">
                         });
 
                         
-                        this.update(items);
+                        this.update(items);**/
                     });
                 },3000);
                 
