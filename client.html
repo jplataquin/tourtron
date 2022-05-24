@@ -227,7 +227,7 @@ mozallowfullscreen="true">
 
                 if(!this.broker) return false;
 
-               // this.broker.volatile.emit(command,this.roverName);
+                this.broker.volatile.emit(command,this.roverName);
                 /*
                 this.lastCommand = setInterval(()=>{
                    this.broker.volatile.emit(command,this.roverName);
