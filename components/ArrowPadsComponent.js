@@ -65,7 +65,7 @@ class ArrowPadsComponent extends Component {
         this.el.left.onmouseout      = (e)=>{this.leftInactive(e,11)};
         this.el.right.onmouseout     = (e)=>{this.rightInactive(e,12)};
        
-        /** 
+        
         //Touchstart
         this.el.neutral.ontouchstart = (e)=>{this.neutralActive(e,0)}
         this.el.up.ontouchstart      = (e)=>{this.upActive(e,13);};
@@ -95,6 +95,7 @@ class ArrowPadsComponent extends Component {
         this.el.right.ondragsleave     = (e)=>{this.rightInactive(e,28)};
 
 
+       /** 
         dom.ontouchend = (e)=>{
            
            this.el.neutral.classList.remove('active');
@@ -116,7 +117,6 @@ class ArrowPadsComponent extends Component {
            this.callback(this.currentActive,(new Date).getTime(),30); 
        }
 
-  
 
        dom.ontouchmove = (e)=>{
                                
