@@ -54,11 +54,11 @@
 
                 const t = new Template();
 
-                return t.div({},()=>{
+                return t.div({class:'m-auto'},()=>{
 
                     t.video({
                         style:{
-                            minWidth: '100%'
+                            minHeight: '100%'
                         },
                         playsinline:true, 
                         autoplay:true, 
@@ -426,9 +426,12 @@
 
 
                 this.broker.on("candidate", (id, candidate) => {
-                    this.peerConnection
+                    
+                    if(this.peerConnection){
+                        this.peerConnection
                         .addIceCandidate(new RTCIceCandidate(candidate))
                         .catch(e => console.error(e));
+                    }
                 });
 
                 this.broker.on('client-broadcast-failed',(message)=>{
