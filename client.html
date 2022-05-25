@@ -45,7 +45,6 @@
 
                 return t.div({},()=>{
 
-
                     t.div({dataEl:'modal', class:'modal',tabindex:'-1'},()=>{
                         t.div({class:'modal-dialog'},()=>{
                             t.div({class:'modal-content'},()=>{
@@ -58,16 +57,16 @@
                                 });
 
                                 t.div({class:'modal-footer'},()=>{
-                           
-
+                        
                                     t.button({
                                         type:'button',
                                         class:'btn btn-primary',
                                         dataEl:'receiveStreamBtn'
                                     },'Ok');
-                                });
-                            });
-                        });
+
+                                });//div
+                            });//div
+                        });//div
                     });
 
                     t.div({class:'row'},()=>{
@@ -103,7 +102,6 @@
                                         t.button({class:'control-buttons mt-auto', dataEl:'fullScreenBtn'},()=>{
                                             t.img({src:'/assets/img/maximize.png'});
                                         });
-
                                         
                                         t.el(ArrowPads.component.bindTo(this).as('directionPad')); 
                                     });
@@ -167,16 +165,15 @@
                
                this.el.receiveStreamBtn.onclick = ()=>{
                     this.el.video.play();
-                    this.modalReceiveStream.hide();
-                 
+                    this.modalReceiveStream.hide();      
                }
 
                
             }
 
             toggleFullScreen(){
-                let doc = window.document;
-                let docEl = doc.documentElement;
+                let doc     = window.document;
+                let docEl   = doc.documentElement;
 
                 let requestFullScreen =
                     docEl.requestFullscreen ||
@@ -224,7 +221,6 @@
             sendCommand(command,time,id){
                 console.log(command);
                 
-          
                 clearInterval(this.lastCommand);
 
                 if(!this.broker) return false;
@@ -274,9 +270,7 @@
                         .setRemoteDescription(description)
                         .then(()  => this.peerConnection.createAnswer())
                         .then(sdp => this.peerConnection.setLocalDescription(sdp))
-                        .then(() => {
-
-                        
+                        .then(() => {                        
                             this.broker.emit("answer", id, this.peerConnection.localDescription);
                         }).catch((e)=>{
                             console.log('error',e);
@@ -297,7 +291,6 @@
 
                     this.peerConnection.onicecandidate = event => {
                         if (event.candidate) {
-                         
                             this.broker.emit("candidate", id, event.candidate);
                         }
                     };
@@ -342,7 +335,7 @@
                             camera: media.video[0].id,
                             microphone: media.audio[0].id,
                             socket:this.broker,
-                            clientSocketId:clientScoketId,
+                            clientSocketId: clientScoketId,
                             state:{name:''}
                         }).then((bcast)=>{
 

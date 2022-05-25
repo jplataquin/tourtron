@@ -44,7 +44,8 @@
                 this.peerConnection;
                 this.lastCommnand   = '';
                 this.broadcast      = null;
-                this.initConnection();
+               //this.initLocalSocket();
+                this.initBrokerSocket();
                 this.commands();
                 this.receiveStream();
             }
@@ -74,29 +75,14 @@
 
             }
 
-            initConnection(){
-              
-
-                try{
-
-                    this.local  = io('ws://localhost:3000');
-                    this.broker = io("wss://patrila.app:5000");
-
-                }catch(err){
-
-                    //Restart
-                    setTimeout(()=>{
-                        documen.location.reload();
-                    },3000);
-
-                    throw err;
-                };
-
+            initLocalSocket(){
+                
+                this.local  = io('ws://localhost:3000');
+                
                 this.local.on('connect',()=>{
                     console.log('Local server connected');
                 });
 
-                //If local server was disconnected
                 this.local.on('disconnected',()=>{
                     
                     console.log('Local server disconnected');
@@ -111,9 +97,30 @@
                         time:(new Date()).getTime()
                     });
 
-                    this.broker.volatile.emit('rover-not-responding');
+                    if(this.broker){
+                        this.broker.volatile.emit('rover-not-responding');
+                    }
+                    
                 });
-                
+            }
+
+
+            initBrokerSocket(){
+              
+
+                try{
+                    this.broker = io("wss://patrila.app:5000");
+                }catch(err){
+
+                    //Restart
+                    setTimeout(()=>{
+                        documen.location.reload();
+                    },3000);
+
+                    throw err;
+                };
+
+               
                 this.broker.on('connect',()=>{
 
                     let pendingFlag = false;
@@ -134,7 +141,6 @@
 
                             pendingFlag = true;
 
-                            console.log('pending stuff')
                             //Stop the stream
                             if(this.broadcast != null){
                                 this.broadcast.stopStream();
@@ -148,10 +154,11 @@
                             this.broker.volatile.emit('rover-not-responding');
                             
                             //Stop movement
-                            this.local.emit('stop');
+                            if(this.local){
+                                this.local.emit('stop');
+                            }
                         }
                         
-
                     },2000);
                 
                 });
@@ -210,7 +217,11 @@
                                 'Rover cannot connect to client'
                             );
 
-                            this.local.emit('stop');
+                            
+                            if(this.local){
+                                this.local.emit('stop');
+                            }
+                            
                             console.log('Error',err);
                         });
 
@@ -228,7 +239,9 @@
                             'Cannot access camera or microphone'
                         );
                         
-                        this.local.emit('stop');
+                        if(this.local){
+                            this.local.emit('stop');
+                        }
                         console.log('ERROR',err);
                     });
                 });
@@ -245,7 +258,9 @@
                     }
                     
                     //Stop movement
-                    this.local.emit('stop');
+                    if(this.local){
+                        this.local.emit('stop');
+                    }
 
                     this.updateState({
                         status:'ready',
@@ -258,8 +273,6 @@
                         this.peerConnection = null;
                     }
                 });
-                
-
             }
 
             updateState(data){
@@ -288,7 +301,6 @@
                     
                     statusDisplay.innerHTML = 'FORWARD';
 
-                    
                     timeoutCommand = setTimeout(()=>{
                         this.local.volatile.emit('stop');
                     },localDelay);
@@ -392,19 +404,16 @@
                         .then(()  => this.peerConnection.createAnswer())
                         .then(sdp => this.peerConnection.setLocalDescription(sdp))
                         .then(() => {
-
                         
                             this.broker.emit("answer", id, this.peerConnection.localDescription);
+
                         }).catch((e)=>{
                             console.log('error',e);
                         });
 
 
                     this.peerConnection.ontrack = event => {
-
-                        this.el.video.srcObject = event.streams[0];
-                
-                    
+                        this.el.video.srcObject = event.streams[0];    
                     };
 
                     this.peerConnection.onicecandidate = event => {
