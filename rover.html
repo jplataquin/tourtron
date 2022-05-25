@@ -54,19 +54,24 @@
                     t.div({class:'container'},()=>{
 
                         t.div({class:'embed-responsive embed-responsive-16by9'},()=>{
-                            t.video({
-                                style:{
-                                    minHeight: '100%',
-                                    maxWidth:'100%'
-                                },
-                                playsinline:true, 
-                                autoplay:true, 
-                                muted:true,
-                                controls:true,
-                                poster:'https://via.placeholder.com/300.jpg?text=TEST',
-                                //src:'https://www.w3schools.com/html/mov_bbb.mp4',
-                                dataEl:'video'
+
+                            t.div({class:'border d-flex align-items-center justify-content-center'},()=>{
+
+                                t.video({
+                                    style:{
+                                        minHeight: '100%',
+                                        maxWidth:'100%'
+                                    },
+                                    playsinline:true, 
+                                    autoplay:true, 
+                                    muted:true,
+                                    controls:true,
+                                    poster:'https://via.placeholder.com/300.jpg?text=TEST',
+                                    //src:'https://www.w3schools.com/html/mov_bbb.mp4',
+                                    dataEl:'video'
+                                });
                             });
+                            
                         });//div
                     });
                     
