@@ -11,13 +11,8 @@
 
 </head>
 <body>
-    <h1>Hello World</h1>
-    <h2 id="status"></h2>
     <div id="app"></div>
-  
-
    
-    
     <script type="text/javascript" src="//patrila.app:5000/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="//patrila.app:5001/assets/js/streamify.js"></script>
 
@@ -54,20 +49,27 @@
 
                 const t = new Template();
 
-                return t.div({class:'m-auto'},()=>{
+                return t.div({},()=>{
 
-                    t.video({
-                        style:{
-                            minHeight: '100%'
-                        },
-                        playsinline:true, 
-                        autoplay:true, 
-                        muted:true,
-                        controls:true,
-                        poster:'https://via.placeholder.com/300.jpg?text=TEST',
-                        //src:'https://www.w3schools.com/html/mov_bbb.mp4',
-                        dataEl:'video'
+                    t.div({class:'container'},()=>{
+
+                        t.div({class:'embed-responsive embed-responsive-16by9'},()=>{
+                            t.video({
+                                style:{
+                                    minHeight: '100%',
+                                    maxWidth:'100%'
+                                },
+                                playsinline:true, 
+                                autoplay:true, 
+                                muted:true,
+                                controls:true,
+                                poster:'https://via.placeholder.com/300.jpg?text=TEST',
+                                //src:'https://www.w3schools.com/html/mov_bbb.mp4',
+                                dataEl:'video'
+                            });
+                        });//div
                     });
+                    
                 });
             }
 
