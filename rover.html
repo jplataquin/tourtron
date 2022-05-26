@@ -40,6 +40,7 @@
                 this.peerConnection;
                 this.lastCommnand   = '';
                 this.broadcast      = null;
+                this.clientID       = null;
                //this.initLocalSocket();
                 this.initBrokerSocket();
                 this.commands();
@@ -97,8 +98,6 @@
 
                 this.local.on('disconnected',()=>{
                     
-                    console.log('Local server disconnected');
-                    
                     //Stop the stream
                     if(this.broadcast != null){
                         this.broadcast.stopStream();
@@ -119,7 +118,6 @@
 
             initBrokerSocket(){
               
-
                 try{
                     this.broker = io("wss://patrila.app:5000");
                 }catch(err){
@@ -178,9 +176,6 @@
                 
                 //If there is a status update
                 this.broker.on('status',(data)=>{
-                    
-                    console.log('status',data);
-                    
                     this.updateState({
                         status:data.status,
                         time:(new Date()).getTime()
@@ -191,8 +186,6 @@
                 //If a client wants to connect
                 this.broker.on('connection-request',(data)=>{
                     
-                    console.log('connection-request',data);
-
                     //Update rover state to pending
                     this.updateState({
                         status:'pending',   
@@ -204,16 +197,17 @@
                         broadcastStream({
                             camera: media.video[0].id,
                             microphone: media.audio[0].id,
-                            socket:this.broker,
-                            clientSocketId:data.clientId,
+                            socket: this.broker,
+                            clientSocketId: data.clientId,
                             state:this.state
                         }).then((bcast)=>{
 
                             this.broadcast = bcast;
-                            console.log('done');
                             
                             //Request stream of client
                             this.broker.emit('request-client-stream',data.clientId);
+
+                            this.clientID = data.clientId;
 
                         }).catch(err=>{
                             
@@ -455,8 +449,26 @@
 
                     console.log('Error: '+message);
                 });
+            }
 
+            ping(){
 
+                setInterval(()=>{
+                    let now = (new Date).getTime();
+                    
+                    this.broker.emit('ping',{
+                        id: this.clientID,
+                        time:now
+                    });
+
+                },5000);
+
+                //Handle ping
+                this.broker.on('ping',(data)=>{
+
+                    console.log('ping',data);
+                });
+                
             }
         }();
 

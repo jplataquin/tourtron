@@ -7,7 +7,7 @@ export default function videoSizeStablizer(video){
         //Landscape
         if(elem.offsetWidth > elem.offsetHeight){
             
-            elem.style.width = width+'px';
+            elem.style.height = width+'px';
             
             
 
