@@ -295,17 +295,17 @@
                 let localDelay = 2000;
         
                 this.broker.on('forward',()=>{
-                    
+                    console.log('Forward');
                     //if(lastCommnand == 'forward') return false;
                     //lastCommand = 'forward';
                     
                     clearInterval(timeoutCommand);
                     
                     this.local.volatile.emit('forward');
-                    console.log('Forward');
-                    timeoutCommand = setTimeout(()=>{
+                    
+                    //timeoutCommand = setTimeout(()=>{
                         this.local.volatile.emit('stop');
-                    },localDelay);
+                    //},localDelay);
                     
                 });
 

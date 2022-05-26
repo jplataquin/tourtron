@@ -236,7 +236,7 @@
             }
 
             sendCommand(command,time,id){
-                
+                console.log(command);
                 clearInterval(this.lastCommand);
 
                 if(!this.broker) return false;
