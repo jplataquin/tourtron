@@ -24,19 +24,20 @@
         const app = document.querySelector('#app');
         
 
-        const rover_name = trim($_GET('r'));
-
-
-        if(!rover_name){
-            alert('Target bot not defined, please select again');
-            document.location.href = '/';
-            return false;
-        }
+     
 
     
         let view = new class extends Component{
 
             init(){
+
+                this.rover_name = trim($_GET('r'));
+
+                if(!this.rover_name){
+                    alert('Target bot not defined, please select again');
+                    document.location.href = '/';
+                    return false;
+                }
 
                 this.lastCommand;
                 this.broadcast;
@@ -256,7 +257,7 @@
                 setTimeout(()=>{
 
                     this.broker.emit('connect-to-rover',{
-                        name: rover_name,
+                        name: this.rover_name,
                         uid: uuidv4()
                     });
 
