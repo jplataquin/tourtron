@@ -249,7 +249,7 @@
                     console.log('Client disconneced');
                     
                     //Stop the stream
-                    if(this.broadcast != null){
+                    if(this.broadcast){
                         console.log('boradcast',broadcast);
                         this.broadcast.stopStream();
                     }
@@ -395,6 +395,30 @@
                 this.broker.on("offer", (id, description, name) => {
         
                     this.peerConnection = new RTCPeerConnection(webRTCconfig);
+                    
+                    this.peerConnection.onconnectionstatechange = ev => {
+                        switch(pc.connectionState) {
+                            case "new":
+                            case "checking":
+                            console.log("Connecting...");
+                            break;
+                            case "connected":
+                            console.log("Online");
+                            break;
+                            case "disconnected":
+                            console.log("Disconnecting...");
+                            break;
+                            case "closed":
+                            console.log("Offline");
+                            break;
+                            case "failed":
+                            console.log("Error");
+                            break;
+                            default:
+                            console.log("Unknown");
+                            break;
+                        }
+                    }
                     
                     this.peerConnection
                         .setRemoteDescription(description)
