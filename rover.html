@@ -494,14 +494,17 @@
                     let now     = (new Date).getTime();
                     let elapsed = now - this.clientReplyPingTime;
                     
-                    console.log('elapsed',elapsed,this.clientID);
-
                     if(this.clientID){
                       
                         this.broker.emit('status_ping',{
                             id: this.clientID,
                             time:now
                         });
+                    }
+                    
+                    
+                    if(this.clientReplyPingTime != 0){
+                        console.log('elapsed',elapsed);
                     }
                     
                     this.ping();
