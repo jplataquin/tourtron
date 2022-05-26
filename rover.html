@@ -219,7 +219,11 @@
                                 this.local.emit('stop');
                             }
                             
-                            console.log('Error',err);
+                            //Reload document
+                            setTimout(()=>{
+                                document.location.reload();
+                            },3000)
+                            
                         });
 
                     }).catch(err=>{
@@ -239,11 +243,15 @@
                         if(this.local){
                             this.local.emit('stop');
                         }
-                        console.log('ERROR',err);
+                        
+                        //Reload document
+                        setTimout(()=>{
+                            document.location.reload();
+                        },3000);
                     });
                 });
 
-                //if client got disconnected
+                //If client got disconnected
                 this.broker.on('client-disconnected',()=>{
                     
                     console.log('Client disconneced');
@@ -258,16 +266,22 @@
                         this.local.emit('stop');
                     }
 
+                    //Set status to ready
                     this.updateState({
                         status:'ready',
                         time:(new Date()).getTime()
                     });
-                    
 
+                    //Close peer connection
                     if(this.peerConnection){
                         this.peerConnection.close();
                         this.peerConnection = null;
                     }
+
+                     //Reload document
+                     setTimout(()=>{
+                        document.location.reload();
+                    },3000);
                 });
             }
 
