@@ -20,7 +20,6 @@ export default function videoSizeStablizer(video){
 
     const elemResizeObserver = new ResizeObserver(elems=>{
         
-        console.log(elems);
 
         let elem = elems[0] ?? false;
 
