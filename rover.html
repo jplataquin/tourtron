@@ -457,9 +457,10 @@
                 },5000);
 
                 //Handle ping
-                this.broker.on('ping',(data)=>{
+                this.broker.on('xping',(data)=>{
 
-                    console.log('ping receive',data);
+                    console.log('rcv',data);
+
                 });
                 
             }
