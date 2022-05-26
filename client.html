@@ -31,7 +31,7 @@
 
             init(){
 
-                this.rover_name = trim($_GET('r'));
+                this.rover_name =  $_GET('r').trim();
 
                 if(!this.rover_name){
                     alert('Target bot not defined, please select again');
