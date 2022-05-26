@@ -250,7 +250,6 @@
                     
                     //Stop the stream
                     if(this.broadcast){
-                        console.log('boradcast',broadcast);
                         this.broadcast.stopStream();
                     }
                     
@@ -397,7 +396,7 @@
                     this.peerConnection = new RTCPeerConnection(webRTCconfig);
                     
                     this.peerConnection.onconnectionstatechange = ev => {
-                        switch(pc.connectionState) {
+                        switch(this.peerConnection.connectionState) {
                             case "new":
                             case "checking":
                             console.log("Connecting...");
@@ -419,7 +418,7 @@
                             break;
                         }
                     }
-                    
+
                     this.peerConnection
                         .setRemoteDescription(description)
                         .then(()  => this.peerConnection.createAnswer())
