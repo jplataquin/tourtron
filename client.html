@@ -18,11 +18,21 @@
     <script type="text/javascript" src="//patrila.app:5000/socket.io/socket.io.js"></script>
 
     <script type="module">
-        import {render,Component,Template} from '/js/adarna.js';
+        import {render,Component,Template,$_GET,uuidv4} from '/js/adarna.js';
         import {ArrowPadsComponent} from '/components/ArrowPadsComponent.js'; 
 
         const app = document.querySelector('#app');
         
+
+        const rover_name = trim($_GET('r'));
+
+
+        if(!rover_name){
+            alert('Target bot not defined, please select again');
+            document.location.href = '/';
+            return false;
+        }
+
     
         let view = new class extends Component{
 
@@ -241,13 +251,18 @@
                     reconnection:false
                 });
 
-                this.broker.emit('get-available-rovers',(list)=>{
-             
+              //  this.broker.emit('get-available-rovers',(list)=>{
+                
+                setTimeout(()=>{
+
                     this.broker.emit('connect-to-rover',{
-                        name:'TOURTRON_1',
-                        uid:1
+                        name: rover_name,
+                        uid: uuidv4()
                     });
-                });
+
+                },1000);
+                  
+                //});
                 
                 let webRTCconfig = {
                     iceServers: [

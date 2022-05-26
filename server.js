@@ -153,8 +153,8 @@ io.sockets.on("connection", socket => {
 
         //Inform rover that the client wants to connect
         availableRovers[name].socket.emit('connection-request',{
-            uid:uid,
-            clientId:socket.id,
+            uid: uid,
+            clientId: socket.id,
             state: availableRovers[name].state
         });
     });
