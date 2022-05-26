@@ -4,15 +4,15 @@ export default function videoSizeStablizer(video){
         let height  = window.innerHeight;
         let width   = window.innerWidth;
 
-        console.log(width,height);
-
         //Landscape
         if(elem.offsetWidth > elem.offsetHeight){
-            console.log('landscape');
+            
             elem.style.width = width+'px';
+            
+            
 
         }else if(elem.offsetWidth <= elem.offsetHeight){ //Portraint or Box
-            console.log('portrait');
+     
             elem.style.height = height+'px';
             
         }
@@ -35,7 +35,7 @@ export default function videoSizeStablizer(video){
     elemResizeObserver.observe(video);
 
     window.addEventListener('orientationchange', () => {
-        alert('changed');
+      
         stabilize(video);
     }, false);
 

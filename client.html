@@ -20,7 +20,7 @@
     <script type="module">
         import {render,Component,Template,$_GET,uuidv4} from '/js/adarna.js';
         import {ArrowPadsComponent} from '/components/ArrowPadsComponent.js'; 
-
+        import videoSizeStablizer from '/assets/js/videoSizeStabilzer.js';
         const app = document.querySelector('#app');
         
 
@@ -126,6 +126,10 @@
                 });
             }
 
+            onPage(){
+                
+                videoSizeStablizer(this.el.video);
+            }
 
             controller(){
 
