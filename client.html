@@ -343,13 +343,13 @@
 
 
                 //Reply to a ping
-                this.broker.on('xping',(data)=>{
+                this.broker.on('ping',(data)=>{
 
                     console.log('rcv',data);
 
                     let now = (new Date).getTime();
                     
-                    this.broker.emit('xping',{
+                    this.broker.emit('ping',{
                         id:data.from,
                         time:now,
                     });

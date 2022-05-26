@@ -240,10 +240,9 @@ io.sockets.on("connection", socket => {
     }
 
     
-    socket.on('xping',(data)=>{
+    socket.on('ping',(data)=>{
         
-        console.log('ping',data);
-        socket.to(data.id).emit('xping',{
+        socket.to(data.id).emit('ping',{
             time:data.time,
             id:data.id,
             from:socket.id
