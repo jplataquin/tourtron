@@ -227,70 +227,52 @@ io.sockets.on("connection", socket => {
         };
     });
 
-    /****************MOVEMENT*****************/
 
 
-    socket.on('forward',(roverName)=>{
-
+    function preMovementCheck(){
         if(typeof availableRovers[roverName] == 'undefined') return false;
         
         if(availableRovers[roverName].state.status != 'connected') return false;
 
         if(availableRovers[roverName].client.id != socket.id) return false;
 
-        console.log('FORWARD');
+        return true;
+    }
+
+    
+    socket.on('ping',data,()=>{
+        socket.to(data.id).emit('ping',data);
+    });
+
+    /****************MOVEMENT*****************/
+
+    socket.on('forward',(roverName)=>{
+
+        if(!preMovementCheck(roverName)) return false;
         availableRovers[roverName].socket.emit('forward');
     });
 
     socket.on('backward',(roverName)=>{
 
-        if(typeof availableRovers[roverName] == 'undefined') return false;
-
-        if(availableRovers[roverName].state.status != 'connected') return false;
-
-        if(availableRovers[roverName].client.id != socket.id) return false;
-
-        
-        console.log('BACKWARD');
+        if(!preMovementCheck(roverName)) return false;
         availableRovers[roverName].socket.emit('backward');
     });
 
     socket.on('rotate-left',(roverName)=>{
 
-        if(typeof availableRovers[roverName] == 'undefined') return false;
-
-        if(availableRovers[roverName].state.status != 'connected') return false;
-
-        if(availableRovers[roverName].client.id != socket.id) return false;
-
-        
-        console.log('ROTATE LEFT');
+        if(!preMovementCheck(roverName)) return false;
         availableRovers[roverName].socket.emit('rotate-left');
     });
 
     socket.on('rotate-right',(roverName)=>{
 
-        if(typeof availableRovers[roverName] == 'undefined') return false;
-
-        if(availableRovers[roverName].state.status != 'connected') return false;
-
-        if(availableRovers[roverName].client.id != socket.id) return false;
-
-        
-        console.log('ROTATE RIGHT');
+        if(!preMovementCheck(roverName)) return false;
         availableRovers[roverName].socket.emit('rotate-right');
     });
 
     socket.on('stop',(roverName)=>{
 
-        if(typeof availableRovers[roverName] == 'undefined') return false;
-
-        if(availableRovers[roverName].state.status != 'connected') return false;
-
-        if(availableRovers[roverName].client.id != socket.id) return false;
-
-        
-        console.log('STOP');
+        if(!preMovementCheck(roverName)) return false;
         availableRovers[roverName].socket.emit('stop');
     });
 
