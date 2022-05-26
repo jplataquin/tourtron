@@ -43,6 +43,7 @@
                 this.clientID       = null;
                //this.initLocalSocket();
                 this.initBrokerSocket();
+                this.ping();
                 this.commands();
                 this.receiveStream();
             }
@@ -118,17 +119,8 @@
 
             initBrokerSocket(){
               
-                try{
-                    this.broker = io("wss://patrila.app:5000");
-                }catch(err){
-
-                    //Restart
-                    setTimeout(()=>{
-                        documen.location.reload();
-                    },3000);
-
-                    throw err;
-                };
+                this.broker = io("wss://patrila.app:5000");
+                
 
                
                 this.broker.on('connect',()=>{
@@ -145,7 +137,6 @@
                             this.broker.volatile.emit('status',this.state);
                         }
 
-                        
                         //If pending status has not change in more or equal to 10 seconds
                         if(this.state.status == 'pending' && (now - this.state.time) >= 10000 && !pendingFlag){
 
