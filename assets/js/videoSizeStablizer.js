@@ -4,6 +4,7 @@ export default function videoSizeStablizer(video){
         let height  = window.innerHeight;
         let width   = window.innerWidth;
 
+        console.log(elem.style.width);
         //Landscape
         if(elem.offsetWidth > elem.offsetHeight){
             
