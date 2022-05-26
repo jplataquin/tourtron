@@ -345,6 +345,8 @@
                 //Reply to a ping
                 this.broker.on('ping',(data)=>{
 
+                    console.log('rcv',data);
+
                     let now = (new Date).getTime();
                     
                     this.broker.emit('ping',{
