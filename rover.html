@@ -448,7 +448,7 @@
                     let now = (new Date).getTime();
                     
                     if(this.clientID){
-                        this.broker.emit('ping',{
+                        this.broker.emit('xping',{
                             id: this.clientID,
                             time:now
                         });
