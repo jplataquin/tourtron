@@ -26,7 +26,7 @@ export default function videoSizeStablizer(video){
         if(!elem) return false;
 
         elem = elem.target;
-
+        console.log('asdad');
         stabilize(elem);
 
     });
@@ -34,7 +34,7 @@ export default function videoSizeStablizer(video){
     elemResizeObserver.observe(video);
 
     let listener1 = window.addEventListener('orientationchange', () => { 
-        stabilize(video);
+       // stabilize(video);
     }, false);
 
 
