@@ -342,13 +342,14 @@
                 });
 
 
+                //Reply to a ping
                 this.broker.on('ping',(data)=>{
 
                     let now = (new Date).getTime();
                     
                     this.broker.emit('ping',{
-                        id:data.id,
-                        time:now
+                        id:data.from,
+                        time:now,
                     });
                 });
             }
