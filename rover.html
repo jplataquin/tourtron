@@ -20,12 +20,8 @@
         import {render,Component,Template} from '/js/adarna.js';
         import videoSizeStablizer from '/assets/js/videoSizeStablizer.js';
 
-        const statusDisplay = document.getElementById('status');
-        
-
         const app = document.querySelector('#app');
-        
-    
+            
         let view = new class extends Component{
 
             init(){
@@ -42,7 +38,7 @@
                 this.lastCommnand           = '';
                 this.broadcast              = null;
                 this.clientID               = null;
-               //this.initLocalSocket();
+                this.initLocalSocket();
                 this.initBrokerSocket();
                 this.commands();
                 this.receiveStream();
@@ -77,11 +73,10 @@
                                 dataEl:'video'
                             });
                         
-                            
                         });//div
-                    });
+                    });//div
                     
-                });
+                });//div
             }
 
             controller(){
@@ -297,7 +292,6 @@
             commands(){
                 //local
                 let timeoutCommand;
-                
                 let localDelay = 2000;
         
                 this.broker.on('forward',()=>{
@@ -309,8 +303,6 @@
                     
                     this.local.volatile.emit('forward');
                     
-                    statusDisplay.innerHTML = 'FORWARD';
-
                     timeoutCommand = setTimeout(()=>{
                         this.local.volatile.emit('stop');
                     },localDelay);
@@ -326,9 +318,6 @@
                     
                     this.local.volatile.emit('backward');
 
-                    statusDisplay.innerHTML = 'BACKWARD';
-                    
-                    
                     timeoutCommand = setTimeout(()=>{
                         this.local.volatile.emit('stop');
                     },localDelay);
@@ -344,8 +333,6 @@
                     
                     this.local.volatile.emit('rotate-left');
 
-                    statusDisplay.innerHTML = 'ROTATE LEFT';
-                    
                     timeoutCommand = setTimeout(()=>{
                         this.local.volatile.emit('stop');
                     },localDelay);
@@ -361,8 +348,6 @@
                     
                     this.local.volatile.emit('rotate-right');
 
-                    statusDisplay.innerHTML = 'ROTATE RIGHT';
-                    
                     timeoutCommand = setTimeout(()=>{
                         this.local.volatile.emit('stop');
                     },localDelay);
@@ -379,8 +364,6 @@
                     
                     this.local.volatile.emit('stop');
 
-                    statusDisplay.innerHTML = 'STOP';
-                    
                     timeoutCommand = setTimeout(()=>{
                         this.local.volatile.emit('stop');
                     },localDelay);
@@ -481,9 +464,7 @@
 
                 //Handle reply to a ping
                 this.broker.on('status_ping',(data)=>{
-
                     this.clientReplyPingTime = data.time;
-
                 });
             }
 
@@ -502,14 +483,26 @@
                         });
                     }
                     
-                    
+                    /**
+                     //Do something
                     if(this.clientReplyPingTime != 0){
                         console.log('elapsed',elapsed);
-                    }
+                    }**/
                     
                     this.ping();
                 },5000);
    
+            }
+
+
+            echoCancellation(){
+                const audioContext      = new AudioContext()
+                const destinationNode   = audioContext.createMediaStreamDestination();
+                
+                audioContext
+                        .createMediaStreamSource(new MediaStream([audioStream.getAudioTracks()[0]]))
+                        .connect(createDistortion(audioContext))
+                        .connect(destinationNode);
             }
         }();
 
