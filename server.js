@@ -240,9 +240,9 @@ io.sockets.on("connection", socket => {
     }
 
     
-    socket.on('ping',(data)=>{
+    socket.on('status_ping',(data)=>{
         
-        socket.to(data.id).emit('ping',{
+        socket.to(data.id).emit('status_ping',{
             time:data.time,
             id:data.id,
             from:socket.id

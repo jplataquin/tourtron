@@ -448,7 +448,7 @@
                     
                     if(this.clientID){
                         console.log('here');
-                        this.broker.emit('ping',{
+                        this.broker.emit('status_ping',{
                             id: this.clientID,
                             time:now
                         });
@@ -457,7 +457,7 @@
                 },5000);
 
                 //Handle ping
-                this.broker.on('ping',(data)=>{
+                this.broker.on('status_ping',(data)=>{
 
                     console.log('rcv',data);
 
