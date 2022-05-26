@@ -228,7 +228,7 @@ io.sockets.on("connection", socket => {
 
 
 
-    function preMovementCheck(){
+    function preMovementCheck(roverName){
         if(typeof availableRovers[roverName] == 'undefined') return false;
         
         if(availableRovers[roverName].state.status != 'connected') return false;
@@ -254,6 +254,7 @@ io.sockets.on("connection", socket => {
     socket.on('forward',(roverName)=>{
 
         if(!preMovementCheck(roverName)) return false;
+        console.log('FORWARD')
         availableRovers[roverName].socket.emit('forward');
     });
 

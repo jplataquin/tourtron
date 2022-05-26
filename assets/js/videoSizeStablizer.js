@@ -37,8 +37,9 @@ export default function videoSizeStablizer(video){
         stabilize(video);
     }, false);
 
+
     let listener2 = window.addEventListener('resize',()=>{
-        stabilize(video);
+        //stabilize(video);
     });
 
     return {
