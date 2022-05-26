@@ -43,7 +43,6 @@
                 this.clientID       = null;
                //this.initLocalSocket();
                 this.initBrokerSocket();
-                this.ping();
                 this.commands();
                 this.receiveStream();
             }
@@ -120,9 +119,7 @@
             initBrokerSocket(){
               
                 this.broker = io("wss://patrila.app:5000");
-                
-
-               
+                  
                 this.broker.on('connect',()=>{
 
                     let pendingFlag = false;
@@ -199,6 +196,8 @@
                             this.broker.emit('request-client-stream',data.clientId);
 
                             this.clientID = data.clientId;
+
+                            this.ping();
 
                         }).catch(err=>{
                             
