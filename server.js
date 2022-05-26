@@ -239,10 +239,10 @@ io.sockets.on("connection", socket => {
         return true;
     }
 
-
+    /** 
     socket.on('ping',data,()=>{
         socket.to(data.id).emit('ping',data);
-    });
+    });**/
 
     /****************MOVEMENT*****************/
 
