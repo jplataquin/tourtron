@@ -27,7 +27,7 @@ export default function videoSizeStablizer(video){
 
         elem = elem.target;
         console.log('asdad');
-        stabilize(elem);
+        //stabilize(elem);
 
     });
 
