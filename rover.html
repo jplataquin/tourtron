@@ -403,12 +403,37 @@
                             break;
                             case "disconnected":
                             console.log("Disconnecting...");
+
+                                if(this.local){
+                                    this.local.volatile.emit('stop');
+                                }
+
+                                setTimeout(()=>{
+                                    document.location.reload();
+                                },3000);
+
                             break;
                             case "closed":
                             console.log("Offline");
+                                if(this.local){
+                                    this.local.volatile.emit('stop');
+                                }
+
+                                setTimeout(()=>{
+                                    document.location.reload();
+                                },3000);
+                                
                             break;
                             case "failed":
                             console.log("Error");
+                                if(this.local){
+                                    this.local.volatile.emit('stop');
+                                }
+
+                                setTimeout(()=>{
+                                    document.location.reload();
+                                },3000);
+                                
                             break;
                             default:
                             console.log("Unknown");
