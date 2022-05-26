@@ -35,6 +35,7 @@ export default function videoSizeStablizer(video){
     elemResizeObserver.observe(video);
 
     window.addEventListener('orientationchange', () => {
+        alert('changed');
         stabilize(video);
     }, false);
 
