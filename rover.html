@@ -18,6 +18,7 @@
 
     <script type="module">
         import {render,Component,Template} from '/js/adarna.js';
+        import videoSizeStablizer from '/assets/js/videoSizeStablizer.js';
 
         const statusDisplay = document.getElementById('status');
         
@@ -39,7 +40,7 @@
                 this.peerConnection;
                 this.lastCommnand   = '';
                 this.broadcast      = null;
-                this.initLocalSocket();
+               //this.initLocalSocket();
                 this.initBrokerSocket();
                 this.commands();
                 this.receiveStream();
@@ -83,6 +84,7 @@
 
             controller(){
 
+                videoSizeStablizer(this.el.video);
             }
 
             initLocalSocket(){
