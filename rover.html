@@ -68,7 +68,7 @@
                                 autoplay:true, 
                                 muted:true,
                                 controls:true,
-                                poster:'https://via.placeholder.com/300.jpg?text=TEST',
+                                poster:'/assets/img/bubot_face.jpg',
                                 //src:'https://www.w3schools.com/html/mov_bbb.mp4',
                                 dataEl:'video'
                             });
@@ -99,15 +99,17 @@
                         this.broadcast.stopStream();
                     }
 
-                    this.updateState({
-                        status:'ready',
-                        time:(new Date()).getTime()
-                    });
 
                     if(this.broker){
                         this.broker.volatile.emit('rover-not-responding');
                     }
                     
+                    /*
+                    this.updateState({
+                        status:'ready',
+                        time:(new Date()).getTime()
+                    });*/
+
                 });
             }
 
@@ -127,7 +129,7 @@
                         //If state is ready inform broker
                         if(this.state.status == 'ready'){
                             pendingFlag = false;
-                            this.broker.volatile.emit('status',this.state);
+                            this.broker.volatile.emit('update-rover-status',this.state);
                         }
 
                         //If pending status has not change in more or equal to 10 seconds
@@ -168,7 +170,7 @@
 
 
                 //If a client wants to connect
-                this.broker.on('connection-request',(data)=>{
+                this.broker.on('rover-connection-request',(data)=>{
                     
                     //Update rover state to pending
                     this.updateState({
@@ -176,31 +178,32 @@
                         time:(new Date()).getTime()
                     });
 
+                    this.clientID  = data.clientId;
+                    this.clientPing();
+
                     getMediaCaptureDevices().then(media=>{
                     
                         broadcastStream({
                             camera: media.video[0].id,
                             microphone: media.audio[0].id,
                             socket: this.broker,
-                            clientSocketId: data.clientId,
+                            clientSocketId: this.clientID,
                             state:this.state
                         }).then((bcast)=>{
 
                             this.broadcast = bcast;
                             
                             //Request stream of client
-                            this.broker.emit('request-client-stream',data.clientId);
+                            this.broker.emit('request-client-stream',this.clientID);
 
-                            this.clientID = data.clientId;
-
-                            this.ping();
-
+                            
                         }).catch(err=>{
                             
+                            /**
                             updateState({
                                 status:'ready',
                                 time:(new Date()).getTime()
-                            });
+                            });**/
 
                             this.broker.volatile.emit(
                                 'rover-broadcast-failed',
@@ -223,10 +226,11 @@
 
                     }).catch(err=>{
 
+                        /**
                         updateState({
                             status:'ready',
                             time:(new Date()).getTime()
-                        });
+                        });**/
                         
                         this.broker.volatile.emit(
                             'rover-broadcast-failed',
@@ -262,10 +266,11 @@
                     }
 
                     //Set status to ready
+                    /**
                     this.updateState({
                         status:'ready',
                         time:(new Date()).getTime()
-                    });
+                    });**/
 
                     //Close peer connection
                     if(this.peerConnection){
@@ -397,13 +402,13 @@
                         switch(this.peerConnection.connectionState) {
                             case "new":
                             case "checking":
-                            console.log("Connecting...");
+                                console.log("Connecting...");
                             break;
                             case "connected":
-                            console.log("Online");
+                                console.log("Online");
                             break;
                             case "disconnected":
-                            console.log("Disconnecting...");
+                                console.log("Disconnecting...");
 
                                 if(this.local){
                                     this.local.volatile.emit('stop');
@@ -426,7 +431,7 @@
                                 
                             break;
                             case "failed":
-                            console.log("Error");
+                                console.log("Error");
                                 if(this.local){
                                     this.local.volatile.emit('stop');
                                 }
@@ -437,7 +442,7 @@
                                 
                             break;
                             default:
-                            console.log("Unknown");
+                                console.log("Unknown");
                             break;
                         }
                     }
@@ -479,43 +484,90 @@
 
                 this.broker.on('client-broadcast-failed',(message)=>{
 
+                    if(this.broadcast){
+                        this.broadcast.stopStream();
+                    }
+
                     if(this.peerConnection){
                         this.peerConnection.close();
                         this.peerConnection = null
                     }
 
-                    console.log('Error: '+message);
+                    //Stop movement
+                    if(this.local){
+                        this.local.emit('stop');
+                    }
+
+                    setTimeout(()=>{
+                        document.location.href = '/';
+                    },3000);
                 });
 
 
-                //Handle reply to a ping
-                this.broker.on('status_ping',(data)=>{
+                //Handle reply of client ping
+                this.broker.on('client-ping',(data)=>{
                     this.clientReplyPingTime = data.time;
+                });
+
+                //Reply to a rover ping request
+                this.broker.on('ping-rover',(data)=>{
+
+                    let now = (new Date).getTime();
+
+                    this.broker.emit('reply-ping-rover',{
+                        time:now,
+                        to:data.from
+                    });
                 });
             }
 
-            ping(){
+            clientPing(){
 
                 setTimeout(()=>{
 
                     let now     = (new Date).getTime();
+
+                    if(this.clientReplyPingTime == 0){
+                        this.clientReplyPingTime = now;
+                    }
+
                     let elapsed = now - this.clientReplyPingTime;
                     
                     if(this.clientID){
                       
-                        this.broker.emit('status_ping',{
+                        this.broker.emit('client-ping',{
                             id: this.clientID,
                             time:now
                         });
                     }
                     
-                    /**
-                     //Do something
-                    if(this.clientReplyPingTime != 0){
-                        console.log('elapsed',elapsed);
-                    }**/
                     
-                    this.ping();
+                     //Do something after no response for 10 seconds
+                    if(this.clientID && elapsed >= 10000){
+                        
+                        if(this.local){
+                            this.local.emit('stop');
+                        }
+
+                        //Stop the stream
+                        if(this.broadcast != null){
+                            this.broadcast.stopStream();
+                        }
+
+                        //Close peer connection
+                        if(this.peerConnection){
+                            this.peerConnection.close();
+                            this.peerConnection = null;
+                        }
+
+                        setTimeout(()=>{
+                            document.location.reload();
+                        },3000);
+
+                        return false;
+                    }
+                    
+                    this.clientPing();
                 },5000);
    
             }

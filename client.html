@@ -23,9 +23,6 @@
         import videoSizeStablizer from '/assets/js/videoSizeStablizer.js';
         const app = document.querySelector('#app');
         
-
-     
-
     
         let view = new class extends Component{
 
@@ -41,6 +38,7 @@
 
                 this.lastCommand;
                 this.broadcast;
+                this.roverReplyPingTime = 0;
                 this.commandDelay       = 1000;
                 this.roverName          = null;
                 this.peerConnection     = null;
@@ -96,7 +94,7 @@
                                     autoplay:true, 
                                     muted:true,
                                     controls:true,
-                                    poster:'https://via.placeholder.com/300.jpg?text=TEST',
+                                    poster:'/assets/img/bubot_face.jpg',
                                     //src:'https://www.w3schools.com/html/mov_bbb.mp4',
                                     dataEl:'video'
                                 });
@@ -236,7 +234,7 @@
             }
 
             sendCommand(command,time,id){
-                console.log(command);
+            
                 clearInterval(this.lastCommand);
 
                 if(!this.broker) return false;
@@ -256,11 +254,20 @@
                     reconnection:false
                 });
 
+                this.pingRover();
+                        
                 setTimeout(()=>{
 
                     this.broker.emit('connect-to-rover',{
                         name: this.rover_name,
                         uid: uuidv4()
+                    },(reply)=>{
+
+                        if(!reply.status){
+                            alert(reply.message);
+                            document.location.href = '/';
+                            return false;
+                        }
                     });
 
                 },1000);
@@ -284,6 +291,35 @@
         
                     this.peerConnection = new RTCPeerConnection(webRTCconfig);
                     
+                    this.peerConnection.onconnectionstatechange = ev => {
+                        switch(this.peerConnection.connectionState) {
+                            case "new":
+                            case "checking":
+                                console.log("Connecting...");
+                            break;
+                            case "connected":
+                                console.log("Online");
+                            break;
+                            case "disconnected":
+                                console.log("Disconnecting...");
+                                alert('Error: Rover disconnected (Aborting)');
+                                document.location.href = '/';
+                            break;
+                            case "closed":
+                                console.log("Closed");
+                                alert('Error: Rover disconnected (Aborting)');
+                                document.location.href = '/';
+                                
+                            break;
+                            case "failed":
+                                console.log("Failed");
+                            break;
+                            default:
+                                console.log("Unknown");
+                            break;
+                        }
+                    }
+
                     this.peerConnection
                         .setRemoteDescription(description)
                         .then(()  => this.peerConnection.createAnswer())
@@ -298,13 +334,18 @@
                     this.peerConnection.ontrack = event => {
 
                         this.el.video.srcObject = event.streams[0];
-                        this.broker.volatile.emit('connection-success',name);
                         this.roverName = name;
 
+                        //Inform the server that you have successfully connected to rover and 
+                        //can now receive the video stream
+                        this.broker.volatile.emit('rover-connection-success',this.roverName);
+                        
+                        
+                        //Prompt the user to play the stream video
                         if(!this.el.video.classList.contains('show')){
                             this.modalReceiveStream.show();
                         }
-                
+                        
                     };
 
                     this.peerConnection.onicecandidate = event => {
@@ -322,42 +363,65 @@
                         .catch(e => console.error(e));
                 });
 
-                //If rover is disconnected then close the peer connection
+
                 this.broker.on('rover-disconnected',()=>{
-                    if(this.peerConnection){
-                        this.peerConnection.close();
-                        this.peerConnection = null;
+               
+                    //Stop the stream
+                    if(this.broadcast != null){
+                        this.broadcast.stopStream();
                     }
-                });
 
-                //If rover failed to broadcast
-                this.broker.on('rover-broadcast-failed',(message)=>{
-
+                    //Close peer connection
                     if(this.peerConnection){
                         this.peerConnection.close();
                         this.peerConnection = null
                     }
 
-                    console.log('Error: '+message);
+                    alert('Rover disconnected');
+
+                    document.location.href = '/';
+                });
+
+                //If rover failed to broadcast
+                this.broker.on('rover-broadcast-failed',(message)=>{
+
+                    //Stop the stream
+                    if(this.broadcast != null){
+                        this.broadcast.stopStream();
+                    }
+
+                    //Close peer connection
+                    if(this.peerConnection){
+                        this.peerConnection.close();
+                        this.peerConnection = null
+                    }
+
+                    alert(message);
+                    
+                    document.location.href = '/';
+                    return false;
                 });
 
 
-                //Reply to a ping
-                this.broker.on('status_ping',(data)=>{
-
-                    console.log('rcv',data);
-
+                //Reply to a client ping request
+                this.broker.on('client-ping',(data)=>{
+                    
                     let now = (new Date).getTime();
                     
-                    this.broker.emit('status_ping',{
+                    this.broker.emit('client-ping',{
                         id:data.from,
                         time:now,
                     });
                 });
+
+                this.broker.on('reply-ping-rover',(data)=>{
+                    this.roverReplyPingTime = data.time;
+                })
             }
 
             initStream(){
 
+                //Reply to a request from rover for a client stream
                 this.broker.on('request-client-stream',(clientScoketId)=>{
 
                     getMediaCaptureDevices().then(media=>{
@@ -382,7 +446,8 @@
                                 'Client cannot connect to rover'
                             );
 
-                            console.log('Error',err);
+                            alert('Error failed to broadcast stream to rover');
+                            document.location.href = '/';
                         });
 
                     }).catch(err=>{
@@ -392,12 +457,59 @@
                             clientScoketId,
                             'Camera or Microphone not accessible'
                         );
-                        console.log('ERROR',err);
+
+                        alert('Error: failed to access camera or microphone');
+                        document.location.href = '/';
                     });
                 });
                
             }
 
+            pingRover(){
+
+                setTimeout(()=>{
+
+                    let now     = (new Date).getTime();
+
+                    if(this.roverReplyPingTime == 0){
+                        this.roverReplyPingTime = now;
+                    }
+
+                    let elapsed = now - this.roverReplyPingTime;
+
+                    if(this.roverName){
+                    
+                        this.broker.emit('ping-rover',{
+                            name: this.roverName,
+                            time:now
+                        });
+                    }
+
+
+                    //Do something after no response for 10 seconds
+                    if(this.roverName && elapsed >= 10000){
+                        
+                        //Stop the stream
+                        if(this.broadcast != null){
+                            this.broadcast.stopStream();
+                        }
+
+                        //Close peer connection
+                        if(this.peerConnection){
+                            this.peerConnection.close();
+                            this.peerConnection = null;
+                        }
+
+                        alert('Error: Rover took too long to respond, connection unreliable (Aborting)');
+                        document.location.href = '/';
+                        return false;
+                    }
+
+                    this.pingRover();
+                },5000);
+            }
+
+          
             style(){
                 return {
                     '.control-buttons':{
@@ -420,103 +532,6 @@
         render(view).to(app);
 
 
-              /***************************************************************/
-
-       /**
-        const forward   = document.querySelector('#forward');
-        const backward  = document.querySelector('#backward');
-        const left      = document.querySelector('#left');
-        const right     = document.querySelector('#right');
-        
-        
-        let lastCommand;
-        let commandDelay = 2000;
-
-        //Forward
-        forward.onmousedown = ()=>{
-            console.log('forward');
-            clearInterval(lastCommand);
-            broker.volatile.emit('forward',roverName);
-            lastCommand = setInterval(()=>{
-                broker.volatile.emit('forward',roverName);
-            },commandDelay);
-               
-        }
-
-        forward.onmouseout = ()=>{
-            clearInterval(lastCommand);
-            broker.volatile.emit('stop',roverName);
-        }
-
-        forward.onmouseup = ()=>{
-
-            clearInterval(lastCommand);
-            broker.volatile.emit('stop',roverName);
-        }
-
-        //Backward
-        backward.onmousedown = ()=>{
-            console.log('backward');
-            clearInterval(lastCommand);
-            broker.volatile.emit('backward',roverName);
-            lastCommand = setInterval(()=>{
-                broker.volatile.emit('backward',roverName);
-            },commandDelay);
-            
-        }
-
-        backward.onmouseout = ()=>{
-            clearInterval(lastCommand);
-            broker.volatile.emit('stop',roverName);
-        }
-
-        backward.onmouseup = ()=>{
-            clearInterval(lastCommand);
-            broker.volatile.emit('stop',roverName);
-        }
-
-        //Left
-        left.onmousedown = ()=>{
-            console.log('left');
-            clearInterval(lastCommand);
-            broker.volatile.emit('rotate-left',roverName);
-            lastCommand = setInterval(()=>{
-                broker.volatile.emit('rotate-left',roverName);
-            },commandDelay);
-        }
-
-        left.onmouseout = ()=>{
-            clearInterval(lastCommand);
-            broker.volatile.emit('stop',roverName);
-        }
-
-        left.onmouseup = ()=>{
-            clearInterval(lastCommand);
-            broker.volatile.emit('stop',roverName);
-        }
-
-        //Right
-        right.onmousedown = ()=>{
-            console.log('right');
-            clearInterval(lastCommand);
-            broker.volatile.emit('rotate-right',roverName);
-            lastCommand = setInterval(()=>{
-                broker.volatile.emit('rotate-right',roverName);
-            },commandDelay);
-            
-        }
-
-        right.onmouseout = ()=>{
-            clearInterval(lastCommand);
-            broker.volatile.emit('stop',roverName);
-        }
-
-        right.onmouseup = ()=>{
-            clearInterval(lastCommand);
-            broker.volatile.emit('stop',roverName);
-        }
-
-    **/
     </script>
    
 </body>

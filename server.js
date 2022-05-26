@@ -64,8 +64,6 @@ let availableRovers = {};
 
 io.sockets.on("connection", socket => {
 
-    console.log('Connected');
-
     socket.on("offer", (id, message,name) => {
         socket.to(id).emit("offer", socket.id, message,name);
     });
@@ -79,10 +77,10 @@ io.sockets.on("connection", socket => {
     });
 
 
-    //ready - avaiable - pending - connected
+    /**ready - avaiable - pending - connected**/
 
-    //Receive status of rover
-    socket.on('status',(state)=>{
+    //Receive status update from rover
+    socket.on('update-rover-status',(state)=>{
 
         if(state.status == 'ready'){
 
@@ -91,7 +89,7 @@ io.sockets.on("connection", socket => {
 
             availableRovers[state.name] = {
                 socket: socket,
-                state:state,
+                state: state,
                 client:null
             };
 
@@ -116,11 +114,9 @@ io.sockets.on("connection", socket => {
         callback(roverList);
     });
 
-    socket.on('connect-to-rover',(data)=>{
+    socket.on('connect-to-rover',(data,callback)=>{
         
-        console.log('connect-to-rover');
-
-        let uid = data.uid ?? false;
+        let uid  = data.uid ?? false;
         let name = data.name ?? '';
 
         //TODO: validate user and session
@@ -128,7 +124,8 @@ io.sockets.on("connection", socket => {
         //If rover is not detected
         if(typeof availableRovers[name] == 'undefined'){
             
-            socket.emit('connection-error',{
+            callback({
+                status:0,
                 message:'Rover is not available (A)'
             });
 
@@ -138,7 +135,8 @@ io.sockets.on("connection", socket => {
         //If rover is not status available
         if(availableRovers[name].state.status != 'available'){
         
-            socket.emit('connection-error',{
+            callback({
+                status:0,
                 message:'Rover is not available (B)'
             });
 
@@ -150,9 +148,8 @@ io.sockets.on("connection", socket => {
         //Update rover status
         availableRovers[name].state.status = 'pending';
 
-
         //Inform rover that the client wants to connect
-        availableRovers[name].socket.emit('connection-request',{
+        availableRovers[name].socket.emit('rover-connection-request',{
             uid: uid,
             clientId: socket.id,
             state: availableRovers[name].state
@@ -160,7 +157,7 @@ io.sockets.on("connection", socket => {
     });
 
 
-    socket.on('connection-success',name=>{
+    socket.on('rover-connection-success',name=>{
 
         //TODO validate that rover exists
 
@@ -175,10 +172,12 @@ io.sockets.on("connection", socket => {
         socket.to(clientId).emit('request-client-stream',socket.id);
     });
 
+    //Inform the rover that the client broadcast failed
     socket.on('client-broadcast-failed',(target)=>{
         socket.to(target).emit('client-broadcast-failed');
     });
 
+    //Inform the client that the rover broadcast failed
     socket.on('rover-broadcast-failed',(roverName,clientId,message)=>{
 
         if(typeof availableRovers[roverName] == 'undefined') return false;
@@ -190,8 +189,6 @@ io.sockets.on("connection", socket => {
         
         let rovers = Object.values(availableRovers);
 
-        console.log('Disconnected',socket.id);
-
         for(let i = 0; i <= rovers.length-1;i++){
             let rover = rovers[i];
 
@@ -199,10 +196,7 @@ io.sockets.on("connection", socket => {
             if(rover.socket.id == socket.id){
                 
                 if(rover.client != null){
-    
-                    rover.client.emit('rover-disconnected');
-
-                    
+                    rover.client.emit('rover-disconnected');     
                 }
 
                 //Delete rover from registry
@@ -228,6 +222,39 @@ io.sockets.on("connection", socket => {
 
 
 
+
+    /*** PING ***/
+    socket.on('client-ping',(data)=>{
+        
+        socket.to(data.id).emit('client-ping',{
+            time:data.time,
+            id:data.id,
+            from:socket.id
+        });
+        
+    });
+
+    socket.on('ping-rover',(data)=>{
+
+        if(typeof availableRovers[data.name] == 'undefined') return false;
+        let rover = availableRovers[data.name];
+
+        socket.to(rover.socket.id).emit('ping-rover',{
+            time:data.time,
+            from:socket.id
+        });
+    });
+
+    socket.on('reply-ping-rover',(data)=>{
+        
+        socket.to(data.to).emit('reply-ping-rover',{
+            time:data.time
+        });
+    })
+
+
+    /****************MOVEMENT*****************/
+
     function preMovementCheck(roverName){
         if(typeof availableRovers[roverName] == 'undefined') return false;
         
@@ -237,19 +264,6 @@ io.sockets.on("connection", socket => {
 
         return true;
     }
-
-    
-    socket.on('status_ping',(data)=>{
-        
-        socket.to(data.id).emit('status_ping',{
-            time:data.time,
-            id:data.id,
-            from:socket.id
-        });
-        
-    });
-
-    /****************MOVEMENT*****************/
 
     socket.on('forward',(roverName)=>{
 
