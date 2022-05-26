@@ -3,11 +3,13 @@ export default function videoSizeStablizer(video){
     const resizeObserver = new ResizeObserver(elems=>{
         
         console.log(elems);
-        
+
         let elem = elems[0] ?? false;
 
         if(!elem) return false;
 
+        elem = elem.target;
+        
         let height  = window.innerHeight;
         let width   = window.innerWidth;
 
