@@ -298,11 +298,11 @@
                     
                     //if(lastCommnand == 'forward') return false;
                     //lastCommand = 'forward';
-
+                    
                     clearInterval(timeoutCommand);
                     
                     this.local.volatile.emit('forward');
-                    
+                    console.log('Forward');
                     timeoutCommand = setTimeout(()=>{
                         this.local.volatile.emit('stop');
                     },localDelay);
