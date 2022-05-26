@@ -38,9 +38,10 @@
                 this.local;
                 this.broker;
                 this.peerConnection;
-                this.lastCommnand   = '';
-                this.broadcast      = null;
-                this.clientID       = null;
+                this.clientReplyPingTime    = 0
+                this.lastCommnand           = '';
+                this.broadcast              = null;
+                this.clientID               = null;
                //this.initLocalSocket();
                 this.initBrokerSocket();
                 this.commands();
@@ -439,30 +440,36 @@
 
                     console.log('Error: '+message);
                 });
+
+
+                //Handle reply to a ping
+                this.broker.on('status_ping',(data)=>{
+
+                    this.clientReplyPingTime = data.time;
+
+                });
             }
 
             ping(){
 
-                setInterval(()=>{
-                    let now = (new Date).getTime();
+                setTimeout(()=>{
+
+                    let now     = (new Date).getTime();
+                    let elapsed = now - this.clientReplyPingTime;
                     
+                    console.log('elapsed',elapsed);
+
                     if(this.clientID){
-                        console.log('here');
+                      
                         this.broker.emit('status_ping',{
                             id: this.clientID,
                             time:now
                         });
                     }
                     
+                    this.ping();
                 },5000);
-
-                //Handle ping
-                this.broker.on('status_ping',(data)=>{
-
-                    console.log('rcv',data);
-
-                });
-                
+   
             }
         }();
 
