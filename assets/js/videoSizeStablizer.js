@@ -7,44 +7,35 @@ export default function videoSizeStablizer(video){
         //Landscape
         if(elem.offsetWidth > elem.offsetHeight){
             
-            elem.style.height = width+'px';
-            
-            
+            if(elem.style.width != width+'px'){
+                elem.style.height = width+'px';
+            }
 
         }else if(elem.offsetWidth <= elem.offsetHeight){ //Portraint or Box
-     
-            elem.style.height = height+'px';
+            
+            if(elem.style.height != height+'px'){
+                elem.style.height = height+'px';
+            }
             
         }
     }
 
-    const elemResizeObserver = new ResizeObserver(elems=>{
-        
-
-        let elem = elems[0] ?? false;
-
-        if(!elem) return false;
-
-        elem = elem.target;
-        console.log('asdad');
-        //stabilize(elem);
-
-    });
-
-    elemResizeObserver.observe(video);
+    let checker = setInterval(()=>{
+        stabilize(video);
+    },3000);
 
     let listener1 = window.addEventListener('orientationchange', () => { 
-       // stabilize(video);
+        stabilize(video);
     }, false);
 
 
     let listener2 = window.addEventListener('resize',()=>{
-        //stabilize(video);
+        stabilize(video);
     });
 
     return {
         unboserve: ()=>{
-            elemResizeObserver.unobserve();
+            clearInterval(checker);
             window.removeEventListener(listener1);
             window.removeEventListener(listener2);
         }
