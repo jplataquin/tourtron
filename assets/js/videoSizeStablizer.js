@@ -34,10 +34,19 @@ export default function videoSizeStablizer(video){
 
     elemResizeObserver.observe(video);
 
-    window.addEventListener('orientationchange', () => {
-      
+    let listener1 = window.addEventListener('orientationchange', () => { 
         stabilize(video);
     }, false);
 
-    return elemResizeObserver;
+    let listener2 = window.addEventListener('resize',()=>{
+        stabilize(video);
+    });
+
+    return {
+        unboserve: ()=>{
+            elemResizeObserver.unobserve();
+            window.removeEventListener(listener1);
+            window.removeEventListener(listener2);
+        }
+    }
 }
