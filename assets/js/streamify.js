@@ -54,13 +54,14 @@ function broadcastStream(data){
             audio: { deviceId: data.microphone ? { exact: data.microphone } : undefined },
             video: { deviceId: data.camera ? { exact: data.camera } : undefined }
         }).then((stream)=>{
-        
+            console.log('A 0');
             window.stream = stream;
             
             
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
         
             peerConnection.onicecandidate = (event) => {
+                console.log('A 2');
                 if (event.candidate) {
                     data.socket.emit("candidate", data.clientSocketId, event.candidate);
                 }
@@ -71,17 +72,20 @@ function broadcastStream(data){
                 .createOffer()
                 .then(sdp => peerConnection.setLocalDescription(sdp))
                 .then(() => {
+                    console.log('A 1');
                     data.socket.emit("offer", data.clientSocketId, peerConnection.localDescription,data.state.name);
                 });
 
 
-            data.socket.on("answer", (id, description) => {  
+            data.socket.on("answer", (id, description) => { 
+                console.log('A 3'); 
                 if(peerConnection != null){
                     peerConnection.setRemoteDescription(description);
                 }
             });
 
             data.socket.on("candidate", (id, candidate) => {
+                console.log('A 4');
                 if(peerConnection != null){
                     peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
                 }
