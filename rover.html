@@ -461,6 +461,7 @@
 
 
                     this.peerConnection.ontrack = event => {
+                        alert('On Track');
                         this.el.video.srcObject = event.streams[0];    
                     };
 
