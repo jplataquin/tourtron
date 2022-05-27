@@ -402,13 +402,13 @@
                         switch(this.peerConnection.connectionState) {
                             case "new":
                             case "checking":
-                                alert("Connecting...");
+                                console.log("Connecting...");
                             break;
                             case "connected":
-                                alert("Online");
+                                console.log("Online");
                             break;
                             case "disconnected":
-                                alert("Disconnecting...");
+                                console.log("Disconnecting...");
 
                                 if(this.local){
                                     this.local.volatile.emit('stop');
@@ -420,7 +420,7 @@
 
                             break;
                             case "closed":
-                            alert("Offline");
+                                console.log("Offline");
                                 if(this.local){
                                     this.local.volatile.emit('stop');
                                 }
@@ -431,7 +431,7 @@
                                 
                             break;
                             case "failed":
-                            alert("Error");
+                                console.log("Error");
                                 if(this.local){
                                     this.local.volatile.emit('stop');
                                 }
@@ -442,7 +442,7 @@
                                 
                             break;
                             default:
-                            alert("Unknown");
+                                console.log("Unknown");
                             break;
                         }
                     }
@@ -457,13 +457,12 @@
 
                         }).catch((e)=>{
 
-                            alert(JSON.stringify(e));
                             console.log('error',e);
                         });
 
 
                     this.peerConnection.ontrack = event => {
-                        alert('On Track');
+                     
                         this.el.video.srcObject = event.streams[0];    
                     };
 

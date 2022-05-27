@@ -425,7 +425,7 @@
                 this.broker.on('request-client-stream',(clientScoketId)=>{
 
                     getMediaCaptureDevices().then(media=>{
-                        alert(JSON.stringify(media));
+                        
                         broadcastStream({
                             camera: media.video[0].id,
                             microphone: media.audio[0].id,
@@ -433,7 +433,7 @@
                             clientSocketId: clientScoketId,
                             state:{name:''}
                         }).then((bcast)=>{
-
+                            alert('bcast success');
                             this.broadcast = bcast;
                             console.log('done');
 
