@@ -99,8 +99,12 @@ function broadcastStream(data){
                     }
                     
                     //Close peer connection
-                    peerConnection.close();
-                    peerConnection = null;
+
+                    if(peerConnection){
+                        peerConnection.close();
+                        peerConnection = null;
+                    }
+                    
 
                 }
             });
