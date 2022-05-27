@@ -456,6 +456,8 @@
                             this.broker.emit("answer", id, this.peerConnection.localDescription);
 
                         }).catch((e)=>{
+
+                            alert(JSON.stringify(e));
                             console.log('error',e);
                         });
 
@@ -500,7 +502,7 @@
                     }
 
                     setTimeout(()=>{
-                        document.location.href = '/';
+                        document.location.reload();
                     },3000);
                 });
 
