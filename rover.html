@@ -402,13 +402,13 @@
                         switch(this.peerConnection.connectionState) {
                             case "new":
                             case "checking":
-                                console.log("Connecting...");
+                                alert("Connecting...");
                             break;
                             case "connected":
-                                console.log("Online");
+                                alert("Online");
                             break;
                             case "disconnected":
-                                console.log("Disconnecting...");
+                                alert("Disconnecting...");
 
                                 if(this.local){
                                     this.local.volatile.emit('stop');
@@ -420,7 +420,7 @@
 
                             break;
                             case "closed":
-                                console.log("Offline");
+                            alert("Offline");
                                 if(this.local){
                                     this.local.volatile.emit('stop');
                                 }
@@ -431,7 +431,7 @@
                                 
                             break;
                             case "failed":
-                                console.log("Error");
+                            alert("Error");
                                 if(this.local){
                                     this.local.volatile.emit('stop');
                                 }
@@ -442,7 +442,7 @@
                                 
                             break;
                             default:
-                                console.log("Unknown");
+                            alert("Unknown");
                             break;
                         }
                     }
