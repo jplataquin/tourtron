@@ -1,5 +1,5 @@
 function broadcastStream(data){
-
+    console.log('M 4');
     data.clientSocketId = (typeof data.clientSocketId != 'undefined') ? data.clientSocketId : false;
     data.state          = (typeof data.state != 'undefined') ? data.state : false;
     data.camera         = (typeof data.camera != 'undefined') ? data.camera : false;
@@ -48,7 +48,7 @@ function broadcastStream(data){
     let peerConnection = new RTCPeerConnection(data.webRTCconfig);   
    
     return new Promise( (resolve,reject)=>{
-
+        console.log('M 5');
         //Open microphone and camera
         navigator.mediaDevices.getUserMedia({
             audio: { deviceId: data.microphone ? { exact: data.microphone } : undefined },
@@ -114,7 +114,7 @@ function broadcastStream(data){
             });
 
         }).catch((err)=>{
-            
+            console.log('M 6');
             //Stop all stream
             if (window.stream) {
                 window.stream.getTracks().forEach(track => {
