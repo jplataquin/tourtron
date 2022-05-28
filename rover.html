@@ -519,7 +519,7 @@
                     this.broker.emit('reply-ping-rover',{
                         time:now,
                         to:data.from,
-                        elapsed: (now - data.time)
+                        elapsed: (data.time - now)
                     });
                 });
             }
