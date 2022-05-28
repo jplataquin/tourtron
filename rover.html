@@ -88,7 +88,7 @@
             sendData(){
                 if(this.broker && this.broadcast){
                     //console.log('data',data);
-                    this.broker.emit('data',this.state.name,data);
+                    this.broker.emit('data',this.clientID,data);
                 } 
             }
 

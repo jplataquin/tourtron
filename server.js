@@ -252,16 +252,9 @@ io.sockets.on("connection", socket => {
         });
     });
 
-    socket.on('data',(roverName,data)=>{
+    socket.on('data',(id,data)=>{
 
-       
-        console.log('rover name',roverName);
-        console.log(typeof availableRovers[roverName]);
-        if(typeof availableRovers[roverName] == 'undefined') return false;
-        let rover = availableRovers[data.name];
-        console.log(rover);
-
-        socket.to(rover.client.id).emit('data',data);
+        socket.to(id).emit('data',data);
     });
     /****************MOVEMENT*****************/
 
