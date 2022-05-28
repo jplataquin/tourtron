@@ -17,6 +17,10 @@ class ProximityDisplayComponent extends Component{
                 });
                 
                 t.div({class:'row2'},()=>{
+                    t.div('8s');
+                    t.div('CTRL DLY');
+                })
+                t.div({class:'row3'},()=>{
                     t.div({class:'ball-row-2 b4',dataEl:'b4'});
                     t.div({class:'ball-row-2 b5',dataEl:'b5'});
                     t.div({class:'ball-row-2 b6',dataEl:'b6'});
@@ -33,9 +37,9 @@ class ProximityDisplayComponent extends Component{
             if(!ball) return false;
 
             if(flag){
-                ball.style.backgroundColor = 'rgba(255,0,0,2.0)';
+                ball.style.backgroundColor = 'rgba(255,0,0)';
             }else{
-                ball.style.backgroundColor = 'rgba(0,0,0,2.0)';
+                ball.style.backgroundColor = 'rgba(0,0,0)';
             }
         }
     }
@@ -50,7 +54,9 @@ class ProximityDisplayComponent extends Component{
                 position:'absolute'
             },
             '.row2':{
-                marginTop:'130px'
+                height:'30px'
+            },
+            '.row3':{
             },
             '.ball-row-1':{
                 backgroundColor:'rgba(0,0,0,0.2)',
@@ -62,7 +68,7 @@ class ProximityDisplayComponent extends Component{
             },
 
             '.ball-row-2':{
-                backgroundColor:'rgba(0,0,0,0.2)',
+                backgroundColor:'rgba(0,0,0,0.5)',
                 height:'20px',
                 width:'20px',
                 borderRadius:'50%',
