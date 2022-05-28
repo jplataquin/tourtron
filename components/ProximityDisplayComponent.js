@@ -17,8 +17,8 @@ class ProximityDisplayComponent extends Component{
                 });
                 
                 t.div({class:'row2'},()=>{
-                    t.div('8s');
-                    t.div('CTRL DLY');
+                    t.div({class:'delay'},'8s');
+                    t.div({class:'text'},'CTRL DLY');
                 })
                 t.div({class:'row3'},()=>{
                     t.div({class:'ball-row-2 b4',dataEl:'b4'});
@@ -53,11 +53,19 @@ class ProximityDisplayComponent extends Component{
                 borderRadius:'50%',
                 position:'absolute'
             },
+            '.delay':{
+                color:'#FFFFFF',
+                fontSize:'14px'
+            },
+            '.text':{
+                color:'#FFFFFF',
+                fontSize:'10px'
+            },
             '.row2':{
-                marginTop:'30px'
+                marginTop:'45px'
             },
             '.row3':{
-                marginTop:'130px'
+                marginTop:'36px'
             },
             '.ball-row-1':{
                 backgroundColor:'rgba(0,0,0,0.2)',
