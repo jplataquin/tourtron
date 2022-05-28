@@ -102,10 +102,40 @@ const InApp = function(){
 
 **/
 
+
+function findKey(collection, predicate, eachFunc) {
+    let result;
+    
+    eachFunc(collection, function(value, key, collection) {
+        if (predicate(value, key, collection)) {
+            result = key;
+            return false;
+        }
+    });
+    
+    return result;
+}
+
 class DetectBrowser {
 
     constructor(){
         this.userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+
+        this._browser = {
+            messenger:/\bFB[\w_]+\/(Messenger|MESSENGER)/,
+            facebook:/\bFB[\w_]+\//,
+            twitter:/\bTwitter/i,
+            line:/\bLine\//i,
+            wechat:/\bMicroMessenger\//i,
+            puffin:/\bPuffin/i,
+            miui:/\bMiuiBrowser\//i,
+            instagram:/\bInstagram/i,
+            chrome:/\bCrMo\b|CriOS|Android.*Chrome\/[.0-9]* (Mobile)?/,
+            safari:/Version.*Mobile.*Safari|Safari.*Mobile|MobileSafari/,
+            ie:/IEMobile|MSIEMobile/,
+            firefox:/fennec|firefox.*maemo|(Mobile|Tablet).*Firefox|Firefox.*Mobile|FxiOS/
+        };
     }
 
     isInApp(){
@@ -120,6 +150,18 @@ class DetectBrowser {
 
         return Boolean(this.userAgent.match(regex));
 
+    }
+
+    isMobile(){
+        return /(iPad|iPhone|Android|Mobile)/i.test(this.userAgent) || false;
+    }
+
+
+    browser(){
+     
+        return findKey(this._browser,(regex)=>{
+            return regex.test(this.userAgent);
+        })||'other';
     }
 }
 
