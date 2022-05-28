@@ -20,17 +20,10 @@ mozallowfullscreen="true">
 
     <script type="module">
         import {render,Component,Template} from '/js/adarna.js';
-        import DetectBrowser from '/assets/js/inapp.js';
+        import DetectBrowser from '/assets/js/detectBrowser.js';
         
-
-        const app = document.querySelector('#app');
-        
-        
+        const app           = document.querySelector('#app');
         const detectBrowser = new DetectBrowser();
-
-        if(detectBrowser.isInApp()){
-            alert('In app');
-        }
 
         let view = new class extends Component{
             
@@ -40,7 +33,6 @@ mozallowfullscreen="true">
                 this.broker             = null;
 
                 this.initConnection();
-      
                 this.pollList();
             }
 
@@ -60,8 +52,9 @@ mozallowfullscreen="true">
                     t.div({class:'container'},()=>{
 
                         t.div({class:'text-center'},()=>{
-                            t.img({class:'img-fluid',src:'https://via.placeholder.com/300'});
+                            t.h1('Oo-oO');
                         });
+
 
                         t.div({class:'d-flex justify-content-evenly list'},()=>{
                             
@@ -70,9 +63,11 @@ mozallowfullscreen="true">
                                 let item = this.model.items[i];
                                 
                                 t.div({class:'card', style:{width:'18rem'}},()=>{
+                                    
                                     t.img({
-                                        src:'https://via.placeholder.com/300',
-                                        class:'card-img-top'
+                                        src:'/assets/img/bubot_face.jpg',
+                                        class:'card-img-top',
+                                        width:'300px'
                                     });
 
                                     t.div({class:'card-body'},()=>{
@@ -80,11 +75,15 @@ mozallowfullscreen="true">
                                         t.h5({class:'card-title'},item.name);
                                         
                                         t.p({class:'card-text'},'Iloilo, Philippines');
+
+                                        t.div({class:'text-end'},()=>{
+
+                                            t.a({
+                                                href:'/client?r='+item.name,
+                                                class:'btn btn-primary'
+                                            },'Connect');
+                                        });
                                         
-                                        t.a({
-                                            href:'/client?r='+item.name,
-                                            class:'btn btn-primary'
-                                        },'Connect');
                                     })//div
 
                                 });//div
@@ -99,17 +98,7 @@ mozallowfullscreen="true">
             }
 
 
-            controller(){
-
-                
-                
-               
-            }
-
-            
-
-            
-
+            controller(){}
 
             initConnection(){
 
@@ -156,10 +145,12 @@ mozallowfullscreen="true">
         }();
 
 
-
-        render(view).to(app);
-
-
+        if(detectBrowser.isInApp()){
+            document.location.href = '/in-app-browser-prompt';
+        }else{
+            render(view).to(app);
+        }
+        
     </script>
    
 </body>
