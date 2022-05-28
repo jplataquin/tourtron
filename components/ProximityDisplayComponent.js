@@ -1,4 +1,4 @@
-import {Template, Component} from '../node_modules/adarna/dist/adarna.js';
+import {Template, Component} from '/js/adarna.js';
 
 class ProximityDisplayComponent extends Component{
 
