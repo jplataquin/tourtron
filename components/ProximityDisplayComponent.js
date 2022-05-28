@@ -55,7 +55,7 @@ class ProximityDisplayComponent extends Component{
             },
             '.delay':{
                 color:'#FFFFFF',
-                fontSize:'14px'
+                fontSize:'23px'
             },
             '.text':{
                 color:'#FFFFFF',
