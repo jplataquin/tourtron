@@ -435,8 +435,7 @@
                 this.broker.on('request-client-stream',(clientScoketId)=>{
 
                     getMediaCaptureDevices().then(media=>{
-                        console.log('M 1');
-
+                  
                         broadcastStream({
                             camera: media.video[0].id,
                             microphone: media.audio[0].id,
@@ -493,7 +492,8 @@
                         });
                     }
 
-                    this.el.proximityDisplay.hanlder.setTime(elapsed);
+                    this.el.proximityDisplay.handler.setTime(elapsed);
+                    
 
                     //Do something after no response for 10 seconds
                     if(this.roverName && elapsed >= 10000){
