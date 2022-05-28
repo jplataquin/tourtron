@@ -255,7 +255,7 @@ io.sockets.on("connection", socket => {
     socket.on('data',(roverName,data)=>{
 
        
-
+        console.log('rover name',roverName);
         if(typeof availableRovers[roverName] == 'undefined') return false;
         let rover = availableRovers[data.name];
         console.log(rover);
