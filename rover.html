@@ -87,10 +87,7 @@
 
             sendData(){
 
-                if(this.broker){
-                    //console.log('data',data);
-                    this.broker.emit('data',this.clientID,data);
-                } 
+            
             }
 
             initLocalSocket(){
@@ -104,8 +101,10 @@
                 
                 this.local.on('data',(data)=>{
                     
-                    this.sendData();
-                 
+                    if(this.clientID){
+                        console.log('kwak',data);
+                        this.broker.emit('data',this.clientID,data);
+                    }
                 });
 
                 this.local.on('disconnected',()=>{
