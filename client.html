@@ -25,6 +25,15 @@
         import videoSizeStablizer from '/assets/js/videoSizeStablizer.js';
         const app = document.querySelector('#app');
         
+
+        window.addEventListener("orientationchange", function() {
+            // Announce the new orientation number
+            if(window.orientation != 0){
+                
+                document.exitFullscreen();
+            }
+            
+        }, false);
     
         let view = new class extends Component{
 
@@ -437,7 +446,6 @@
 
                 let arr = data.split(':');
 
-                console.log(data);
 
                 let dir         = parseInt(arr[0]);
                 let p_f_right   = parseInt(arr[1]);

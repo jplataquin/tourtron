@@ -35,7 +35,7 @@ class ProximityDisplayComponent extends Component{
 
             this.el.time.innerText = num+'s';
         }
-        
+
         dom.handler.setBall = (num,flag) => {
             let ball = this.el['b'+num] ?? false;
 
@@ -44,7 +44,7 @@ class ProximityDisplayComponent extends Component{
             if(flag){
                 ball.style.backgroundColor = 'rgba(255,0,0)';
             }else{
-                ball.style.backgroundColor = 'rgba(0,0,0)';
+                ball.style.backgroundColor = 'rgba(0,0,0,0.2)';
             }
         }
     }
