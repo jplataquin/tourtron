@@ -491,8 +491,8 @@
                             time:now
                         });
                     }
-                    console.log(this.el.proximityDisplay);
-                    this.el.proximityDisplay.handler.setTime(elapsed);
+                    
+                    this.el.proximityDisplay.handler.setTime( Math.round( elapsed / 1000 ) );
                     
 
                     //Do something after no response for 10 seconds
