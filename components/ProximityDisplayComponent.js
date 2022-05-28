@@ -10,13 +10,13 @@ class ProximityDisplayComponent extends Component{
 
             t.div({class:'main'},()=>{
 
-                t.div(()=>{
+                t.div({class:'row1'},()=>{
                     t.div({class:'ball-row-1'});
                     t.div({class:'ball-row-1'});
                     t.div({class:'ball-row-1'});
                 });
                 
-                t.div(()=>{
+                t.div({class:'row2'},()=>{
                     t.div({class:'ball-row-2'});
                     t.div({class:'ball-row-2'});
                     t.div({class:'ball-row-2'});
@@ -35,7 +35,11 @@ class ProximityDisplayComponent extends Component{
                 backgroundColor:'rgba(0,0,0,0.2)',
                 height:'150px',
                 width:'150px',
-                borderRadius:'50%'
+                borderRadius:'50%',
+                position:'absolute'
+            },
+            '.row2':{
+                marginTop:'130px'
             },
             '.ball-row-1':{
                 backgroundColor:'red',
