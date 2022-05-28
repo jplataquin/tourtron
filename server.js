@@ -35,9 +35,6 @@ app.get('/js/adarna.js',function(req,res){
     res.sendFile(path.join(__dirname, 'node_modules/adarna/dist/adarna.js'));
 });
 
-app.get('/js/inapp.js',function(req,res){
-    res.sendFile(path.join(__dirname, 'node_modules/detect-inapp/lib/inapp.js'));
-});
 
 app.get('/',function(req,res){
     res.sendFile(path.join(__dirname, '/list.html'));
