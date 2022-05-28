@@ -140,8 +140,9 @@
                 this.modalReceiveStream = new bootstrap.Modal(this.el.modal,{});
 
                 this.el.proximityDisplay.handler.setBall(1,true);
-                this.el.proximityDisplay.handler.setBall(6,true);
-
+                this.el.proximityDisplay.handler.setBall(5,true);
+                this.el.proximityDisplay.handler.setTime(5);
+                
                 this.el.directionPad.handler.onchange((command,time,id)=>{
                     
                     switch(command){

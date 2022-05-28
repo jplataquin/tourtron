@@ -17,7 +17,7 @@ class ProximityDisplayComponent extends Component{
                 });
                 
                 t.div({class:'row2'},()=>{
-                    t.div({class:'delay'},'8s');
+                    t.div({class:'delay',dataEl:'time'},'0s');
                     t.div({class:'text'},'CTRL DLY');
                 })
                 t.div({class:'row3'},()=>{
@@ -31,6 +31,11 @@ class ProximityDisplayComponent extends Component{
 
     controller(dom){
 
+        dom.handler.setTime = (num)=>{
+
+            this.el.time.innerText = num+'s';
+        }
+        
         dom.handler.setBall = (num,flag) => {
             let ball = this.el['b'+num] ?? false;
 
