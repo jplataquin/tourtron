@@ -85,6 +85,13 @@
                 videoSizeStablizer(this.el.video);
             }
 
+            sendData(){
+                if(this.broker && this.broadcast){
+                    //console.log('data',data);
+                    this.broker.emit('data',this.state.name,data);
+                } 
+            }
+
             initLocalSocket(){
                 
                 this.local  = io('ws://localhost:3000');
@@ -93,14 +100,12 @@
                     console.log('Local server connected');
                 });
 
-                /*
+                
                 this.local.on('data',(data)=>{
-                   
-                    if(this.broker){
-                        console.log('data',data);
-                        this.broker.emit('data',this.state.name,data);
-                    }   
-                });*/
+                    
+                    this.sendData();
+                 
+                });
 
                 this.local.on('disconnected',()=>{
                     
