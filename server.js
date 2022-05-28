@@ -250,9 +250,15 @@ io.sockets.on("connection", socket => {
             time:data.time,
             elapsed: data.elapsed
         });
-    })
+    });
 
+    socket.on('data',(roverName,data)=>{
 
+        if(typeof availableRovers[roverName] == 'undefined') return false;
+        let rover = availableRovers[data.name];
+
+        socket.to(rover.client.id).emit('data',data);
+    });
     /****************MOVEMENT*****************/
 
     function preMovementCheck(roverName){

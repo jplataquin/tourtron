@@ -36,6 +36,7 @@
                 this.peerConnection;
                 this.clientReplyPingTime    = 0
                 this.lastCommnand           = '';
+                this.data                   = '';
                 this.broadcast              = null;
                 this.clientID               = null;
                 this.initLocalSocket();
@@ -92,6 +93,12 @@
                     console.log('Local server connected');
                 });
 
+                this.local.on('data',(data)=>{
+                    if(this.broker){
+                        this.broker.emit('data',this.roverName,data);
+                    }   
+                });
+
                 this.local.on('disconnected',()=>{
                     
                     //Stop the stream
@@ -104,11 +111,19 @@
                         this.broker.volatile.emit('rover-not-responding');
                     }
                     
-                    /*
-                    this.updateState({
-                        status:'ready',
-                        time:(new Date()).getTime()
-                    });*/
+                    if(this.broadcast){
+                        this.broadcast.stopStream();
+                    }
+
+                    //Close peer connection
+                    if(this.peerConnection){
+                        this.peerConnection.close();
+                        this.peerConnection = null;
+                    }
+
+                    setTimeout(()=>{
+                        document.location.reload();
+                    },3000);
 
                 });
             }

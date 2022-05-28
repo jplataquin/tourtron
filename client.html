@@ -429,6 +429,11 @@
                     this.roverReplyPingTime = data.time;
                     this.ctrlDelay          = data.elapsed
                 });
+
+                this.broker.on('data',(data)=>{
+
+                    console.log('data',data);
+                });
             }
 
             initStream(){
