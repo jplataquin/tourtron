@@ -11,15 +11,15 @@ class ProximityDisplayComponent extends Component{
             t.div({class:'main'},()=>{
 
                 t.div({class:'row1'},()=>{
-                    t.div({class:'ball-row-1'});
-                    t.div({class:'ball-row-1'});
-                    t.div({class:'ball-row-1'});
+                    t.div({class:'ball-row-1 b1'});
+                    t.div({class:'ball-row-1 b2'});
+                    t.div({class:'ball-row-1 b3'});
                 });
                 
                 t.div({class:'row2'},()=>{
-                    t.div({class:'ball-row-2'});
-                    t.div({class:'ball-row-2'});
-                    t.div({class:'ball-row-2'});
+                    t.div({class:'ball-row-2 b4'});
+                    t.div({class:'ball-row-2 b5'});
+                    t.div({class:'ball-row-2 b6'});
                 });
             });
         });
@@ -57,7 +57,26 @@ class ProximityDisplayComponent extends Component{
                 borderRadius:'50%',
                 float:'left',
                 marginLeft:'23px'
-            }
+            },
+
+            '.b1':{
+                marginTop:'20px'
+            },
+            '.b2':{
+
+            },
+            '.b3':{
+                marginTop:'20px'
+            },
+            '.b4':{
+                marginTop:'-19px'
+            },
+            '.b5':{
+
+            },
+            '.b6':{
+                marginTop:'-20px'
+            },
         }
     }
 }
