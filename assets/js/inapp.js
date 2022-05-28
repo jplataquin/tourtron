@@ -1,3 +1,4 @@
+/**
 const _createClass = function(){
     function defineProperties(target,props){
         for(var i=0;i<props.length;i++){
@@ -99,5 +100,27 @@ const InApp = function(){
     return InApp;
 }();
 
+**/
 
-export default InApp;
+class DetectBrowser {
+
+    constructor(){
+        this.userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    }
+
+    isInApp(){
+
+        var rules=[
+            'WebView',
+            '(iPhone|iPod|iPad)(?!.*Safari\/)',
+            'Android.*(wv|\.0\.0\.0)'
+        ];
+
+        var regex = new RegExp('('+rules.join('|')+')','ig');
+
+        return Boolean(this.userAgent.match(regex));
+
+    }
+}
+
+export default DetectBrowser;

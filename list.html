@@ -20,16 +20,15 @@ mozallowfullscreen="true">
 
     <script type="module">
         import {render,Component,Template} from '/js/adarna.js';
-        import InApp from '/assets/js/inapp.js';
+        import DetectBrowser from '/assets/js/inapp.js';
         
-        console.log(InApp);
 
         const app = document.querySelector('#app');
         
         
-        const inapp = new InApp(navigator.userAgent || navigator.vendor || window.opera);
+        const detectBrowser = new DetectBrowser();
 
-        if(inapp.isInApp()){
+        if(detectBrowser.isInApp()){
             alert('In app');
         }
 
