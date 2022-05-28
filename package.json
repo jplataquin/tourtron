@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "adarna": "^1.0.20",
+    "detect-inapp": "^1.4.0",
     "express": "^4.17.2",
     "socket.io": "^4.4.1"
   }

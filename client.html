@@ -435,14 +435,10 @@
                             clientSocketId: clientScoketId,
                             state:{name:''}
                         }).then((bcast)=>{
-
-                            console.log('M 2');
                             this.broadcast = bcast;
-                            console.log('done');
-
+            
                         }).catch(err=>{
                             
-                            console.log('M 3');
                             this.broker.volatile.emit(
                                 'client-broadcast-failed',
                                  clientScoketId,
@@ -454,7 +450,7 @@
                         });
 
                     }).catch(err=>{
-                        alert(JSON.stringify(err));
+               
                         this.broker.volatile.emit(
                             'client-broadcast-failed',
                             clientScoketId,
