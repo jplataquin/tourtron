@@ -253,7 +253,7 @@ io.sockets.on("connection", socket => {
     });
 
     socket.on('data',(id,data)=>{
-
+        console.log('id',id);
         socket.to(id).emit('data',data);
     });
     /****************MOVEMENT*****************/
