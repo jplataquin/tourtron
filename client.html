@@ -484,20 +484,18 @@
 
                     let elapsed = now - this.roverReplyPingTime;
 
-                    if(this.roverName){
+                    this.broker.emit('ping-rover',{
+                        name: this.roverName,
+                        time:now
+                    });
                     
-                        this.broker.emit('ping-rover',{
-                            name: this.roverName,
-                            time:now
-                        });
-                    }
 
                     if(this.roverName){
                         this.el.proximityDisplay.handler.setTime( Math.round( elapsed / 1000 ) );
                     }
 
                     //Do something after no response for 10 seconds
-                    if(this.roverName && elapsed >= 10000){
+                    if(elapsed >= 10000){
                         
                         //Stop the stream
                         if(this.broadcast != null){
