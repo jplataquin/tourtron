@@ -139,9 +139,6 @@
             controller(){
 
                 this.modalReceiveStream = new bootstrap.Modal(this.el.modal,{});
-
-                this.el.proximityDisplay.handler.setBall(1,true);
-                this.el.proximityDisplay.handler.setBall(5,true);
                 
 
                 this.el.directionPad.handler.onchange((command,time,id)=>{
@@ -432,8 +429,36 @@
 
                 this.broker.on('data',(data)=>{
 
-                    console.log('data',data);
+                    this.renderData(data);
                 });
+            }
+
+            renderData(data){
+
+                let arr = data.split(':');
+
+                let dir         = arr[0];
+                let p_f_right   = arr[1];
+                let p_f_left    = arr[2];
+                let p_back      = arr[3];
+                let p_b_right   = arr[4];
+                let p_b_left    = arr[5];
+
+                //Frontal
+                if(p_f_right && p_f_left){
+                    this.el.proximityDisplay.handler.setBall(2,true);
+                }else{
+                    this.el.proximityDisplay.handler.setBall(2,false);
+                }
+
+                this.el.proximityDisplay.hander.setBall(1,p_f_left);
+                this.el.proximityDisplay.hander.setBall(3,p_f_right);
+                
+                //Back
+                this.el.proximityDisplay.handler.setBall(5,p_back);
+
+                this.el.proximityDisplay.handler.setBall(6,p_b_right);
+                this.el.proximityDisplay.handler.setBall(4,p_b_left);
             }
 
             initStream(){

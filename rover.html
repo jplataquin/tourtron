@@ -102,7 +102,7 @@
                 this.local.on('data',(data)=>{
                     
                     if(this.clientID){
-                        console.log('kwak',data);
+                        
                         this.broker.emit('data',this.clientID,data);
                     }
                 });
