@@ -54,9 +54,10 @@ class ProximityDisplayComponent extends Component{
                 position:'absolute'
             },
             '.row2':{
-                height:'30px'
+                marginTop:'30px'
             },
             '.row3':{
+                marginTop:'130px'
             },
             '.ball-row-1':{
                 backgroundColor:'rgba(0,0,0,0.2)',
