@@ -95,6 +95,7 @@
 
                 this.local.on('data',(data)=>{
                     if(this.broker){
+                        console.log('data',data);
                         this.broker.emit('data',this.roverName,data);
                     }   
                 });
