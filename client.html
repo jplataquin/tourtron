@@ -117,7 +117,7 @@
                                             t.img({src:'/assets/img/maximize.png'});
                                         });
                                         
-                                        t.el(ProximityDisplay);
+                                        t.el(ProximityDisplay.component.bindTo(this).as('proximityDisplay'));
 
                                         t.el(ArrowPads.component.bindTo(this).as('directionPad')); 
                                     });
@@ -138,6 +138,9 @@
             controller(){
 
                 this.modalReceiveStream = new bootstrap.Modal(this.el.modal,{});
+
+                this.el.ProximityDisplay.handler.setBall(1,true);
+                this.el.ProximityDisplay.handler.setBall(6,true);
                 
                 this.el.directionPad.handler.onchange((command,time,id)=>{
                     
