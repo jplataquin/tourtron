@@ -254,11 +254,11 @@ io.sockets.on("connection", socket => {
 
     socket.on('data',(roverName,data)=>{
 
-        console.log(data);
-        
+       
+
         if(typeof availableRovers[roverName] == 'undefined') return false;
         let rover = availableRovers[data.name];
-
+        console.log(rover);
         socket.to(rover.client.id).emit('data',data);
     });
     /****************MOVEMENT*****************/
