@@ -30,8 +30,8 @@ class ProximityDisplayComponent extends Component{
             },
             '.ball':{
                 backgroundColor:'red',
-                height:'50px',
-                width:'50px',
+                height:'20px',
+                width:'20px',
                 borderRadius:'50%'
             }
         }
