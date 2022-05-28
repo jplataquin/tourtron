@@ -41,6 +41,7 @@
                 this.lastCommand;
                 this.broadcast;
                 this.roverReplyPingTime = 0;
+                this.ctrlDelay          = 0;
                 this.commandDelay       = 1000;
                 this.roverName          = null;
                 this.peerConnection     = null;
@@ -426,6 +427,7 @@
                 //Handle rover reply ping
                 this.broker.on('reply-ping-rover',(data)=>{
                     this.roverReplyPingTime = data.time;
+                    this.ctrlDelay          = data.elapsed
                 });
             }
 
@@ -491,7 +493,7 @@
                     
 
                     if(this.roverName){
-                        this.el.proximityDisplay.handler.setTime( Math.round( elapsed / 1000 ) );
+                        this.el.proximityDisplay.handler.setTime( Math.round(  this.ctrlDelay  / 1000 ) );
                     }
 
                     //Do something after no response for 10 seconds

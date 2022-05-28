@@ -247,7 +247,8 @@ io.sockets.on("connection", socket => {
     socket.on('reply-ping-rover',(data)=>{
         
         socket.to(data.to).emit('reply-ping-rover',{
-            time:data.time
+            time:data.time,
+            elapsed: data.elapsed
         });
     })
 
