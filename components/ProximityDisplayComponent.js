@@ -27,3 +27,5 @@ class ProximityDisplayComponent extends Component{
         }
     }
 }
+
+export {ProximityDisplayComponent};
