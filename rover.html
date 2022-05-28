@@ -93,12 +93,14 @@
                     console.log('Local server connected');
                 });
 
+                /*
                 this.local.on('data',(data)=>{
+                   
                     if(this.broker){
                         console.log('data',data);
                         this.broker.emit('data',this.state.name,data);
                     }   
-                });
+                });*/
 
                 this.local.on('disconnected',()=>{
                     
