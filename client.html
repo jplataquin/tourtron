@@ -426,14 +426,6 @@
                 //Handle rover reply ping
                 this.broker.on('reply-ping-rover',(data)=>{
                     this.roverReplyPingTime = data.time;
-
-                    let dly = 5000 - data.time;
-
-                    if(dly < 0){
-                        dly = 0;
-                    }
-
-                    this.el.proximityDisplay.handler.setTime(dly);
                 });
             }
 
@@ -501,6 +493,7 @@
                         });
                     }
 
+                    this.el.proximityDisplay.hanlder.setTime(elapsed);
 
                     //Do something after no response for 10 seconds
                     if(this.roverName && elapsed >= 10000){
