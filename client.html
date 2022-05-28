@@ -96,7 +96,7 @@
                                     playsinline:true, 
                                     autoplay:true, 
                                     muted:true,
-                                    controls:true,
+                                    controls:false,
                                     poster:'/assets/img/bubot_face.jpg',
                                     //src:'https://www.w3schools.com/html/mov_bbb.mp4',
                                     dataEl:'video'
@@ -141,8 +141,8 @@
 
                 this.el.proximityDisplay.handler.setBall(1,true);
                 this.el.proximityDisplay.handler.setBall(5,true);
-                this.el.proximityDisplay.handler.setTime(5);
                 
+
                 this.el.directionPad.handler.onchange((command,time,id)=>{
                     
                     switch(command){
@@ -423,9 +423,18 @@
                     });
                 });
 
+                //Handle rover reply ping
                 this.broker.on('reply-ping-rover',(data)=>{
                     this.roverReplyPingTime = data.time;
-                })
+
+                    let dly = 5000 - data.time;
+
+                    if(dly < 0){
+                        dly = 0;
+                    }
+
+                    this.el.proximityDisplay.handler.setTime(dly);
+                });
             }
 
             initStream(){
