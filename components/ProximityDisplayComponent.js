@@ -25,7 +25,7 @@ class ProximityDisplayComponent extends Component{
                 
                 t.div({class:'row2'},()=>{
                     t.div({class:'direction',dataEl:'direction'},this.text.stop);
-                    t.div({class:'text',dataEl:'time'},'Dly:0s');
+                    t.div({class:'text',dataEl:'time'},'DLY: 0s');
                 })
                 t.div({class:'row3'},()=>{
                     t.div({class:'ball-row-2 b4',dataEl:'b4'});
