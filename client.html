@@ -95,6 +95,7 @@
                                       maxWidth: '100%',
                                       maxHeight: '100%'
                                     },
+                                    class:'video',
                                     playsinline:true, 
                                     autoplay:true, 
                                     muted:true,
@@ -574,6 +575,11 @@
                             position:'relative',
                             top:'-170px',
                             right: '-85px'
+                        }
+                    },
+                    '@media (orientation: landscape)':{
+                        '.video':{
+                            minHeight:'100%'
                         }
                     }
                 }
