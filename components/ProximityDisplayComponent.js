@@ -47,7 +47,7 @@ class ProximityDisplayComponent extends Component{
             if(num > 100){
                 num = 99;
             }
-            
+
             this.el.time.innerText = 'DLY: '+num+'s';
         }
 
@@ -104,13 +104,14 @@ class ProximityDisplayComponent extends Component{
                 borderRadius:'50%',
                 position:'absolute'
             },
-            '.dir':{
+            '.direction':{
                 color:'#FFFFFF',
                 fontSize:'30px'
             },
             '.text':{
                 color:'#FFFFFF',
-                fontSize:'15px'
+                fontSize:'15px',
+                fontWeight:'bold'
             },
             '.row2':{
                 marginTop:'45px'
