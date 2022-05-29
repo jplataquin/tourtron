@@ -51,7 +51,7 @@ app.get('/rover', function (req, res) {
 
 app.get('/in-app-browser-prompt',function(req,res){
 
-    res.sendFile(path.join(__dirname,'/in-app-browser.html'));
+    res.sendFile(path.join(__dirname,'/in-app-browser-prompt.html'));
 });
 /***************************************************************/
 
