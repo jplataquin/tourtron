@@ -48,11 +48,15 @@ function broadcastStream(data){
     let peerConnection = new RTCPeerConnection(data.webRTCconfig);   
    
     return new Promise( (resolve,reject)=>{
-      
+     
         //Open microphone and camera
         navigator.mediaDevices.getUserMedia({
             audio: { deviceId: data.microphone ? { exact: data.microphone } : undefined },
-            video: { deviceId: data.camera ? { exact: data.camera } : undefined }
+            video: { 
+                deviceId: data.camera ? { exact: data.camera } : undefined,
+                width: { ideal: 4096 },
+                height: { ideal: 2160 } 
+            }
         }).then((stream)=>{
            
             window.stream = stream;
