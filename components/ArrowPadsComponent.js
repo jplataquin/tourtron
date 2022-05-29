@@ -364,7 +364,8 @@ class ArrowPadsComponent extends Component {
                 backgroundColor:'rgba(0,0,0,0.2)',
                 height:'150px',
                 width:'150px',
-                borderRadius:'50%'
+                borderRadius:'50%',
+                color:'#FFFFFF'
             },
             '.float-left':{
                 float:'left'
