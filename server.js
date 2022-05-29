@@ -49,6 +49,10 @@ app.get('/rover', function (req, res) {
     res.sendFile(path.join(__dirname, '/rover.html'));
 });
 
+app.get('/in-app-browser-prompt',function(req,res){
+
+    res.sendFile(path.join(__dirname,'/in-app-browser.html'));
+});
 /***************************************************************/
 
 const io = new Server(http2Server,{  
@@ -253,7 +257,7 @@ io.sockets.on("connection", socket => {
     });
 
     socket.on('data',(id,data)=>{
-        console.log('id',id);
+   
         socket.to(id).emit('data',data);
     });
     /****************MOVEMENT*****************/
