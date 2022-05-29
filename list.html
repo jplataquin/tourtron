@@ -21,7 +21,7 @@ mozallowfullscreen="true">
     <script type="module">
         import {render,Component,Template} from '/js/adarna.js';
         import DetectBrowser from '/assets/js/detectBrowser.js';
-        
+        import {MainLayoutComponent} from '/components/MainLayoutComponent.js';
         const app           = document.querySelector('#app');
         const detectBrowser = new DetectBrowser();
 
@@ -147,7 +147,12 @@ mozallowfullscreen="true">
         if(detectBrowser.isInApp()){
             document.location.href = '/in-app-browser-prompt';
         }else{
-            render(view).to(app);
+
+            const mainLayout = new MainLayoutComponent({
+                content:view
+            });
+
+            render(mainLayout).to(app);
         }
         
     </script>
