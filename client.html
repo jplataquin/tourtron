@@ -424,6 +424,7 @@
 
                 //Handle rover reply ping
                 this.broker.on('reply-ping-rover',(data)=>{
+                    console.log(data);
                     this.roverReplyPingTime = data.time;
                     this.ctrlDelay          = data.elapsed
                 });
@@ -544,8 +545,8 @@
                             this.peerConnection = null;
                         }
 
-                        alert('Error: Rover took too long to respond, connection unreliable (Aborting)');
-                        document.location.href = '/';
+                       // alert('Error: Rover took too long to respond, connection unreliable (Aborting)');
+                        //document.location.href = '/';
                         return false;
                     }
 
