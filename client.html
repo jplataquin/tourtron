@@ -246,15 +246,16 @@
 
             sendCommand(command,time,id){
             
-                clearInterval(this.lastCommand);
+                //clearInterval(this.lastCommand);
 
                 if(!this.broker) return false;
 
                 this.broker.volatile.emit(command,this.roverName);
-                
+                /*    
                 this.lastCommand = setInterval(()=>{
                    this.broker.volatile.emit(command,this.roverName);
                 },this.commandDelay);
+                */
                 
             }
 

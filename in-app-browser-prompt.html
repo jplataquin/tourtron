@@ -37,7 +37,7 @@ mozallowfullscreen="true">
                 
                 const t = new Template();
 
-                return t.div({class:'container text-center'},()=>{
+                return t.div({class:'container text-center pt-10px'},()=>{
                     t.h3('Sorry but In-App browsers are not supported, please open this site in');
                     t.ul(()=>{
                         t.li('Google Chrome');
@@ -64,7 +64,13 @@ mozallowfullscreen="true">
         const mainLayout = new MainLayoutComponent({
             content:view
         });
-        render(mainLayout).to(app);
+
+        if(detectBrowser.isInApp()){
+            render(mainLayout).to(app);
+        }else{
+            document.location.href = '/';
+        }
+       
         
         
     </script>
