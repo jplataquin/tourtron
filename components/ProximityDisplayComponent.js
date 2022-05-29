@@ -44,7 +44,11 @@ class ProximityDisplayComponent extends Component{
                 num = 0;
             }
 
-            this.el.time.innerText = 'Dly:'+num+'s';
+            if(num > 100){
+                num = 99;
+            }
+            
+            this.el.time.innerText = 'DLY: '+num+'s';
         }
 
         dom.handler.setBall = (num,flag) => {
@@ -102,17 +106,17 @@ class ProximityDisplayComponent extends Component{
             },
             '.dir':{
                 color:'#FFFFFF',
-                fontSize:'23px'
+                fontSize:'30px'
             },
             '.text':{
                 color:'#FFFFFF',
-                fontSize:'10px'
+                fontSize:'15px'
             },
             '.row2':{
                 marginTop:'45px'
             },
             '.row3':{
-                marginTop:'36px'
+                marginTop:'16px'
             },
             '.ball-row-1':{
                 backgroundColor:'rgba(0,0,0,0.2)',
