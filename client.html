@@ -119,8 +119,10 @@
                                             t.img({src:'/assets/img/maximize.png'});
                                         });
                                         
-                                        t.el(ProximityDisplay.component.bindTo(this).as('proximityDisplay'));
-
+                                        t.div({class:'hud-item-2'},()=>{
+                                            t.el(ProximityDisplay.component.bindTo(this).as('proximityDisplay'));
+                                        });
+                                       
                                         t.el(ArrowPads.component.bindTo(this).as('directionPad')); 
                                     });
                                 });
@@ -566,6 +568,12 @@
                     '.control-buttons img':{
                         height:'25px',
                         width:'25px'
+                    },
+                    '@media screen and (min-width: 500px)':{
+                        '.hud-item-2':{
+                            position:'relative',
+                            top:'-200px'
+                        }
                     }
                 }
             }
