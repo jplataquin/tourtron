@@ -46,8 +46,8 @@
                 this.roverName          = null;
                 this.peerConnection     = null;
                 this.broker             = null;
-                this.initConnection();
-                this.initStream();
+                //this.initConnection();
+               // this.initStream();
             }
 
 
@@ -545,8 +545,8 @@
                             this.peerConnection = null;
                         }
 
-                       // alert('Error: Rover took too long to respond, connection unreliable (Aborting)');
-                        //document.location.href = '/';
+                        alert('Error: Rover took too long to respond, connection unreliable (Aborting)');
+                        document.location.href = '/';
                         return false;
                     }
 
