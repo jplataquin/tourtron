@@ -21,30 +21,17 @@ mozallowfullscreen="true">
     <script type="text/javascript" src="//patrila.app:5000/socket.io/socket.io.js"></script>
 
     <script type="module">
-        /**
+        
         import {render,Component,Template} from '/js/adarna.js';
         import DetectBrowser from '/assets/js/detectBrowser.js';
+        import {MainLayoutComponent} from '/components/MainLayoutComponent.js';
         
         const app           = document.querySelector('#app');
         const detectBrowser = new DetectBrowser();
 
         let view = new class extends Component{
             
-            init(){
-
-                this.peerConnection     = null;
-                this.broker             = null;
-
-                this.initConnection();
-                this.pollList();
-            }
-
-
-            model(){
-                return {
-                    items:[]
-                };
-            }
+      
 
             view(){
                 
@@ -52,51 +39,6 @@ mozallowfullscreen="true">
 
                 return t.div({},()=>{
 
-                    t.div({class:'container'},()=>{
-
-                        t.div({class:'text-center'},()=>{
-                            t.h1('Oo~Tourtron~oO');
-                        });
-
-                        t.h3('Available Drone');
-                        t.hr();
-                        t.div({class:'d-flex justify-content-evenly list'},()=>{
-                            
-                            for(let i = 0; i<= this.model.items.length - 1; i++){
-
-                                let item = this.model.items[i];
-                                
-                                t.div({class:'card', style:{width:'18rem'}},()=>{
-                                    
-                                    t.img({
-                                        src:'/assets/img/bubot_face.jpg',
-                                        class:'card-img-top',
-                                        width:'300px'
-                                    });
-
-                                    t.div({class:'card-body'},()=>{
-                                        
-                                        t.h5({class:'card-title'},item.name);
-                                        
-                                        t.p({class:'card-text'},'Iloilo, Philippines');
-
-                                        t.div({class:'text-end'},()=>{
-
-                                            t.a({
-                                                href:'/client?r='+item.name,
-                                                class:'btn btn-primary'
-                                            },'Connect');
-                                        });
-                                        
-                                    })//div
-
-                                });//div
-                                
-                            }
-                            
-                        });//div
-
-                    });//div
 
                 });//div
             }
@@ -104,54 +46,21 @@ mozallowfullscreen="true">
 
             controller(){}
 
-            initConnection(){
-
-                //Connect to broker
-                this.broker = io('wss://patrila.app:5000/',{
-                    reconnection:true
-                });
-
-            }
-
-            pollList(){
-
-                setTimeout(()=>{
-
-                    this.broker.emit('get-available-rovers',(list)=>{
-                    
-                        
-                        let items = [];
-
-                        list.map(name=>{
-                            items.push({name:name});
-                        });
-                        
-                        this.update('items',items);
-
-                        this.pollList();
-                    });
-                },3000);
-                
-                
-                
-            }
-
+         
             style(){
                 return {
-                    '.list':{
-                        paddingTop:'20px'
-                    }
+                  
                 }
             }
 
         }();
 
 
-        if(detectBrowser.isInApp()){
-            document.location.href = '/in-app-browser-prompt';
-        }else{
-            render(view).to(app);
-        }**/
+        const mainLayout = new MainLayoutComponent({
+            content:view
+        });
+        render(mainLayout).to(app);
+        
         
     </script>
    
