@@ -24,18 +24,7 @@
         import {ProximityDisplayComponent} from '/components/ProximityDisplayComponent.js'; 
         import videoSizeStablizer from '/assets/js/videoSizeStablizer.js';
         const app = document.querySelector('#app');
-        
-
-        window.addEventListener("orientationchange", function() {
-            // Announce the new orientation number
-
-            alert(window.orientation);
-            if(window.orientation != 0){
-                
-                document.exitFullscreen();
-            }
-
-        }, false);
+    
     
         let view = new class extends Component{
 
@@ -64,8 +53,9 @@
 
             view(){
                 const t = new Template();
-                let ArrowPads = new ArrowPadsComponent();
-                let ProximityDisplay = new ProximityDisplayComponent();
+
+                let ArrowPads           = new ArrowPadsComponent();
+                let ProximityDisplay    = new ProximityDisplayComponent();
 
                 return t.div({},()=>{
 
@@ -467,13 +457,14 @@
                     this.el.proximityDisplay.handler.setBall(3,p_f_right);
                 }
 
-                
-                
                 //Back
                 this.el.proximityDisplay.handler.setBall(5,p_back);
 
                 this.el.proximityDisplay.handler.setBall(6,p_b_right);
                 this.el.proximityDisplay.handler.setBall(4,p_b_left);
+
+                //Directions
+                this.el.proximityDisplay.handler.setDirection(dir);
             }
 
             initStream(){
@@ -484,11 +475,11 @@
                     getMediaCaptureDevices().then(media=>{
                   
                         broadcastStream({
-                            camera: media.video[0].id,
-                            microphone: media.audio[0].id,
-                            socket:this.broker,
-                            clientSocketId: clientScoketId,
-                            state:{name:''}
+                            camera          : media.video[0].id,
+                            microphone      : media.audio[0].id,
+                            socket          : this.broker,
+                            clientSocketId  : clientScoketId,
+                            state           : {name:''}
                         }).then((bcast)=>{
                             this.broadcast = bcast;
             
@@ -533,7 +524,7 @@
 
                     this.broker.emit('ping-rover',{
                         name: this.roverName,
-                        time:now
+                        time: now
                     });
                     
 

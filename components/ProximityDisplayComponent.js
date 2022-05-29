@@ -2,6 +2,13 @@ import {Template, Component} from '/js/adarna.js';
 
 class ProximityDisplayComponent extends Component{
 
+    init(){
+        this.text = {
+            arrow: '➤',
+            stop: '🛑'
+        }
+    }
+
     view(){
 
         const t = new Template();
@@ -17,8 +24,8 @@ class ProximityDisplayComponent extends Component{
                 });
                 
                 t.div({class:'row2'},()=>{
-                    t.div({class:'delay',dataEl:'time'},'0s');
-                    t.div({class:'text'},'CTRL DLY');
+                    t.div({class:'direction',dataEl:'direction'},this.text.stop);
+                    t.div({class:'text',dataEl:'time'},'Dly:0s');
                 })
                 t.div({class:'row3'},()=>{
                     t.div({class:'ball-row-2 b4',dataEl:'b4'});
@@ -33,10 +40,15 @@ class ProximityDisplayComponent extends Component{
 
         dom.handler.setTime = (num)=>{
 
-            this.el.time.innerText = num+'s';
+            if(num < 0){
+                num = 0;
+            }
+
+            this.el.time.innerText = 'Dly:'+num+'s';
         }
 
         dom.handler.setBall = (num,flag) => {
+            
             let ball = this.el['b'+num] ?? false;
 
             if(!ball) return false;
@@ -45,6 +57,36 @@ class ProximityDisplayComponent extends Component{
                 ball.style.backgroundColor = 'rgba(255,0,0)';
             }else{
                 ball.style.backgroundColor = 'rgba(0,0,0,0.2)';
+            }
+        }
+
+        dom.handler.setDirection = (d)=>{
+
+            switch(d){
+                case 0:
+                    this.el.direction.innerText = this.text.stop;
+                    this.el.direction.style.transform = 'rotate(0deg)';
+                    break;
+                case 1: //Forward
+                    this.el.direction.innerText = this.text.arrow;
+                    this.el.direction.style.transform = 'rotate(-90deg)';
+                    break;
+                case 2: //Backward
+                    this.el.direction.innerText = this.text.arrow;
+                    this.el.direction.style.transform = 'rotate(90deg)';
+                    break;
+                case 5: //ROT_LEFT
+                    this.el.direction.innerText = this.text.arrow;
+                    this.el.direction.style.transform = 'rotate(-180deg)';
+                    break;
+                case 6: //ROT_LEFT
+                    this.el.direction.innerText = this.text.arrow;
+                    this.el.direction.style.transform = 'rotate(0deg)';
+                    break;
+                default:
+                    this.el.direction.innerText = this.text.stop;
+                    this.el.direction.style.transform = 'rotate(0deg)';
+                    break;
             }
         }
     }
@@ -58,7 +100,7 @@ class ProximityDisplayComponent extends Component{
                 borderRadius:'50%',
                 position:'absolute'
             },
-            '.delay':{
+            '.dir':{
                 color:'#FFFFFF',
                 fontSize:'23px'
             },
