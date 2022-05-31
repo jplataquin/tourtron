@@ -141,9 +141,8 @@ function broadcastStream(data){
 
 function getMediaCaptureDevices(){
     
-    if(!navigator.mediaDevices){
-        alert('Browser not compatible');
-    }
+    console.log('kwak',navigator.mediaDevices);
+    
 
     return new Promise( (resolve,reject) =>{
 
