@@ -141,8 +141,10 @@ function broadcastStream(data){
 
 function getMediaCaptureDevices(){
     
-    console.log('HERE',navigator.mediaDevices);
-    
+    if(!navigator.mediaDevices){
+        alert('Browser not compatible');
+    }
+
     return new Promise( (resolve,reject) =>{
 
         navigator.mediaDevices.enumerateDevices().then((deviceInfos)=>{
