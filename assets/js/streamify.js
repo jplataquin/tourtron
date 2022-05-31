@@ -54,8 +54,8 @@ function broadcastStream(data){
             audio: { deviceId: data.microphone ? { exact: data.microphone } : undefined },
             video: { 
                 deviceId: data.camera ? { exact: data.camera } : undefined,
-                width: { ideal: 4096 },
-                height: { ideal: 2160 } 
+                //width: { ideal: 4096 },
+                //height: { ideal: 2160 } 
             }
         }).then((stream)=>{
             console.log('B3');
@@ -65,7 +65,7 @@ function broadcastStream(data){
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
         
             peerConnection.onicecandidate = (event) => {
-                console.log('K1');
+              
                 if (event.candidate) {
                     data.socket.emit("candidate", data.clientSocketId, event.candidate);
                 }
@@ -76,21 +76,21 @@ function broadcastStream(data){
                 .createOffer()
                 .then(sdp => peerConnection.setLocalDescription(sdp))
                 .then(() => {
-                    console.log('K2');
+                  
                     data.socket.emit("offer", data.clientSocketId, peerConnection.localDescription,data.state.name);
                 });
 
 
             data.socket.on("answer", (id, description) => { 
                 if(peerConnection != null){
-                    console.log('K3');
+                   
                     peerConnection.setRemoteDescription(description);
                 }
             });
 
             data.socket.on("candidate", (id, candidate) => {
                 if(peerConnection != null){
-                    console.log('K4');
+                    
                     peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
                 }
             });
@@ -129,9 +129,10 @@ function broadcastStream(data){
             
             peerConnection.close();
             peerConnection = null;
-
-            reject(err);
+            
             console.log('Error: unable to broadcast',err);
+            reject(err);
+            
         });
 
     });
