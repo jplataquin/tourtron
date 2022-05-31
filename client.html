@@ -488,7 +488,7 @@
             
                         }).catch(err=>{
                             
-                           // console.log(err);
+                            console.log(err);
 
                             this.broker.volatile.emit(
                                 'client-broadcast-failed',
@@ -536,7 +536,7 @@
                     if(this.roverName){
                         this.el.proximityDisplay.handler.setTime( Math.round(  this.ctrlDelay  / 1000 ) );
                     }
-
+                    /*
                     //Do something after no response for 10 seconds
                     if(elapsed >= 10000){
                         
@@ -554,7 +554,7 @@
                         alert('Error: Rover took too long to respond, connection unreliable (Aborting)');
                         document.location.href = '/';
                         return false;
-                    }
+                    }*/
 
                     this.pingRover();
                 },5000);
