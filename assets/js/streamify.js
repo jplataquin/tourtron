@@ -1,11 +1,12 @@
 function broadcastStream(data){
     console.log('B1');
-    data.clientSocketId = (typeof data.clientSocketId != 'undefined') ? data.clientSocketId : false;
-    data.state          = (typeof data.state != 'undefined') ? data.state : false;
-    data.camera         = (typeof data.camera != 'undefined') ? data.camera : false;
-    data.microphone     = (typeof data.microphone != 'undefined') ? data.microphone : false;
-    data.socket         = (typeof data.socket != 'undefined') ? data.socket : false;
-    data.webRTCconfig   = (typeof data.webRTCconfig != 'undefined') ? data.webRTCconfig : {
+    data.videoConstraint =  (typeof data.videoConstraint != 'undefined') ? data.videoConstraint : {};
+    data.clientSocketId  = (typeof data.clientSocketId != 'undefined') ? data.clientSocketId : false;
+    data.state           = (typeof data.state != 'undefined') ? data.state : false;
+    data.camera          = (typeof data.camera != 'undefined') ? data.camera : false;
+    data.microphone      = (typeof data.microphone != 'undefined') ? data.microphone : false;
+    data.socket          = (typeof data.socket != 'undefined') ? data.socket : false;
+    data.webRTCconfig    = (typeof data.webRTCconfig != 'undefined') ? data.webRTCconfig : {
         iceServers: [
             { 
             "urls": "stun:stun.l.google.com:19302",
@@ -44,22 +45,20 @@ function broadcastStream(data){
         });
     }
 
-
+    data.videoConstraint.deviceId = data.camera ? { exact: data.camera } : undefined;
+    
     let peerConnection = new RTCPeerConnection(data.webRTCconfig);   
    
     return new Promise( (resolve,reject)=>{
-        console.log('B2');
+     
         //Open microphone and camera
         navigator.mediaDevices.getUserMedia({
-            audio: { deviceId: data.microphone ? { exact: data.microphone } : undefined },
-            video: { 
-                deviceId: data.camera ? { exact: data.camera } : undefined,
-                //width: { ideal: 4096 },
-                //height: { ideal: 2160 } 
-            }
+            audio: { 
+                deviceId: data.microphone ? { exact: data.microphone } : undefined 
+            },
+            video: data.videoConstraint
         }).then((stream)=>{
-            console.log('B3');
-
+        
             window.stream = stream;
             
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
@@ -119,7 +118,6 @@ function broadcastStream(data){
 
         }).catch((err)=>{
             
-            console.log('B4');
             //Stop all stream
             if (window.stream) {
                 window.stream.getTracks().forEach(track => {

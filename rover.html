@@ -211,7 +211,11 @@
                             microphone: media.audio[0].id,
                             socket: this.broker,
                             clientSocketId: this.clientID,
-                            state:this.state
+                            state:this.state,
+                            videoConstraint:{
+                                width: { ideal: 4096 },
+                                height: { ideal: 2160 } 
+                            }
                         }).then((bcast)=>{
 
                             this.broadcast = bcast;
