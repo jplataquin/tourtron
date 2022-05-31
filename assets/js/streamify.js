@@ -141,7 +141,7 @@ function broadcastStream(data){
 
 function getMediaCaptureDevices(){
     
-    console.log('kwak',navigator.mediaDevices);
+  
     
 
     return new Promise( (resolve,reject) =>{
