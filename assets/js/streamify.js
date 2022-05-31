@@ -129,7 +129,7 @@ function broadcastStream(data){
             
             peerConnection.close();
             peerConnection = null;
-            
+
             console.log('Error: unable to broadcast',err);
             reject(err);
             
@@ -144,9 +144,13 @@ function getMediaCaptureDevices(){
     
   
     return new Promise( async (resolve,reject) =>{
-        await navigator.mediaDevices.getUserMedia({audio: true, video: true}); 
-        navigator.mediaDevices.enumerateDevices().then((deviceInfos)=>{
         
+        await navigator.mediaDevices.getUserMedia({audio: true, video: true}); 
+        
+        navigator.mediaDevices.enumerateDevices().then((deviceInfos)=>{
+            
+            console.log(deviceInfos);
+            
             let audioDevices = [];
             let videoDevices = [];
     
