@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     <script type="text/javascript" src="//patrila.app:5001/assets/js/webRTC-adapter.js"></script>
     <script type="text/javascript" src="//patrila.app:5001/assets/js/streamify.js"></script>
-    <title>Client</title>
+    <title>Beam-Oh</title>
     <script data-consolejs-channel="3e5ff48b-c0c8-9eb9-857b-62029e435e39" src="https://remotejs.com/agent/agent.js"></script>
 </head>
 <body allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
@@ -102,7 +102,6 @@
                                     muted:true,
                                     controls:false,
                                     poster:'/assets/img/bubot_face.jpg',
-                                    //src:'https://www.w3schools.com/html/mov_bbb.mp4',
                                     dataEl:'video'
                                 });
 
@@ -247,16 +246,11 @@
 
             sendCommand(command,time,id){
             
-                //clearInterval(this.lastCommand);
 
                 if(!this.broker) return false;
 
                 this.broker.volatile.emit(command,this.roverName);
-                /*    
-                this.lastCommand = setInterval(()=>{
-                   this.broker.volatile.emit(command,this.roverName);
-                },this.commandDelay);
-                */
+                
                 
             }
 
@@ -497,8 +491,8 @@
                                 'Client cannot connect to rover'
                             );
 
-                            alert('Error failed to broadcast stream to rover');
-                            //document.location.href = '/';
+                            alert('Error: Failed to broadcast your stream');
+                            document.location.href = '/';
                         });
 
                     }).catch(err=>{
@@ -509,7 +503,7 @@
                             'Camera or Microphone not accessible'
                         );
 
-                        alert('Error: failed to access camera or microphone');
+                        alert('Error: Failed to access your camera or microphone');
                         document.location.href = '/';
                     });
                     
@@ -538,7 +532,7 @@
                     if(this.roverName){
                         this.el.proximityDisplay.handler.setTime( Math.round(  this.ctrlDelay  / 1000 ) );
                     }
-                    /*
+                    
                     //Do something after no response for 10 seconds
                     if(elapsed >= 10000){
                         
@@ -556,7 +550,7 @@
                         alert('Error: Rover took too long to respond, connection unreliable (Aborting)');
                         document.location.href = '/';
                         return false;
-                    }*/
+                    }
 
                     this.pingRover();
                 },5000);
@@ -575,7 +569,7 @@
                         height:'25px',
                         width:'25px'
                     },
-                    '@media (orientation: portrait)':{
+                    '@media  only screen and (min-device-width : 500px) and (orientation: portrait)':{
                         '.hud-item-2':{
                             position:'relative',
                             top:'-170px',

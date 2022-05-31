@@ -22,7 +22,7 @@ class MainLayoutComponent extends Component {
                             height:24,
                             class:'d-inline-block align-text-top'
                         });
-                        t.txt(' Tourtron');
+                        t.txt(' Beam-Oh');
                     });
                 });
             });
