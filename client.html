@@ -477,7 +477,7 @@
                 this.broker.on('request-client-stream',(clientScoketId)=>{
                     
                     getMediaCaptureDevices().then(media=>{
-                  
+                        console.log(media);
                         broadcastStream({
                             camera          : media.video[0].id,
                             microphone      : media.audio[0].id,
