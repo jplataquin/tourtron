@@ -142,8 +142,8 @@ function broadcastStream(data){
 function getMediaCaptureDevices(){
     
   
-    return new Promise( (resolve,reject) =>{
-
+    return new Promise( async (resolve,reject) =>{
+        await navigator.mediaDevices.getUserMedia({audio: true, video: true}); 
         navigator.mediaDevices.enumerateDevices().then((deviceInfos)=>{
         
             let audioDevices = [];
@@ -154,7 +154,6 @@ function getMediaCaptureDevices(){
     
             for (const deviceInfo of deviceInfos) {
                 
-                console.log(deviceInfo);
                 if (deviceInfo.kind === "audioinput") {
                     
                     audioDevices.push({
