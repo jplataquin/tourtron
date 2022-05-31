@@ -176,6 +176,8 @@ function getMediaCaptureDevices(){
                 video: videoDevices,
                 audio: audioDevices
             });
+        }).catch((err)=>{
+            reject('Media devices unavailable');
         });
     
     });
