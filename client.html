@@ -474,7 +474,7 @@
 
                 //Reply to a request from rover for a client stream
                 this.broker.on('request-client-stream',(clientScoketId)=>{
-                    /*
+                    
                     getMediaCaptureDevices().then(media=>{
                   
                         broadcastStream({
@@ -497,7 +497,7 @@
                             );
 
                             alert('Error failed to broadcast stream to rover');
-                            document.location.href = '/';
+                            //document.location.href = '/';
                         });
 
                     }).catch(err=>{
@@ -511,7 +511,7 @@
                         alert('Error: failed to access camera or microphone');
                         document.location.href = '/';
                     });
-                    */
+                    
                 });
                
             }

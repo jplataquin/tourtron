@@ -1,5 +1,5 @@
 function broadcastStream(data){
-    
+    console.log('B1');
     data.clientSocketId = (typeof data.clientSocketId != 'undefined') ? data.clientSocketId : false;
     data.state          = (typeof data.state != 'undefined') ? data.state : false;
     data.camera         = (typeof data.camera != 'undefined') ? data.camera : false;
@@ -48,7 +48,7 @@ function broadcastStream(data){
     let peerConnection = new RTCPeerConnection(data.webRTCconfig);   
    
     return new Promise( (resolve,reject)=>{
-     
+        console.log('B2');
         //Open microphone and camera
         navigator.mediaDevices.getUserMedia({
             audio: { deviceId: data.microphone ? { exact: data.microphone } : undefined },
@@ -58,13 +58,14 @@ function broadcastStream(data){
                 height: { ideal: 2160 } 
             }
         }).then((stream)=>{
-           
+            console.log('B3');
+
             window.stream = stream;
             
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
         
             peerConnection.onicecandidate = (event) => {
-           
+                console.log('K1');
                 if (event.candidate) {
                     data.socket.emit("candidate", data.clientSocketId, event.candidate);
                 }
@@ -75,18 +76,21 @@ function broadcastStream(data){
                 .createOffer()
                 .then(sdp => peerConnection.setLocalDescription(sdp))
                 .then(() => {
+                    console.log('K2');
                     data.socket.emit("offer", data.clientSocketId, peerConnection.localDescription,data.state.name);
                 });
 
 
             data.socket.on("answer", (id, description) => { 
                 if(peerConnection != null){
+                    console.log('K3');
                     peerConnection.setRemoteDescription(description);
                 }
             });
 
             data.socket.on("candidate", (id, candidate) => {
                 if(peerConnection != null){
+                    console.log('K4');
                     peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
                 }
             });
@@ -115,6 +119,7 @@ function broadcastStream(data){
 
         }).catch((err)=>{
             
+            console.log('B4');
             //Stop all stream
             if (window.stream) {
                 window.stream.getTracks().forEach(track => {
