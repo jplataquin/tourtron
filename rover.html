@@ -485,8 +485,7 @@
 
 
                     this.peerConnection.ontrack = event => {
-                        console.log(event.streams);
-                        this.el.video.srcObject = event.streams[0];    
+                       this.el.video.srcObject = event.streams[0];    
                     };
 
                     this.peerConnection.onicecandidate = event => {
