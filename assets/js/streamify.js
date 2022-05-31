@@ -54,8 +54,8 @@ function broadcastStream(data){
             audio: { deviceId: data.microphone ? { exact: data.microphone } : undefined },
             video: { 
                 deviceId: data.camera ? { exact: data.camera } : undefined,
-                width: { ideal: 4096 },
-                height: { ideal: 2160 } 
+                //width: { ideal: 4096 },
+                //height: { ideal: 2160 } 
             }
         }).then((stream)=>{
             console.log('B3');
