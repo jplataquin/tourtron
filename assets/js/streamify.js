@@ -141,6 +141,8 @@ function broadcastStream(data){
 
 function getMediaCaptureDevices(){
     
+    console.log('HERE',navigator.mediaDevices);
+    
     return new Promise( (resolve,reject) =>{
 
         navigator.mediaDevices.enumerateDevices().then((deviceInfos)=>{
